@@ -41,11 +41,41 @@ const tables = [
     ],
   },
   {
-    name: "enrollment",
+    name: "curriculum",
+    columns: [{ name: "handle", type: "string", unique: true }],
+  },
+  {
+    name: "period",
+    columns: [{ name: "handle", type: "string", unique: true }],
+  },
+  {
+    name: "class",
+    columns: [
+      { name: "course", type: "link", link: { table: "course" } },
+      { name: "period", type: "link", link: { table: "period" } },
+    ],
+  },
+  {
+    name: "student_curriculum",
     columns: [
       { name: "student", type: "link", link: { table: "student" } },
-      { name: "classroom", type: "link", link: { table: "classroom" } },
-      { name: "final_score", type: "float" },
+      { name: "curriculum", type: "link", link: { table: "curriculum" } },
+    ],
+  },
+  {
+    name: "level",
+    columns: [
+      { name: "number", type: "int", notNull: true, defaultValue: "0" },
+      { name: "curriculum", type: "link", link: { table: "curriculum" } },
+      { name: "elective_count", type: "int" },
+    ],
+  },
+  {
+    name: "level_course",
+    columns: [
+      { name: "level", type: "link", link: { table: "level" } },
+      { name: "course", type: "link", link: { table: "course" } },
+      { name: "credits", type: "float", notNull: true, defaultValue: "0" },
     ],
   },
   {
@@ -55,19 +85,6 @@ const tables = [
       { name: "score", type: "float", notNull: true, defaultValue: "17.89" },
       { name: "section", type: "int", notNull: true, defaultValue: "1" },
       { name: "class", type: "link", link: { table: "class" } },
-    ],
-  },
-  {
-    name: "score",
-    columns: [
-      { name: "enrollment", type: "link", link: { table: "enrollment" } },
-      { name: "evaluation", type: "link", link: { table: "evaluation" } },
-      {
-        name: "raw_grades",
-        type: "string",
-        notNull: true,
-        defaultValue: '"20,19.85"',
-      },
     ],
   },
   {
@@ -91,10 +108,24 @@ const tables = [
     ],
   },
   {
-    name: "class",
+    name: "enrollment",
     columns: [
-      { name: "course", type: "link", link: { table: "course" } },
-      { name: "period", type: "link", link: { table: "period" } },
+      { name: "student", type: "link", link: { table: "student" } },
+      { name: "classroom", type: "link", link: { table: "classroom" } },
+      { name: "final_score", type: "float" },
+    ],
+  },
+  {
+    name: "score",
+    columns: [
+      { name: "enrollment", type: "link", link: { table: "enrollment" } },
+      { name: "evaluation", type: "link", link: { table: "evaluation" } },
+      {
+        name: "raw_grades",
+        type: "string",
+        notNull: true,
+        defaultValue: '"20,19.85"',
+      },
     ],
   },
   {
@@ -162,37 +193,6 @@ const tables = [
       { name: "user", type: "link", link: { table: "nextauth_users" } },
     ],
   },
-  {
-    name: "period",
-    columns: [{ name: "handle", type: "string", unique: true }],
-  },
-  {
-    name: "curriculum",
-    columns: [{ name: "handle", type: "string", unique: true }],
-  },
-  {
-    name: "student_curriculum",
-    columns: [
-      { name: "student", type: "link", link: { table: "student" } },
-      { name: "curriculum", type: "link", link: { table: "curriculum" } },
-    ],
-  },
-  {
-    name: "level",
-    columns: [
-      { name: "number", type: "int", notNull: true, defaultValue: "0" },
-      { name: "curriculum", type: "link", link: { table: "curriculum" } },
-      { name: "elective_count", type: "int" },
-    ],
-  },
-  {
-    name: "level_course",
-    columns: [
-      { name: "level", type: "link", link: { table: "level" } },
-      { name: "course", type: "link", link: { table: "course" } },
-      { name: "credits", type: "float", notNull: true, defaultValue: "0" },
-    ],
-  },
 ] as const;
 
 export type SchemaTables = typeof tables;
@@ -207,20 +207,35 @@ export type CourseRecord = Course & XataRecord;
 export type Teacher = InferredTypes["teacher"];
 export type TeacherRecord = Teacher & XataRecord;
 
-export type Enrollment = InferredTypes["enrollment"];
-export type EnrollmentRecord = Enrollment & XataRecord;
+export type Curriculum = InferredTypes["curriculum"];
+export type CurriculumRecord = Curriculum & XataRecord;
+
+export type Period = InferredTypes["period"];
+export type PeriodRecord = Period & XataRecord;
+
+export type Class = InferredTypes["class"];
+export type ClassRecord = Class & XataRecord;
+
+export type StudentCurriculum = InferredTypes["student_curriculum"];
+export type StudentCurriculumRecord = StudentCurriculum & XataRecord;
+
+export type Level = InferredTypes["level"];
+export type LevelRecord = Level & XataRecord;
+
+export type LevelCourse = InferredTypes["level_course"];
+export type LevelCourseRecord = LevelCourse & XataRecord;
 
 export type Classroom = InferredTypes["classroom"];
 export type ClassroomRecord = Classroom & XataRecord;
 
-export type Score = InferredTypes["score"];
-export type ScoreRecord = Score & XataRecord;
-
 export type Evaluation = InferredTypes["evaluation"];
 export type EvaluationRecord = Evaluation & XataRecord;
 
-export type Class = InferredTypes["class"];
-export type ClassRecord = Class & XataRecord;
+export type Enrollment = InferredTypes["enrollment"];
+export type EnrollmentRecord = Enrollment & XataRecord;
+
+export type Score = InferredTypes["score"];
+export type ScoreRecord = Score & XataRecord;
 
 export type NextauthUsers = InferredTypes["nextauth_users"];
 export type NextauthUsersRecord = NextauthUsers & XataRecord;
@@ -242,47 +257,32 @@ export type NextauthUsersSessionsRecord = NextauthUsersSessions & XataRecord;
 export type NextauthSessions = InferredTypes["nextauth_sessions"];
 export type NextauthSessionsRecord = NextauthSessions & XataRecord;
 
-export type Period = InferredTypes["period"];
-export type PeriodRecord = Period & XataRecord;
-
-export type Curriculum = InferredTypes["curriculum"];
-export type CurriculumRecord = Curriculum & XataRecord;
-
-export type StudentCurriculum = InferredTypes["student_curriculum"];
-export type StudentCurriculumRecord = StudentCurriculum & XataRecord;
-
-export type Level = InferredTypes["level"];
-export type LevelRecord = Level & XataRecord;
-
-export type LevelCourse = InferredTypes["level_course"];
-export type LevelCourseRecord = LevelCourse & XataRecord;
-
 export type DatabaseSchema = {
   student: StudentRecord;
   course: CourseRecord;
   teacher: TeacherRecord;
-  enrollment: EnrollmentRecord;
-  classroom: ClassroomRecord;
-  score: ScoreRecord;
-  evaluation: EvaluationRecord;
+  curriculum: CurriculumRecord;
+  period: PeriodRecord;
   class: ClassRecord;
+  student_curriculum: StudentCurriculumRecord;
+  level: LevelRecord;
+  level_course: LevelCourseRecord;
+  classroom: ClassroomRecord;
+  evaluation: EvaluationRecord;
+  enrollment: EnrollmentRecord;
+  score: ScoreRecord;
   nextauth_users: NextauthUsersRecord;
   nextauth_accounts: NextauthAccountsRecord;
   nextauth_verificationTokens: NextauthVerificationTokensRecord;
   nextauth_users_accounts: NextauthUsersAccountsRecord;
   nextauth_users_sessions: NextauthUsersSessionsRecord;
   nextauth_sessions: NextauthSessionsRecord;
-  period: PeriodRecord;
-  curriculum: CurriculumRecord;
-  student_curriculum: StudentCurriculumRecord;
-  level: LevelRecord;
-  level_course: LevelCourseRecord;
 };
 
 const DatabaseClient = buildClient();
 
 const defaultOptions = {
-  databaseURL: "https://beauty-grades-vgntv3.us-east-1.xata.sh/db/utec",
+  databaseURL: "https://beauty-grades-jbc8sn.us-east-1.xata.sh/db/bg4utec",
 };
 
 export class XataClient extends DatabaseClient<DatabaseSchema> {

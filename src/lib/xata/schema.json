@@ -1,6 +1,269 @@
 {
   "tables": [
     {
+      "name": "student",
+      "columns": [
+        {
+          "name": "email",
+          "type": "string",
+          "unique": true
+        }
+      ]
+    },
+    {
+      "name": "course",
+      "columns": [
+        {
+          "name": "name",
+          "type": "string",
+          "notNull": true,
+          "defaultValue": "Frontend Engineering Fundamentals"
+        },
+        {
+          "name": "handle",
+          "type": "string",
+          "unique": true
+        }
+      ]
+    },
+    {
+      "name": "teacher",
+      "columns": [
+        {
+          "name": "first_name",
+          "type": "string",
+          "notNull": true,
+          "defaultValue": "Bad"
+        },
+        {
+          "name": "last_name",
+          "type": "string",
+          "notNull": true,
+          "defaultValue": "Bunny"
+        }
+      ]
+    },
+    {
+      "name": "curriculum",
+      "columns": [
+        {
+          "name": "handle",
+          "type": "string",
+          "unique": true
+        }
+      ]
+    },
+    {
+      "name": "period",
+      "columns": [
+        {
+          "name": "handle",
+          "type": "string",
+          "unique": true
+        }
+      ]
+    },
+    {
+      "name": "class",
+      "columns": [
+        {
+          "name": "course",
+          "type": "link",
+          "link": {
+            "table": "course"
+          }
+        },
+        {
+          "name": "period",
+          "type": "link",
+          "link": {
+            "table": "period"
+          }
+        }
+      ]
+    },
+    {
+      "name": "student_curriculum",
+      "columns": [
+        {
+          "name": "student",
+          "type": "link",
+          "link": {
+            "table": "student"
+          }
+        },
+        {
+          "name": "curriculum",
+          "type": "link",
+          "link": {
+            "table": "curriculum"
+          }
+        }
+      ]
+    },
+    {
+      "name": "level",
+      "columns": [
+        {
+          "name": "number",
+          "type": "int",
+          "notNull": true,
+          "defaultValue": "0"
+        },
+        {
+          "name": "curriculum",
+          "type": "link",
+          "link": {
+            "table": "curriculum"
+          }
+        },
+        {
+          "name": "elective_count",
+          "type": "int"
+        }
+      ]
+    },
+    {
+      "name": "level_course",
+      "columns": [
+        {
+          "name": "level",
+          "type": "link",
+          "link": {
+            "table": "level"
+          }
+        },
+        {
+          "name": "course",
+          "type": "link",
+          "link": {
+            "table": "course"
+          }
+        },
+        {
+          "name": "credits",
+          "type": "float",
+          "notNull": true,
+          "defaultValue": "0"
+        }
+      ]
+    },
+    {
+      "name": "classroom",
+      "columns": [
+        {
+          "name": "teacher",
+          "type": "link",
+          "link": {
+            "table": "teacher"
+          }
+        },
+        {
+          "name": "score",
+          "type": "float",
+          "notNull": true,
+          "defaultValue": "17.89"
+        },
+        {
+          "name": "section",
+          "type": "int",
+          "notNull": true,
+          "defaultValue": "1"
+        },
+        {
+          "name": "class",
+          "type": "link",
+          "link": {
+            "table": "class"
+          }
+        }
+      ]
+    },
+    {
+      "name": "evaluation",
+      "columns": [
+        {
+          "name": "handle",
+          "type": "string",
+          "notNull": true,
+          "defaultValue": "PC1"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "notNull": true,
+          "defaultValue": "Práctica Calificada 1"
+        },
+        {
+          "name": "class",
+          "type": "link",
+          "link": {
+            "table": "class"
+          }
+        },
+        {
+          "name": "delete_lowest",
+          "type": "bool",
+          "notNull": true,
+          "defaultValue": "false"
+        },
+        {
+          "name": "weight",
+          "type": "float",
+          "notNull": true,
+          "defaultValue": "0"
+        }
+      ]
+    },
+    {
+      "name": "enrollment",
+      "columns": [
+        {
+          "name": "student",
+          "type": "link",
+          "link": {
+            "table": "student"
+          }
+        },
+        {
+          "name": "classroom",
+          "type": "link",
+          "link": {
+            "table": "classroom"
+          }
+        },
+        {
+          "name": "final_score",
+          "type": "float"
+        }
+      ]
+    },
+    {
+      "name": "score",
+      "columns": [
+        {
+          "name": "enrollment",
+          "type": "link",
+          "link": {
+            "table": "enrollment"
+          }
+        },
+        {
+          "name": "evaluation",
+          "type": "link",
+          "link": {
+            "table": "evaluation"
+          }
+        },
+        {
+          "name": "raw_grades",
+          "type": "string",
+          "notNull": true,
+          "defaultValue": "\"20,19.85\""
+        }
+      ]
+    },
+    {
       "name": "nextauth_users",
       "columns": [
         {
@@ -167,217 +430,6 @@
           "link": {
             "table": "nextauth_users"
           }
-        }
-      ]
-    },
-    {
-      "name": "user",
-      "columns": [
-        {
-          "name": "email",
-          "type": "string",
-          "unique": true
-        }
-      ]
-    },
-    {
-      "name": "curriculum_course",
-      "columns": [
-        {
-          "name": "name",
-          "type": "string",
-          "notNull": true,
-          "defaultValue": "Frontend Engineering Fundamentals"
-        },
-        {
-          "name": "handle",
-          "type": "string",
-          "defaultValue": "BB1001"
-        }
-      ]
-    },
-    {
-      "name": "teacher",
-      "columns": [
-        {
-          "name": "name",
-          "type": "string",
-          "notNull": true,
-          "defaultValue": "Bad Bunny"
-        }
-      ]
-    },
-    {
-      "name": "enrollment",
-      "columns": [
-        {
-          "name": "student",
-          "type": "link",
-          "link": {
-            "table": "user"
-          }
-        },
-        {
-          "name": "classroom",
-          "type": "link",
-          "link": {
-            "table": "classroom"
-          }
-        },
-        {
-          "name": "score",
-          "type": "float"
-        }
-      ]
-    },
-    {
-      "name": "classroom",
-      "columns": [
-        {
-          "name": "teacher",
-          "type": "link",
-          "link": {
-            "table": "teacher"
-          }
-        },
-        {
-          "name": "score",
-          "type": "float",
-          "notNull": true,
-          "defaultValue": "17.89"
-        },
-        {
-          "name": "modality",
-          "type": "string",
-          "notNull": true,
-          "defaultValue": "presencial"
-        },
-        {
-          "name": "section",
-          "type": "int",
-          "notNull": true,
-          "defaultValue": "1"
-        },
-        {
-          "name": "course",
-          "type": "link",
-          "link": {
-            "table": "course"
-          }
-        }
-      ]
-    },
-    {
-      "name": "score",
-      "columns": [
-        {
-          "name": "enrollment",
-          "type": "link",
-          "link": {
-            "table": "enrollment"
-          }
-        }
-      ]
-    },
-    {
-      "name": "evaluation",
-      "columns": [
-        {
-          "name": "handle",
-          "type": "string",
-          "notNull": true,
-          "defaultValue": "PC1"
-        },
-        {
-          "name": "name",
-          "type": "string",
-          "notNull": true,
-          "defaultValue": "Práctica Calificada 1"
-        },
-        {
-          "name": "course",
-          "type": "link",
-          "link": {
-            "table": "course"
-          }
-        }
-      ]
-    },
-    {
-      "name": "course",
-      "columns": [
-        {
-          "name": "curriculum_course",
-          "type": "link",
-          "link": {
-            "table": "curriculum_course"
-          }
-        },
-        {
-          "name": "modality",
-          "type": "string",
-          "notNull": true,
-          "defaultValue": "presencial"
-        },
-        {
-          "name": "semester",
-          "type": "string",
-          "notNull": true,
-          "defaultValue": "2019-1"
-        }
-      ]
-    },
-    {
-      "name": "course_curriculum_career_level",
-      "columns": [
-        {
-          "name": "curriculum_course",
-          "type": "link",
-          "link": {
-            "table": "curriculum_course"
-          }
-        },
-        {
-          "name": "curriculum",
-          "type": "string",
-          "notNull": true,
-          "defaultValue": "2018"
-        },
-        {
-          "name": "career",
-          "type": "link",
-          "link": {
-            "table": "career"
-          }
-        },
-        {
-          "name": "level",
-          "type": "int",
-          "notNull": true,
-          "defaultValue": "1"
-        },
-        {
-          "name": "credits",
-          "type": "int",
-          "notNull": true,
-          "defaultValue": "3"
-        }
-      ]
-    },
-    {
-      "name": "career",
-      "columns": [
-        {
-          "name": "handle",
-          "type": "string",
-          "notNull": true,
-          "defaultValue": "CS"
-        },
-        {
-          "name": "name",
-          "type": "string",
-          "notNull": true,
-          "defaultValue": "Computer Science"
         }
       ]
     }
