@@ -23,7 +23,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         await Xata.db.student.create({
           email,
           utec_token: auth_token,
-          last_populated_at: new Date(),
+          last_token_stored_at: new Date(),
         })
       } else {
         await student.update({
