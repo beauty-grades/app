@@ -8,7 +8,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       "Access-Control-Allow-Origin",
       "https://sistema-academico.utec.edu.pe"
     )
-    res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS")
+    res.setHeader("Access-Control-Allow-Methods", "POST,OPTIONS")
     res.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type")
 
     if (req.method === "OPTIONS") {
