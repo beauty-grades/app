@@ -647,6 +647,8 @@ export const populate = async (auth_token: string, email: string) => {
               level.curriculum?.handle === level_course.level.curriculum.handle
           )
           if (!xata_level) {
+            console.log({ level_course })
+            console.log({ xatalevels: XataRecords.levels })
             throw new Error("Level not found")
           }
 
