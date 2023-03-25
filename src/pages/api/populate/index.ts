@@ -33,8 +33,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       }
 
       res.status(200).json({
-        message:
-          "¡Listo! Estamos transfiriendo tu data. Ve al dashboard de BeautyGrades para ver tus notas. Si no ves nada, espera unos minutos y recarga la página.",
+        status: "¡Listo! Estamos transfiriendo tu data ;)",
+        callback:
+          "Ve al dashboard de BeautyGrades para ver tus notas :) y luego espera 2 minutos.",
+        fallback:
+          "Si no ves nada pasados los dos minutos, recarga la página una vez más :0. Si aún así no ves nada, escríbenos a hi.cuevantn@gmail.com ;)",
       })
       return
     } else {
