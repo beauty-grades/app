@@ -282,7 +282,7 @@ export type DatabaseSchema = {
 const DatabaseClient = buildClient();
 
 const defaultOptions = {
-  databaseURL: "https://semestre-easy-vgntv3.us-east-1.xata.sh/db/utec",
+  databaseURL: "https://beauty-grades-vgntv3.us-east-1.xata.sh/db/utec",
 };
 
 export class XataClient extends DatabaseClient<DatabaseSchema> {
