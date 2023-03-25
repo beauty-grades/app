@@ -12,15 +12,14 @@ import Header from "@/components/header"
 
 const ClientLayout = ({ children }) => {
   return (
-    <SessionProvider>
-      <SWRConfig
-        value={{
-          refreshInterval: 3000,
-          fetcher: (resource, init) =>
-            fetch(resource, init).then((res) => res.json()),
-        }}
-      >
-        <body className="bg-white font-sans text-zinc-900 antialiased dark:bg-zinc-900 dark:text-zinc-50">
+      <SessionProvider>
+        <SWRConfig
+          value={{
+            refreshInterval: 3000,
+            fetcher: (resource, init) =>
+              fetch(resource, init).then((res) => res.json()),
+          }}
+        >
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <WrapBalancerProvider>
               <div className="flex min-h-[150vh] flex-col">
@@ -32,9 +31,8 @@ const ClientLayout = ({ children }) => {
             </WrapBalancerProvider>
             <Analytics />
           </ThemeProvider>
-        </body>
-      </SWRConfig>
-    </SessionProvider>
+        </SWRConfig>
+      </SessionProvider>
   )
 }
 

@@ -19,17 +19,14 @@ export const metadata = {
   icons: {
     icon: "/rounded-icon.svg",
   },
-  verification: {
-    other: {
-      "facebook-domain-verification": ["ku3iedczjv7wodxrpt8gqwbsq9ytd6"],
-    },
-  },
 }
 
 const Layout: React.FunctionComponent<MainLayoutProps> = ({ children }) => {
   return (
     <html lang="es" className={fontSans.className}>
-      <ClientLayout>{children}</ClientLayout>
+      <body className="bg-white font-sans text-zinc-900 antialiased dark:bg-zinc-900 dark:text-zinc-50">
+        <ClientLayout>{children}</ClientLayout>
+      </body>
     </html>
   )
 }
