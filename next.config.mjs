@@ -26,7 +26,7 @@ const nextConfig = {
     return [
       {
         // matching all API routes
-        source: "/api/populate*",
+        source: "/api/populate",
         headers: [
           { key: "Access-Control-Allow-Origin", value: "https://sistema-academico.utec.edu.pe" },
           {
