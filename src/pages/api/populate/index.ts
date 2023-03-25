@@ -1,16 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next"
 
-import { populate } from "./script"
+import Xata from "@/lib/xata"
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    res.setHeader(
-      "Access-Control-Allow-Origin",
-      "https://sistema-academico.utec.edu.pe"
-    )
-    res.setHeader("Access-Control-Allow-Methods", "OPTIONS,POST")
-    res.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type")
-
     if (req.method === "OPTIONS") {
       res.status(200).end()
       return
@@ -24,9 +17,25 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         return res.json({ error: "No email" })
       }
 
-      await populate(auth_token, email)
+      const student = await Xata.db.student.filter({ email }).getFirst()
 
-      res.status(200).json({ message: "OK" })
+      if (!student) {
+        await Xata.db.student.create({
+          email,
+          utec_token: auth_token,
+          last_populated_at: new Date(),
+        })
+      } else {
+        await student.update({
+          utec_token: auth_token,
+          last_token_stored_at: new Date(),
+        })
+      }
+
+      res.status(200).json({
+        message:
+          "¡Listo! Estamos transfiriendo tu data. Ve al dashboard de BeautyGrades para ver tus notas. Si no ves nada, espera unos minutos y recarga la página.",
+      })
       return
     } else {
       res.status(405).end()

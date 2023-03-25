@@ -9,7 +9,12 @@ import type {
 const tables = [
   {
     name: "student",
-    columns: [{ name: "email", type: "string", unique: true }],
+    columns: [
+      { name: "email", type: "string", unique: true },
+      { name: "utec_token", type: "string" },
+      { name: "last_populated_at", type: "datetime" },
+      { name: "last_token_stored_at", type: "datetime" },
+    ],
   },
   {
     name: "course",
