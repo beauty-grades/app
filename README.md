@@ -3,7 +3,7 @@
 ```js
 const { email, tokenV1 } = JSON.parse(localStorage.session)
 
-fetch("http://localhost:3000/api/populate", {
+fetch("https://beauty-grades.vercel.app/api/populate", {
   method: "POST",
   headers: {
     Authorization: tokenV1,

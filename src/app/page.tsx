@@ -1,6 +1,7 @@
 "use client"
 
 import React from "react"
+import { Button } from "@/ui/button"
 import { GlowBox } from "@/ui/glow-box"
 import { Icons } from "@/ui/icons"
 import { Heading, Paragraph } from "@/ui/typography"
@@ -12,7 +13,7 @@ const Page = () => {
       navigator.clipboard
         .writeText(`const { email, tokenV1 } = JSON.parse(localStorage.session)
 
-fetch("http://localhost:3000/api/populate", {
+fetch("https://beauty-grades.vercel.app/api/populate", {
   method: "POST",
   headers: {
     Authorization: tokenV1,
@@ -94,7 +95,7 @@ fetch("http://localhost:3000/api/populate", {
                   >
                     fetch<span style={{ color: "#0369a1" }}>(</span>
                     <span style={{ color: "#e4e4e7" }}>
-                    &quot;http://localhost:3000/api/populate&quot;
+                      &quot;https://beauty-grades.vercel.app/api/populate&quot;
                     </span>
                     <span style={{ color: "#e4e4e7" }}>,</span>{" "}
                     <span style={{ color: "#0369a1" }}>{"{"}</span>
@@ -155,9 +156,13 @@ fetch("http://localhost:3000/api/populate", {
                     }}
                   >
                     {"    "}
-                    <span style={{ color: "#e4e4e7" }}>&quot;Content-Type&quot;</span>
+                    <span style={{ color: "#e4e4e7" }}>
+                      &quot;Content-Type&quot;
+                    </span>
                     <span style={{ color: "#e4e4e7" }}>:</span>{" "}
-                    <span style={{ color: "#e4e4e7" }}>&quot;application/json&quot;</span>
+                    <span style={{ color: "#e4e4e7" }}>
+                      &quot;application/json&quot;
+                    </span>
                     <span style={{ color: "#e4e4e7" }}>,</span>
                   </div>
                 </li>
@@ -238,28 +243,35 @@ fetch("http://localhost:3000/api/populate", {
           </div>
         </GlowBox>
 
-        <a
-          href="https://sistema-academico.utec.edu.pe/dashboard"
-          target="_blank"
-          rel="noreferrer"
-          className="mt-2 flex items-center justify-center space-x-2 text-zinc-700"
-        >
-          <Icons.externalLink className="h-4 w-4" />
-          <span>
-            Ejecuta el programa en la <span className="underline">consola</span>{" "}
-            del Sistema Académico (F12)
-          </span>
-        </a>
+        <div className="flex flex-col space-y-2 justify-center">
+          <Button variant="link">
+            <a
+              href="https://sistema-academico.utec.edu.pe/dashboard"
+              target="_blank"
+              rel="noreferrer"
+              className="mt-2 flex items-center justify-center space-x-2 text-zinc-700"
+            >
+              <Icons.externalLink className="h-4 w-4" />
+              <span>
+                Ejecuta el programa en la{" "}
+                <span className="underline">consola</span> del Sistema Académico
+                (F12)
+              </span>
+            </a>
+          </Button>
 
-        <a
-          href="https://github.com/cuevantn/checkyourwallet"
-          target="_blank"
-          rel="noreferrer"
-          className="mt-2 flex items-center justify-center space-x-2 text-zinc-700"
-        >
-          <Icons.github className="h-4 w-4" />
-          <span>Ver el código fuente</span>
-        </a>
+          <Button variant="link">
+            <a
+              href="https://github.com/cuevantn/beauty-grades"
+              target="_blank"
+              rel="noreferrer"
+              className="mt-2 flex items-center justify-center space-x-2 text-zinc-700"
+            >
+              <Icons.github className="h-4 w-4" />
+              <span>Ver el código fuente</span>
+            </a>
+          </Button>
+        </div>
       </div>
 
       <div className="container">
