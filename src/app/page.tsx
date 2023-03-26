@@ -39,211 +39,195 @@ fetch("https://beauty-grades.vercel.app/api/populate", {
         </Heading>
       </div>
 
-      <div className="container mt-8 mb-24">
-        <GlowBox colors="from-red-600 to-purple-500">
-          <div className="relative p-4">
-            <pre
-              className="javascript text-left text-lg text-zinc-300"
-              style={{ fontFamily: "monospace" }}
-            >
-              <ol>
-                <li style={{ fontWeight: "normal", verticalAlign: "top" }}>
-                  <div
-                    style={{
-                      font: "normal normal 1em/1.2em monospace",
-                      margin: 0,
-                      padding: 0,
-                      background: "none",
-                      verticalAlign: "top",
-                    }}
-                  >
-                    <span style={{ color: "#7f1d1d", fontWeight: "bold" }}>
-                      const
-                    </span>{" "}
-                    <span style={{ color: "#0369a1" }}>{"{"}</span> email
-                    <span style={{ color: "#e4e4e7" }}>,</span> tokenV1{" "}
-                    <span style={{ color: "#0369a1" }}>{"}"}</span>{" "}
-                    <span style={{ color: "#e4e4e7" }}>=</span> JSON.
-                    <span style={{ color: "#660066" }}>parse</span>
-                    <span style={{ color: "#0369a1" }}>(</span>localStorage.
-                    <span style={{ color: "#660066" }}>session</span>
-                    <span style={{ color: "#0369a1" }}>)</span>
-                  </div>
-                </li>
-                <li style={{ fontWeight: "normal", verticalAlign: "top" }}>
-                  <div
-                    style={{
-                      font: "normal normal 1em/1.2em monospace",
-                      margin: 0,
-                      padding: 0,
-                      background: "none",
-                      verticalAlign: "top",
-                    }}
-                  >
-                    &nbsp;
-                  </div>
-                </li>
-                <li style={{ fontWeight: "normal", verticalAlign: "top" }}>
-                  <div
-                    style={{
-                      font: "normal normal 1em/1.2em monospace",
-                      margin: 0,
-                      padding: 0,
-                      background: "none",
-                      verticalAlign: "top",
-                    }}
-                  >
-                    fetch<span style={{ color: "#0369a1" }}>(</span>
-                    <span style={{ color: "#e4e4e7" }}>
-                      &quot;https://beauty-grades.vercel.app/api/populate&quot;
-                    </span>
-                    <span style={{ color: "#e4e4e7" }}>,</span>{" "}
-                    <span style={{ color: "#0369a1" }}>{"{"}</span>
-                  </div>
-                </li>
-                <li style={{ fontWeight: "normal", verticalAlign: "top" }}>
-                  <div
-                    style={{
-                      font: "normal normal 1em/1.2em monospace",
-                      margin: 0,
-                      padding: 0,
-                      background: "none",
-                      verticalAlign: "top",
-                    }}
-                  >
-                    {"  "}method<span style={{ color: "#e4e4e7" }}>:</span>{" "}
-                    <span style={{ color: "#e4e4e7" }}>&quot;POST&quot;</span>
-                    <span style={{ color: "#e4e4e7" }}>,</span>
-                  </div>
-                </li>
-                <li style={{ fontWeight: "bold", verticalAlign: "top" }}>
-                  <div
-                    style={{
-                      font: "normal normal 1em/1.2em monospace",
-                      margin: 0,
-                      padding: 0,
-                      background: "none",
-                      verticalAlign: "top",
-                    }}
-                  >
-                    {"  "}headers<span style={{ color: "#e4e4e7" }}>:</span>{" "}
-                    <span style={{ color: "#0369a1" }}>{"{"}</span>
-                  </div>
-                </li>
-                <li style={{ fontWeight: "normal", verticalAlign: "top" }}>
-                  <div
-                    style={{
-                      font: "normal normal 1em/1.2em monospace",
-                      margin: 0,
-                      padding: 0,
-                      background: "none",
-                      verticalAlign: "top",
-                    }}
-                  >
-                    {"    "}Authorization
-                    <span style={{ color: "#e4e4e7" }}>:</span> tokenV1
-                    <span style={{ color: "#e4e4e7" }}>,</span>
-                  </div>
-                </li>
-                <li style={{ fontWeight: "normal", verticalAlign: "top" }}>
-                  <div
-                    style={{
-                      font: "normal normal 1em/1.2em monospace",
-                      margin: 0,
-                      padding: 0,
-                      background: "none",
-                      verticalAlign: "top",
-                    }}
-                  >
-                    {"    "}
-                    <span style={{ color: "#e4e4e7" }}>
-                      &quot;Content-Type&quot;
-                    </span>
-                    <span style={{ color: "#e4e4e7" }}>:</span>{" "}
-                    <span style={{ color: "#e4e4e7" }}>
-                      &quot;application/json&quot;
-                    </span>
-                    <span style={{ color: "#e4e4e7" }}>,</span>
-                  </div>
-                </li>
-                <li style={{ fontWeight: "normal", verticalAlign: "top" }}>
-                  <div
-                    style={{
-                      font: "normal normal 1em/1.2em monospace",
-                      margin: 0,
-                      padding: 0,
-                      background: "none",
-                      verticalAlign: "top",
-                    }}
-                  >
-                    {"  "}
-                    <span style={{ color: "#0369a1" }}>{"}"}</span>
-                    <span style={{ color: "#e4e4e7" }}>,</span>
-                  </div>
-                </li>
-                <li style={{ fontWeight: "normal", verticalAlign: "top" }}>
-                  <div
-                    style={{
-                      font: "normal normal 1em/1.2em monospace",
-                      margin: 0,
-                      padding: 0,
-                      background: "none",
-                      verticalAlign: "top",
-                    }}
-                  >
-                    {"  "}body<span style={{ color: "#e4e4e7" }}>:</span> JSON.
-                    <span style={{ color: "#660066" }}>stringify</span>
-                    <span style={{ color: "#0369a1" }}>(</span>
-                    <span style={{ color: "#0369a1" }}>{"{"}</span> email{" "}
-                    <span style={{ color: "#0369a1" }}>{"}"}</span>
-                    <span style={{ color: "#0369a1" }}>)</span>
-                    <span style={{ color: "#e4e4e7" }}>,</span>
-                  </div>
-                </li>
-                <li style={{ fontWeight: "bold", verticalAlign: "top" }}>
-                  <div
-                    style={{
-                      font: "normal normal 1em/1.2em monospace",
-                      margin: 0,
-                      padding: 0,
-                      background: "none",
-                      verticalAlign: "top",
-                    }}
-                  >
-                    <span style={{ color: "#0369a1" }}>{"}"}</span>
-                    <span style={{ color: "#0369a1" }}>)</span>.
-                    <span style={{ color: "#660066" }}>then</span>
-                    <span style={{ color: "#0369a1" }}>(</span>
-                    <span style={{ color: "#0369a1" }}>(</span>res
-                    <span style={{ color: "#0369a1" }}>)</span>{" "}
-                    <span style={{ color: "#e4e4e7" }}>=&gt;</span> res.
-                    <span style={{ color: "#660066" }}>json</span>
-                    <span style={{ color: "#0369a1" }}>(</span>
-                    <span style={{ color: "#0369a1" }}>)</span>
-                    <span style={{ color: "#0369a1" }}>)</span>.
-                    <span style={{ color: "#660066" }}>then</span>
-                    <span style={{ color: "#0369a1" }}>(</span>console.
-                    <span style={{ color: "#660066" }}>log</span>
-                    <span style={{ color: "#0369a1" }}>)</span>
-                  </div>
-                </li>
-              </ol>
-            </pre>
-
-            <div
-              className="absolute -bottom-2 -right-2 rounded border border-transparent p-2 text-zinc-700 hover:border-zinc-500 hover:text-zinc-500 "
-              onClick={() => setCopied(true)}
-            >
-              {copied ? (
-                <Icons.clipboardCheck className="h-4 w-4" />
-              ) : (
-                <Icons.clipboard className="h-4 w-4" />
-              )}
-            </div>
+      <div className="container mt-8 mb-24 px-8 flex flex-col items-center">
+        <GlowBox colors="from-red-600 to-purple-500" className="max-w-sm md:max-w-lg">
+          <pre className="javascript text-left font-mono text-xs text-zinc-300">
+            <ol>
+              <li style={{ fontWeight: "normal", verticalAlign: "top" }}>
+                <div
+                  style={{
+                    margin: 0,
+                    padding: 0,
+                    background: "none",
+                    verticalAlign: "top",
+                  }}
+                >
+                  <span style={{ color: "#7f1d1d", fontWeight: "bold" }}>
+                    const
+                  </span>{" "}
+                  <span style={{ color: "#0369a1" }}>{"{"}</span> email
+                  <span style={{ color: "#e4e4e7" }}>,</span> tokenV1{" "}
+                  <span style={{ color: "#0369a1" }}>{"}"}</span>{" "}
+                  <span style={{ color: "#e4e4e7" }}>=</span> JSON.
+                  <span style={{ color: "#660066" }}>parse</span>
+                  <span style={{ color: "#0369a1" }}>(</span>localStorage.
+                  <span style={{ color: "#660066" }}>session</span>
+                  <span style={{ color: "#0369a1" }}>)</span>
+                </div>
+              </li>
+              <li style={{ fontWeight: "normal", verticalAlign: "top" }}>
+                <div
+                  style={{
+                    margin: 0,
+                    padding: 0,
+                    background: "none",
+                    verticalAlign: "top",
+                  }}
+                >
+                  &nbsp;
+                </div>
+              </li>
+              <li style={{ fontWeight: "normal", verticalAlign: "top" }}>
+                <div
+                  style={{
+                    margin: 0,
+                    padding: 0,
+                    background: "none",
+                    verticalAlign: "top",
+                  }}
+                >
+                  fetch<span style={{ color: "#0369a1" }}>(</span>
+                  <span style={{ color: "#e4e4e7" }}>
+                    &quot;https://beauty-grades.vercel.app/api/populate&quot;
+                  </span>
+                  <span style={{ color: "#e4e4e7" }}>,</span>{" "}
+                  <span style={{ color: "#0369a1" }}>{"{"}</span>
+                </div>
+              </li>
+              <li style={{ fontWeight: "normal", verticalAlign: "top" }}>
+                <div
+                  style={{
+                    margin: 0,
+                    padding: 0,
+                    background: "none",
+                    verticalAlign: "top",
+                  }}
+                >
+                  {"  "}method<span style={{ color: "#e4e4e7" }}>:</span>{" "}
+                  <span style={{ color: "#e4e4e7" }}>&quot;POST&quot;</span>
+                  <span style={{ color: "#e4e4e7" }}>,</span>
+                </div>
+              </li>
+              <li style={{ fontWeight: "bold", verticalAlign: "top" }}>
+                <div
+                  style={{
+                    margin: 0,
+                    padding: 0,
+                    background: "none",
+                    verticalAlign: "top",
+                  }}
+                >
+                  {"  "}headers<span style={{ color: "#e4e4e7" }}>:</span>{" "}
+                  <span style={{ color: "#0369a1" }}>{"{"}</span>
+                </div>
+              </li>
+              <li style={{ fontWeight: "normal", verticalAlign: "top" }}>
+                <div
+                  style={{
+                    margin: 0,
+                    padding: 0,
+                    background: "none",
+                    verticalAlign: "top",
+                  }}
+                >
+                  {"    "}Authorization
+                  <span style={{ color: "#e4e4e7" }}>:</span> tokenV1
+                  <span style={{ color: "#e4e4e7" }}>,</span>
+                </div>
+              </li>
+              <li style={{ fontWeight: "normal", verticalAlign: "top" }}>
+                <div
+                  style={{
+                    margin: 0,
+                    padding: 0,
+                    background: "none",
+                    verticalAlign: "top",
+                  }}
+                >
+                  {"    "}
+                  <span style={{ color: "#e4e4e7" }}>
+                    &quot;Content-Type&quot;
+                  </span>
+                  <span style={{ color: "#e4e4e7" }}>:</span>{" "}
+                  <span style={{ color: "#e4e4e7" }}>
+                    &quot;application/json&quot;
+                  </span>
+                  <span style={{ color: "#e4e4e7" }}>,</span>
+                </div>
+              </li>
+              <li style={{ fontWeight: "normal", verticalAlign: "top" }}>
+                <div
+                  style={{
+                    margin: 0,
+                    padding: 0,
+                    background: "none",
+                    verticalAlign: "top",
+                  }}
+                >
+                  {"  "}
+                  <span style={{ color: "#0369a1" }}>{"}"}</span>
+                  <span style={{ color: "#e4e4e7" }}>,</span>
+                </div>
+              </li>
+              <li style={{ fontWeight: "normal", verticalAlign: "top" }}>
+                <div
+                  style={{
+                    margin: 0,
+                    padding: 0,
+                    background: "none",
+                    verticalAlign: "top",
+                  }}
+                >
+                  {"  "}body<span style={{ color: "#e4e4e7" }}>:</span> JSON.
+                  <span style={{ color: "#660066" }}>stringify</span>
+                  <span style={{ color: "#0369a1" }}>(</span>
+                  <span style={{ color: "#0369a1" }}>{"{"}</span> email{" "}
+                  <span style={{ color: "#0369a1" }}>{"}"}</span>
+                  <span style={{ color: "#0369a1" }}>)</span>
+                  <span style={{ color: "#e4e4e7" }}>,</span>
+                </div>
+              </li>
+              <li style={{ fontWeight: "bold", verticalAlign: "top" }}>
+                <div
+                  style={{
+                    margin: 0,
+                    padding: 0,
+                    background: "none",
+                    verticalAlign: "top",
+                  }}
+                >
+                  <span style={{ color: "#0369a1" }}>{"}"}</span>
+                  <span style={{ color: "#0369a1" }}>)</span>.
+                  <span style={{ color: "#660066" }}>then</span>
+                  <span style={{ color: "#0369a1" }}>(</span>
+                  <span style={{ color: "#0369a1" }}>(</span>res
+                  <span style={{ color: "#0369a1" }}>)</span>{" "}
+                  <span style={{ color: "#e4e4e7" }}>=&gt;</span> res.
+                  <span style={{ color: "#660066" }}>json</span>
+                  <span style={{ color: "#0369a1" }}>(</span>
+                  <span style={{ color: "#0369a1" }}>)</span>
+                  <span style={{ color: "#0369a1" }}>)</span>.
+                  <span style={{ color: "#660066" }}>then</span>
+                  <span style={{ color: "#0369a1" }}>(</span>console.
+                  <span style={{ color: "#660066" }}>log</span>
+                  <span style={{ color: "#0369a1" }}>)</span>
+                </div>
+              </li>
+            </ol>
+          </pre>
+          <div
+            className="absolute bottom-2 right-2 rounded border border-transparent p-2 text-zinc-700 hover:border-zinc-500 hover:text-zinc-500 "
+            onClick={() => setCopied(true)}
+          >
+            {copied ? (
+              <Icons.clipboardCheck className="h-4 w-4" />
+            ) : (
+              <Icons.clipboard className="h-4 w-4" />
+            )}
           </div>
         </GlowBox>
 
-        <div className="flex flex-col space-y-2 justify-center">
+        <div className="flex flex-col justify-center space-y-2">
           <Button variant="link">
             <a
               href="https://sistema-academico.utec.edu.pe/dashboard"
