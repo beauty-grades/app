@@ -14,6 +14,7 @@ const tables = [
       { name: "utec_token", type: "string" },
       { name: "last_populated_at", type: "datetime" },
       { name: "last_token_stored_at", type: "datetime" },
+      { name: "populating", type: "bool" },
     ],
   },
   {

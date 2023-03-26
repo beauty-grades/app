@@ -44,24 +44,40 @@ export default async function middleware(
           new Date().getTime() - user.last_populated_at.getTime() >
             24 * 60 * 60 * 1000
         ) {
-          console.log("Populating user", email)
-          event.waitUntil(
-            populate(user.utec_token, email)
-              .catch((error) => console.log(error))
-              .then(() => console.log("Done populating user", email))
-              .then(async () => {
+          if (user.populating) {
+            console.log("User", email, "is already populating. Skipping...")
+          } else {
+            console.log("Populating user", email)
+            event.waitUntil(
+              (async () => {
+                await user.update({
+                  populating: true,
+                })
+                try {
+                  await populate(user.utec_token as string, email)
+                } catch (e) {
+                  console.error("Error populating user", email)
+                  console.error(e)
+                }
                 await user.update({
                   last_populated_at: new Date(),
+                  populating: false,
                 })
-              })
-          )
+                console.log("Finished populating user", email)
+              })()
+            )
+          }
         } else {
           console.log("Skipping population for user", email)
         }
       } else {
         console.log("No valid token found for user", email)
       }
+    } else {
+      console.log("No email found for session token", session_token)
     }
+  } else {
+    console.log("No session token found")
   }
 
   return NextResponse.next()

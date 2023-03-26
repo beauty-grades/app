@@ -546,11 +546,16 @@ export const populate = async (auth_token: string, email: string) => {
           if (levels_matched.length > 0) {
             return levels_matched[0]
           } else {
-            return await Xata.db.level.create({
+            const xata_level = await Xata.db.level.create({
               number: level.number,
               curriculum: xata_curriculum.id,
               elective_count: level.elective_count,
             })
+            
+            const fixed_xata_level = JSON.parse(JSON.stringify(xata_level))
+            fixed_xata_level.curriculum.handle = level.curriculum.handle
+
+            return fixed_xata_level
           }
         })
       )
@@ -642,13 +647,12 @@ export const populate = async (auth_token: string, email: string) => {
       XataRecords.level_courses = await Promise.all(
         level_courses.map(async (level_course) => {
           const xata_level = XataRecords.levels.find(
-            (level) =>
-              level.number === level_course.level.number &&
-              level.curriculum?.handle === level_course.level.curriculum.handle
+            (xata_level) =>
+              xata_level.number === level_course.level.number &&
+              xata_level.curriculum?.handle ===
+                level_course.level.curriculum.handle
           )
           if (!xata_level) {
-            console.log({ level_course })
-            console.log({ xatalevels: XataRecords.levels })
             throw new Error("Level not found")
           }
 
