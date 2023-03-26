@@ -14,7 +14,7 @@ export const GlowBox = ({ children, colors, className, ...props }: Props) => {
         <div
           className={`absolute -inset-0.5 rounded-lg bg-gradient-to-r ${colors} opacity-75 blur transition duration-500 group-hover:opacity-100 group-hover:duration-200`}
         />
-        <button className="w-full overflow-y-hidden overflow-x-auto relative flex items-center rounded-lg bg-zinc-900 p-4 leading-none">
+        <button className="relative w-full overflow-y-hidden overflow-x-auto flex items-center rounded-lg bg-zinc-900 p-4 leading-none">
           {children}
         </button>
       </div>

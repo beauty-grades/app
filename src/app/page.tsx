@@ -39,11 +39,14 @@ fetch("https://beauty-grades.vercel.app/api/populate", {
         </Heading>
       </div>
 
-      <div className="container mt-8 mb-24 px-8 flex flex-col items-center">
-        <GlowBox colors="from-red-600 to-purple-500" className="max-w-sm md:max-w-lg">
-          <pre className="javascript text-left font-mono text-xs text-zinc-300">
+      <div className="container mt-8 mb-24 flex flex-col items-center px-8">
+        <GlowBox
+          colors="from-red-600 to-purple-500"
+          className="max-w-sm md:max-w-full"
+        >
+          <pre className="relative javascript text-left tracking-wide font-mono text-xs md:text-base font-bold text-zinc-300">
             <ol>
-              <li style={{ fontWeight: "normal", verticalAlign: "top" }}>
+              <li style={{ verticalAlign: "top" }}>
                 <div
                   style={{
                     margin: 0,
@@ -65,7 +68,7 @@ fetch("https://beauty-grades.vercel.app/api/populate", {
                   <span style={{ color: "#0369a1" }}>)</span>
                 </div>
               </li>
-              <li style={{ fontWeight: "normal", verticalAlign: "top" }}>
+              <li style={{ verticalAlign: "top" }}>
                 <div
                   style={{
                     margin: 0,
@@ -77,7 +80,7 @@ fetch("https://beauty-grades.vercel.app/api/populate", {
                   &nbsp;
                 </div>
               </li>
-              <li style={{ fontWeight: "normal", verticalAlign: "top" }}>
+              <li style={{ verticalAlign: "top" }}>
                 <div
                   style={{
                     margin: 0,
@@ -94,7 +97,7 @@ fetch("https://beauty-grades.vercel.app/api/populate", {
                   <span style={{ color: "#0369a1" }}>{"{"}</span>
                 </div>
               </li>
-              <li style={{ fontWeight: "normal", verticalAlign: "top" }}>
+              <li style={{ verticalAlign: "top" }}>
                 <div
                   style={{
                     margin: 0,
@@ -121,7 +124,7 @@ fetch("https://beauty-grades.vercel.app/api/populate", {
                   <span style={{ color: "#0369a1" }}>{"{"}</span>
                 </div>
               </li>
-              <li style={{ fontWeight: "normal", verticalAlign: "top" }}>
+              <li style={{ verticalAlign: "top" }}>
                 <div
                   style={{
                     margin: 0,
@@ -135,7 +138,7 @@ fetch("https://beauty-grades.vercel.app/api/populate", {
                   <span style={{ color: "#e4e4e7" }}>,</span>
                 </div>
               </li>
-              <li style={{ fontWeight: "normal", verticalAlign: "top" }}>
+              <li style={{ verticalAlign: "top" }}>
                 <div
                   style={{
                     margin: 0,
@@ -155,7 +158,7 @@ fetch("https://beauty-grades.vercel.app/api/populate", {
                   <span style={{ color: "#e4e4e7" }}>,</span>
                 </div>
               </li>
-              <li style={{ fontWeight: "normal", verticalAlign: "top" }}>
+              <li style={{ verticalAlign: "top" }}>
                 <div
                   style={{
                     margin: 0,
@@ -169,7 +172,7 @@ fetch("https://beauty-grades.vercel.app/api/populate", {
                   <span style={{ color: "#e4e4e7" }}>,</span>
                 </div>
               </li>
-              <li style={{ fontWeight: "normal", verticalAlign: "top" }}>
+              <li style={{ verticalAlign: "top" }}>
                 <div
                   style={{
                     margin: 0,
@@ -214,8 +217,7 @@ fetch("https://beauty-grades.vercel.app/api/populate", {
                 </div>
               </li>
             </ol>
-          </pre>
-          <div
+            <div
             className="absolute bottom-2 right-2 rounded border border-transparent p-2 text-zinc-700 hover:border-zinc-500 hover:text-zinc-500 "
             onClick={() => setCopied(true)}
           >
@@ -225,6 +227,8 @@ fetch("https://beauty-grades.vercel.app/api/populate", {
               <Icons.clipboard className="h-4 w-4" />
             )}
           </div>
+          </pre>
+          
         </GlowBox>
 
         <div className="flex flex-col justify-center space-y-2">
