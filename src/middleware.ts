@@ -7,7 +7,7 @@ import {
 import Xata from "@/lib/xata"
 import { populate } from "./pages/api/populate/script"
 
-export default async function middleware(
+export async function middleware(
   req: NextRequest,
   event: NextFetchEvent
 ) {
