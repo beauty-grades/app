@@ -7,10 +7,7 @@ import {
 import Xata from "@/lib/xata"
 import { populate } from "./pages/api/populate/script"
 
-export async function middleware(
-  req: NextRequest,
-  event: NextFetchEvent
-) {
+export async function middleware(req: NextRequest, event: NextFetchEvent) {
   let session_token = req.cookies.get(
     process.env.VERCEL
       ? "__Secure-next-auth.session-token"
@@ -48,24 +45,20 @@ export async function middleware(
             console.log("User", email, "is already populating. Skipping...")
           } else {
             console.log("Populating user", email)
-            event.waitUntil(
-              (async () => {
-                await user.update({
-                  populating: true,
-                })
-                try {
-                  await populate(user.utec_token as string, email)
-                } catch (e) {
-                  console.error("Error populating user", email)
-                  console.error(e)
-                }
-                await user.update({
-                  last_populated_at: new Date(),
-                  populating: false,
-                })
-                console.log("Finished populating user", email)
-              })()
-            )
+            await user.update({
+              populating: true,
+            })
+            try {
+              await populate(user.utec_token as string, email)
+            } catch (e) {
+              console.error("Error populating user", email)
+              console.error(e)
+            }
+            await user.update({
+              last_populated_at: new Date(),
+              populating: false,
+            })
+            console.log("Finished populating user", email)
           }
         } else {
           console.log("Skipping population for user", email)
