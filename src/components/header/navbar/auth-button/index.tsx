@@ -9,19 +9,15 @@ export const AuthButton = () => {
 
   if (status === "authenticated") {
     return (
-      <Button variant="subtle">
-        <Link href="/dashboard" className="text-white">
-          Dashboard
-        </Link>
-      </Button>
+      <Link href="/dashboard" className="text-white">
+        <Button variant="subtle">Dashboard</Button>
+      </Link>
     )
   } else if (status === "unauthenticated") {
     return (
-      <Button variant="subtle">
-        <a href="/api/auth/signin" className="text-white">
-          Sign in
-        </a>
-      </Button>
+      <Link href="/api/auth/signin" className="text-white">
+        <Button variant="subtle">Sign in</Button>
+      </Link>
     )
   } else {
     return null

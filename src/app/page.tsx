@@ -44,7 +44,7 @@ fetch("https://beauty-grades.vercel.app/api/populate", {
           colors="from-red-600 to-purple-500"
           className="max-w-sm md:max-w-full"
         >
-          <pre className="relative javascript text-left tracking-wide font-mono text-xs md:text-base font-bold text-zinc-300">
+          <pre className="javascript relative text-left font-mono text-xs font-bold tracking-wide text-zinc-300 md:text-base">
             <ol>
               <li style={{ verticalAlign: "top" }}>
                 <div
@@ -218,17 +218,16 @@ fetch("https://beauty-grades.vercel.app/api/populate", {
               </li>
             </ol>
             <div
-            className="absolute bottom-2 right-2 rounded border border-transparent p-2 text-zinc-700 hover:border-zinc-500 hover:text-zinc-500 "
-            onClick={() => setCopied(true)}
-          >
-            {copied ? (
-              <Icons.clipboardCheck className="h-4 w-4" />
-            ) : (
-              <Icons.clipboard className="h-4 w-4" />
-            )}
-          </div>
+              className="absolute bottom-2 right-2 rounded border border-transparent p-2 text-zinc-700 hover:border-zinc-500 hover:text-zinc-500 "
+              onClick={() => setCopied(true)}
+            >
+              {copied ? (
+                <Icons.clipboardCheck className="h-4 w-4" />
+              ) : (
+                <Icons.clipboard className="h-4 w-4" />
+              )}
+            </div>
           </pre>
-          
         </GlowBox>
 
         <div className="flex flex-col justify-center space-y-2">

@@ -12,27 +12,27 @@ import Header from "@/components/header"
 
 const ClientLayout = ({ children }) => {
   return (
-      <SessionProvider>
-        <SWRConfig
-          value={{
-            refreshInterval: 3000,
-            fetcher: (resource, init) =>
-              fetch(resource, init).then((res) => res.json()),
-          }}
-        >
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <WrapBalancerProvider>
-              <div className="flex min-h-[150vh] flex-col">
-                <Header />
-                {children}
-                <Footer />
-              </div>
-              <Toaster />
-            </WrapBalancerProvider>
-            <Analytics />
-          </ThemeProvider>
-        </SWRConfig>
-      </SessionProvider>
+    <SessionProvider>
+      <SWRConfig
+        value={{
+          refreshInterval: 3000,
+          fetcher: (resource, init) =>
+            fetch(resource, init).then((res) => res.json()),
+        }}
+      >
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <WrapBalancerProvider>
+            <div className="flex min-h-[150vh] flex-col">
+              <Header />
+              {children}
+              <Footer />
+            </div>
+            <Toaster />
+          </WrapBalancerProvider>
+          <Analytics />
+        </ThemeProvider>
+      </SWRConfig>
+    </SessionProvider>
   )
 }
 

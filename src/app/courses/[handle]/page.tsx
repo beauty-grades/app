@@ -3,6 +3,7 @@ import { Button } from "@/ui/button"
 import { Heading } from "@/ui/typography"
 
 import Xata from "@/lib/xata"
+import { UserGrades } from "./user-grades"
 
 const getCourse = async (handle: string) => {
   const raw_classrooms = await Xata.db.classroom
@@ -52,13 +53,15 @@ const Page = async ({ params: { handle } }: { params: { handle: string } }) => {
         {handle} - {title}
       </Heading>
 
+      <UserGrades course_handle={handle} />
+
       <Heading as="h3">Este curso aparece en:</Heading>
       <div className="flex flex-wrap gap-4">
         {curriculums.map((curriculum) => {
           return (
-            <Button variant="subtle" key={curriculum}>
-              <Link href={`/curriculums/${curriculum}`}>{curriculum}</Link>
-            </Button>
+            <Link href={`/curriculums/${curriculum}`} key={curriculum}>
+              <Button variant="subtle">{curriculum}</Button>
+            </Link>
           )
         })}
       </div>

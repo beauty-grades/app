@@ -551,7 +551,7 @@ export const populate = async (auth_token: string, email: string) => {
               curriculum: xata_curriculum.id,
               elective_count: level.elective_count,
             })
-            
+
             const fixed_xata_level = JSON.parse(JSON.stringify(xata_level))
             fixed_xata_level.curriculum.handle = level.curriculum.handle
 

@@ -1,4 +1,4 @@
-import { Inter as FontSans } from "@next/font/google"
+import { Inter as FontSans } from "next/font/google"
 
 import "./globals.css"
 import { siteConfig } from "@/lib/site"
@@ -17,7 +17,7 @@ export const metadata = {
   title: siteConfig.name,
   description: siteConfig.description,
   icons: {
-    icon: "/rounded-icon.svg",
+    icon: "/icon.svg",
   },
 }
 

@@ -53,9 +53,11 @@ const Page = async () => {
         <div className="flex flex-wrap gap-4">
           {curriculums.map((curriculum) => {
             return (
-              <Button variant="subtle" key={curriculum}>
-                <Link href={`/curriculums/${curriculum}`}>{curriculum}</Link>
-              </Button>
+              <Link href={`/curriculums/${curriculum}`}>
+                <Button variant="subtle" key={curriculum}>
+                  {curriculum}
+                </Button>
+              </Link>
             )
           })}
         </div>
