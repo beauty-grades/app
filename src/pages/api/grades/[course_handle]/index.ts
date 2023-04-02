@@ -10,6 +10,7 @@ export interface Score {
   name: string
   weight: number
   grades: number[]
+  delete_lowest: boolean
   average: number
 }
 
@@ -48,13 +49,22 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         const grades = score.raw_grades.split(",").map((grade) => {
           return parseFloat(grade)
         })
+        const delete_lowest = score.evaluation.delete_lowest
+
+        let average = grades.reduce((a, b) => a + b)
+        if (delete_lowest) {
+          average -= Math.min(...grades)
+        }
+        average /= grades.length - (delete_lowest ? 1 : 0)
+
         scores.push({
           id: score.id,
           handle: score.evaluation.handle,
           name: score.evaluation.name,
           weight: score.evaluation.weight,
+          delete_lowest: score.evaluation.delete_lowest,
           grades,
-          average: grades.reduce((a, b) => a + b) / grades.length,
+          average: average,
         })
       }
     })

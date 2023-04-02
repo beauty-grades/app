@@ -56,6 +56,8 @@ export const UserGrades = ({ course_handle }: UserGradesProps) => {
             handle={score.handle}
             average={score.average}
             weight={score.weight}
+            grades={score.grades}
+            delete_lowest={score.delete_lowest}
           />
         ))}
       </div>

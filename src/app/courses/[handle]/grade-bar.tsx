@@ -4,8 +4,10 @@ import { AnimatePresence, motion } from "framer-motion"
 
 interface GradeBarProps {
   handle: string
+  grades?: number[]
   average: number
   weight: number
+  delete_lowest?: boolean
   delay?: number
 }
 
@@ -13,6 +15,8 @@ export const GradeBar = ({
   handle,
   average,
   weight,
+  grades = [1],
+  delete_lowest = false,
   delay = 0.3,
 }: GradeBarProps) => {
   const bg_color =
