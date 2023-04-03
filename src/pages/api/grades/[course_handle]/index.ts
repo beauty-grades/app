@@ -16,7 +16,7 @@ export interface Score {
 
 export interface Enrollment {
   period: string
-  scores: Score[] | []
+  scores: Score[]
   teacher: {
     id: string
     fist_name: string
