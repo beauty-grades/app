@@ -119,8 +119,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       }
     })
 
-    console.log(enrollments)
-
     res.status(200).json({
       enrollments,
       ok: true,
