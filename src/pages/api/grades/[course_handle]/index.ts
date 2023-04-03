@@ -14,6 +14,16 @@ export interface Score {
   average: number
 }
 
+export interface Enrollment {
+  period: string
+  scores: Score[] | []
+  teacher: {
+    id: string
+    fist_name: string
+    last_name: string
+  }
+}
+
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const session = await getServerSession(req, res, authOptions)
@@ -34,7 +44,14 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const handle = course_handle as string
 
     const data = await Xata.db.score
-      .select(["*", "evaluation.*", "evaluation.class.*"])
+      .select([
+        "*",
+        "evaluation.*",
+        "evaluation.class.*",
+        "evaluation.class.period",
+        "enrollment.classroom.*",
+        "enrollment.classroom.teacher",
+      ])
       .filter({ "enrollment.student.email": email })
       .filter({
         "evaluation.class.course": {
@@ -43,9 +60,20 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       })
       .getAll()
 
-    let scores: Score[] = []
+    let enrollments: Enrollment[] = []
+
     data.forEach((score) => {
-      if (score.evaluation) {
+      if (
+        score.evaluation?.class?.period &&
+        score.enrollment?.classroom?.teacher
+      ) {
+        const period = score.evaluation.class.period.handle
+        const teacher = score.enrollment.classroom.teacher
+
+        const existing = enrollments.find(
+          (enrollment) => enrollment.period === period
+        )
+
         const grades = score.raw_grades.split(",").map((grade) => {
           return parseFloat(grade)
         })
@@ -57,20 +85,44 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         }
         average /= grades.length - (delete_lowest ? 1 : 0)
 
-        scores.push({
-          id: score.id,
-          handle: score.evaluation.handle,
-          name: score.evaluation.name,
-          weight: score.evaluation.weight,
-          delete_lowest: score.evaluation.delete_lowest,
-          grades,
-          average: average,
-        })
+        if (existing) {
+          existing.scores.push({
+            id: score.id,
+            handle: score.evaluation.handle,
+            name: score.evaluation.name,
+            weight: score.evaluation.weight,
+            delete_lowest: score.evaluation.delete_lowest,
+            grades,
+            average: average,
+          })
+        } else {
+          enrollments.push({
+            period: score.evaluation.class.period.handle as string,
+            teacher: {
+              id: teacher.id,
+              fist_name: teacher.first_name,
+              last_name: teacher.last_name,
+            },
+            scores: [
+              {
+                id: score.id,
+                handle: score.evaluation.handle,
+                name: score.evaluation.name,
+                weight: score.evaluation.weight,
+                delete_lowest: score.evaluation.delete_lowest,
+                grades,
+                average: average,
+              },
+            ],
+          })
+        }
       }
     })
 
+    console.log(enrollments)
+
     res.status(200).json({
-      scores,
+      enrollments,
       ok: true,
     })
   } catch (error) {

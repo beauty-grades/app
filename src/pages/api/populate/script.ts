@@ -1,3 +1,4 @@
+import { retryFetch } from "@/lib/utils/retry-fetch"
 import Xata from "@/lib/xata"
 import {
   ClassRecord,
@@ -218,12 +219,19 @@ export const populate = async (auth_token: string, email: string) => {
         idAlumno: string
       }[]
 
-      await Promise.all(
-        fetched_periods.map(async ({ codPeriodo, descPeriodo }) => {
+      const forEachSeries = async (iterable, action) => {
+        for (const x of iterable) {
+          await action(x)
+        }
+      }
+
+      await forEachSeries(
+        fetched_periods,
+        async ({ codPeriodo, descPeriodo }) => {
           const current_period = new Period(descPeriodo.replaceAll(" ", ""))
           periods.push(current_period)
 
-          const res_get_period = await fetch(
+          const res_get_period = await retryFetch(
             `https://api.utec.edu.pe/academico-api/alumnos/me/course/details`,
             {
               method: "POST",
@@ -267,115 +275,120 @@ export const populate = async (auth_token: string, email: string) => {
             }[]
           }[]
 
-          fetched_courses.map((course) => {
-            // Check if course is in courses array
+          if (fetched_courses.length && fetched_courses.length > 0) {
+            fetched_courses.forEach((course) => {
+              // Check if course is in courses array
 
-            const parsed_handle = course.idCourse.trim()
-            const parsed_title = course.titleCourse.trim()
+              const parsed_handle = course.idCourse.trim()
+              const parsed_title = course.titleCourse.trim()
 
-            let current_course = courses.find((c) => c.handle === parsed_handle)
-            if (!current_course) {
-              current_course = new Course(parsed_handle, parsed_title)
-              courses.push(current_course)
-            }
-
-            const current_clase = new Clase(current_course, current_period)
-            clases.push(current_clase)
-
-            let [first_name, last_name] = course.teacher.split(", ")
-            first_name = first_name.trim()
-            last_name = last_name.trim()
-
-            let current_teacher = teachers.find(
-              (teacher) =>
-                teacher.first_name === first_name &&
-                teacher.last_name === last_name
-            )
-
-            if (!current_teacher) {
-              current_teacher = new Teacher(first_name, last_name)
-              teachers.push(current_teacher)
-            }
-
-            const current_classroom = new Classroom(
-              parseInt(course.sectionName),
-              current_clase,
-              current_teacher
-            )
-
-            classrooms.push(current_classroom)
-
-            const current_enrollment = new Enrollment(
-              student,
-              current_classroom,
-              parseFloat(course.finalScore)
-            )
-            enrollments.push(current_enrollment)
-
-            let current_evaluations: Evaluation[] = []
-            let current_scores: Score[] = []
-
-            course.scores.map((score) => {
-              let name = score.name.trim()
-              let handle = score.code.split(" ")[0]
-
-              let weight: number = 0
-              let weightRegex = new RegExp(`\\d+\\%\\s${handle}`)
-              let weightMatch = weightRegex.exec(course.formula)
-
-              if (weightMatch) {
-                const weightString = weightMatch[0].split("%")[0]
-                weight = Number(weightString) / 100
-              } else {
-                name = name.replace(/[0-9]/g, "")
-
-                weightRegex = new RegExp(`\\d+\\%\\s${name}`)
-                weightMatch = weightRegex.exec(course.formula)
-
-                if (weightMatch) {
-                  const weightString = weightMatch[0].split("%")[0]
-                  weight = Number(weightString) / 100
-                }
+              let current_course = courses.find(
+                (c) => c.handle === parsed_handle
+              )
+              if (!current_course) {
+                current_course = new Course(parsed_handle, parsed_title)
+                courses.push(current_course)
               }
 
-              // Check if evaluation is in evaluations array
+              const current_clase = new Clase(current_course, current_period)
+              clases.push(current_clase)
 
-              let current_evaluation = evaluations.find(
-                (evaluation) =>
-                  evaluation.handle === handle &&
-                  evaluation.clase === current_clase
+              let [first_name, last_name] = course.teacher.split(", ")
+              first_name = first_name.trim()
+              last_name = last_name.trim()
+
+              let current_teacher = teachers.find(
+                (teacher) =>
+                  teacher.first_name === first_name &&
+                  teacher.last_name === last_name
               )
 
-              if (!current_evaluation) {
-                current_evaluation = new Evaluation(
-                  handle,
-                  name,
-                  weight,
-                  score.delete,
-                  current_clase
-                )
-                current_evaluations.push(current_evaluation)
-                evaluations.push(current_evaluation)
+              if (!current_teacher) {
+                current_teacher = new Teacher(first_name, last_name)
+                teachers.push(current_teacher)
               }
 
-              let current_score = current_scores.find(
-                (grade) => grade.evaluation === current_evaluation
+              const current_classroom = new Classroom(
+                parseInt(course.sectionName),
+                current_clase,
+                current_teacher
               )
 
-              if (!current_score) {
-                current_score = new Score(
-                  current_evaluation,
-                  current_enrollment,
-                  [parseFloat(score.score)]
-                )
-                current_scores.push(current_score)
-                scores.push(current_score)
-              } else {
-                current_score.addGrade(parseFloat(score.score))
+              classrooms.push(current_classroom)
+
+              const current_enrollment = new Enrollment(
+                student,
+                current_classroom,
+                parseFloat(course.finalScore)
+              )
+              enrollments.push(current_enrollment)
+
+              let current_evaluations: Evaluation[] = []
+              let current_scores: Score[] = []
+
+              if (course.scores.length && course.scores.length > 0) {
+                course.scores.map((score) => {
+                  let name = score.name.trim()
+                  let handle = score.code.split(" ")[0]
+
+                  let weight: number = 0
+                  let weightRegex = new RegExp(`\\d+\\%\\s${handle}`)
+                  let weightMatch = weightRegex.exec(course.formula)
+
+                  if (weightMatch) {
+                    const weightString = weightMatch[0].split("%")[0]
+                    weight = Number(weightString) / 100
+                  } else {
+                    name = name.replace(/[0-9]/g, "")
+
+                    weightRegex = new RegExp(`\\d+\\%\\s${name}`)
+                    weightMatch = weightRegex.exec(course.formula)
+
+                    if (weightMatch) {
+                      const weightString = weightMatch[0].split("%")[0]
+                      weight = Number(weightString) / 100
+                    }
+                  }
+
+                  // Check if evaluation is in evaluations array
+                  let current_evaluation = evaluations.find(
+                    (evaluation) =>
+                      evaluation.handle === handle &&
+                      evaluation.clase === current_clase
+                  )
+
+                  if (!current_evaluation) {
+                    current_evaluation = new Evaluation(
+                      handle,
+                      name,
+                      weight,
+                      score.delete,
+                      current_clase
+                    )
+                    current_evaluations.push(current_evaluation)
+                    evaluations.push(current_evaluation)
+                  }
+
+                  let current_score = current_scores.find(
+                    (grade) => grade.evaluation === current_evaluation
+                  )
+
+                  if (!current_score) {
+                    current_score = new Score(
+                      current_evaluation,
+                      current_enrollment,
+                      [parseFloat(score.score)]
+                    )
+                    current_scores.push(current_score)
+                    scores.push(current_score)
+                  } else {
+                    current_score.addGrade(parseFloat(score.score))
+                  }
+                })
               }
             })
-          })
-        })
+          }
+        }
       )
     })(),
   ])
@@ -391,6 +404,22 @@ export const populate = async (auth_token: string, email: string) => {
       classroom.setScore(final_classroom_score.classroom_score)
     }
   })
+
+  /*   return {
+    curriculums,
+    periods,
+    courses,
+    student,
+    teachers,
+    levels,
+    clases,
+    student_curriculums,
+    level_courses,
+    evaluations,
+    classrooms,
+    enrollments,
+    scores,
+  } */
 
   // Registering in Xata
 
@@ -602,7 +631,7 @@ export const populate = async (auth_token: string, email: string) => {
 
     // Register StudentCurriculums
     (async () => {
-      XataRecords.student_curriculums = await Promise.all(
+      XataRecords.student_curriculums = (await Promise.all(
         student_curriculums.map(async (student_curriculum) => {
           const xata_student = XataRecords.student
           if (!xata_student) {
@@ -635,7 +664,7 @@ export const populate = async (auth_token: string, email: string) => {
             })
           }
         })
-      )
+      )) as StudentCurriculumRecord[]
     })(),
   ])
 
@@ -687,7 +716,7 @@ export const populate = async (auth_token: string, email: string) => {
 
     // Register Evaluations
     (async () => {
-      XataRecords.evaluations = await Promise.all(
+      XataRecords.evaluations = (await Promise.all(
         evaluations.map(async (evaluation) => {
           const xata_class = XataRecords.classes.find((clase) => {
             const xata_course_id = clase.course?.id || "123"
@@ -695,7 +724,15 @@ export const populate = async (auth_token: string, email: string) => {
               (course) => course.id === xata_course_id
             )
 
-            return xata_course?.handle === evaluation.clase.course.handle
+            const xata_period_id = clase.period?.id || "123"
+            const xata_period = XataRecords.periods.find(
+              (period) => period.id === xata_period_id
+            )
+
+            return (
+              xata_course?.handle === evaluation.clase.course.handle &&
+              xata_period?.handle === evaluation.clase.period.handle
+            )
           })
           if (!xata_class) {
             throw new Error("Class not found")
@@ -722,7 +759,7 @@ export const populate = async (auth_token: string, email: string) => {
             })
           }
         })
-      )
+      )) as EvaluationRecord[]
     })(),
 
     // Register Classrooms
@@ -735,14 +772,21 @@ export const populate = async (auth_token: string, email: string) => {
               (course) => course.id === xata_course_id
             )
 
-            return xata_course?.handle === classroom.clase.course.handle
+            const xata_period_id = clase.period?.id || "123"
+            const xata_period = XataRecords.periods.find(
+              (period) => period.id === xata_period_id
+            )
+
+            return (
+              xata_course?.handle === classroom.clase.course.handle &&
+              xata_period?.handle === classroom.clase.period.handle
+            )
           })
           if (!xata_class) {
             throw new Error("Class not found")
           }
 
           const classrooms_matched = await Xata.db.classroom
-
             .filter({
               "class.id": xata_class.id,
             })
@@ -861,8 +905,14 @@ export const populate = async (auth_token: string, email: string) => {
           (course) => course.id === xata_course_id
         )
 
+        const xata_period_id = xata_class?.period?.id || "123"
+        const xata_period = XataRecords.periods.find(
+          (period) => period.id === xata_period_id
+        )
+
         return (
           xata_course?.handle === score.evaluation.clase.course.handle &&
+          xata_period?.handle === score.evaluation.clase.period.handle &&
           evaluation.name === score.evaluation.name
         )
       })

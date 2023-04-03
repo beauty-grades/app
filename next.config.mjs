@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   experimental: {
-    appDir: true
+    appDir: true,
   },
   images: {
     domains: [
@@ -16,7 +16,10 @@ const nextConfig = {
       "i.imgur.com",
     ],
   },
-  async headers() {
+  httpAgentOptions: {
+    keepAlive: false,
+  },
+  /* async headers() {
     return [
       {
         // matching all API routes
@@ -35,7 +38,7 @@ const nextConfig = {
         ],
       },
     ]
-  },
+  }, */
 }
 
 export default nextConfig
