@@ -19,26 +19,28 @@ const nextConfig = {
   httpAgentOptions: {
     keepAlive: false,
   },
-  /* async headers() {
+  async headers() {
     return [
       {
         // matching all API routes
         source: "/api/populate",
         headers: [
-          { key: "Access-Control-Allow-Origin", value: "https://sistema-academico.utec.edu.pe" },
+          {
+            key: "Access-Control-Allow-Origin",
+            value: "https://sistema-academico.utec.edu.pe",
+          },
           {
             key: "Access-Control-Allow-Methods",
             value: "OPTIONS,POST",
           },
           {
             key: "Access-Control-Allow-Headers",
-            value:
-              "Authorization, Content-Type",
+            value: "Authorization, Content-Type",
           },
         ],
       },
     ]
-  }, */
+  },
 }
 
 export default nextConfig
