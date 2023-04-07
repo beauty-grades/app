@@ -67,7 +67,7 @@ const Page = async ({ params: { handle } }: { params: { handle: string } }) => {
           )
         })}
       </div>
-
+      {/* @ts-expect-error Async Server Component */}
       <ClassroomsByPeriodGrades handle={handle} />
     </div>
   )
