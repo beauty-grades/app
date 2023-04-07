@@ -119,6 +119,67 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       }
     })
 
+    if (enrollments.length === 0) {
+      const data = await Xata.db.enrollment
+        .select([
+          "*",
+          "classroom.*",
+          "student.*",
+          "classroom.class.*",
+          "classroom.class.period",
+          "classroom.teacher.*",
+          "classroom.class.course",
+        ])
+        .filter({ "student.email": email })
+        .filter({
+          "classroom.class.course": {
+            handle,
+          },
+        })
+        .getAll()
+
+      // find evaluations for each class
+      data.forEach(async (enrollment) => {
+        if (!enrollment.classroom?.class?.id) {
+          return
+        }
+
+        const period = enrollment.classroom.class.period?.handle
+        const teacher = enrollment.classroom.teacher
+
+        const evaluations = await Xata.db.evaluation
+          .select(["*"])
+          .filter({
+            class: {
+              id: enrollment.classroom.class.id,
+            },
+          })
+          .getAll()
+
+        if (period && teacher && evaluations) {
+          enrollments.push({
+            period: period as string,
+            teacher: {
+              id: teacher.id,
+              fist_name: teacher.first_name,
+              last_name: teacher.last_name,
+            },
+            scores: evaluations.map((evaluation) => {
+              return {
+                id: "",
+                handle: evaluation.handle,
+                name: evaluation.name,
+                weight: evaluation.weight,
+                delete_lowest: evaluation.delete_lowest,
+                grades: [],
+                average: 0,
+              }
+            }),
+          })
+        }
+      })
+    }
+
     res.status(200).json({
       enrollments,
       ok: true,
