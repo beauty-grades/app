@@ -3,6 +3,7 @@ import { Button } from "@/ui/button"
 import { Heading, Paragraph } from "@/ui/typography"
 
 import Xata from "@/lib/xata"
+import { ClassroomsByPeriodGrades } from "./classrooms-grades"
 import { UserGrades } from "./user-grades"
 
 const getCourse = async (handle: string) => {
@@ -55,10 +56,9 @@ const Page = async ({ params: { handle } }: { params: { handle: string } }) => {
 
       <UserGrades course_handle={handle} />
 
-
       <Heading as="h2">Curriculums</Heading>
       <Paragraph>Este curso aparece en:</Paragraph>
-      <div className="flex flex-wrap gap-4">
+      <div className="mb-4 flex flex-wrap gap-4">
         {curriculums.map((curriculum) => {
           return (
             <Link href={`/curriculums/${curriculum}`} key={curriculum}>
@@ -67,6 +67,8 @@ const Page = async ({ params: { handle } }: { params: { handle: string } }) => {
           )
         })}
       </div>
+
+      <ClassroomsByPeriodGrades handle={handle} />
     </div>
   )
 }
