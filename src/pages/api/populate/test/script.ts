@@ -1,4 +1,3 @@
-import { retryFetch } from "@/lib/utils/retry-fetch"
 import Xata from "@/lib/xata"
 import {
   ClassRecord,
@@ -7,60 +6,63 @@ import {
   CurriculumRecord,
   EnrollmentRecord,
   EvaluationRecord,
+  GradeRecord,
   LevelCourseRecord,
   LevelRecord,
   PeriodRecord,
-  ScoreRecord,
   StudentCurriculumRecord,
   StudentRecord,
   TeacherRecord,
 } from "@/lib/xata/codegen"
 import {
-  Clase,
-  Classroom,
-  Course,
-  Curriculum,
-  Enrollment,
-  Evaluation,
-  Level,
-  Level_Course,
-  Period,
-  Score,
-  Student,
-  Student_Curriculum,
-  Teacher,
+  LocalClase,
+  LocalClassroom,
+  LocalCourse,
+  LocalCurriculum,
+  LocalEnrollment,
+  LocalEvaluation,
+  LocalGrade,
+  LocalLevel,
+  LocalLevel_Course,
+  LocalPeriod,
+  LocalStudent,
+  LocalStudent_Curriculum,
+  LocalTeacher,
 } from "./classes"
+import { ExecuteParallelHacked } from "./execute-parallel/hacked"
+import {
+  RawCourseFromPeriodFetched,
+  RawCurriculumFetched,
+  RawLevelFromCurriculumFetched,
+  RawPeriodFetched,
+} from "./interfaces"
+import { parseEvaluations } from "./parse-evaluations"
+import { retryFetch } from "./retry-fetch"
 
 export const populate = async (auth_token: string, email: string) => {
-  // 1st level objects
-  let curriculums: Curriculum[] = []
-  let periods: Period[] = []
-  let courses: Course[] = []
-  let student: Student
-  let teachers: Teacher[] = []
-
-  // 2nd level objects
-  let levels: Level[] = []
-  let clases: Clase[] = []
-  let student_curriculums: Student_Curriculum[] = []
-
-  // 3rd level objects
-  let level_courses: Level_Course[] = []
-  let classrooms: Classroom[] = []
-  let evaluations: Evaluation[] = []
-
-  // 4th level objects
-  let enrollments: Enrollment[] = []
-
-  // 5th level objects
-  let scores: Score[] = []
+  const LocalRecords = {
+    curriculums: [] as LocalCurriculum[],
+    periods: [] as LocalPeriod[],
+    courses: [] as LocalCourse[],
+    student: {} as LocalStudent,
+    teachers: [] as LocalTeacher[],
+    levels: [] as LocalLevel[],
+    clases: [] as LocalClase[],
+    student_curriculums: [] as LocalStudent_Curriculum[],
+    level_courses: [] as LocalLevel_Course[],
+    classrooms: [] as LocalClassroom[],
+    evaluations: [] as LocalEvaluation[],
+    enrollments: [] as LocalEnrollment[],
+    grades: [] as LocalGrade[],
+  }
 
   let temp_classrooms_scores: {
     course_handle: string
+    period_handle: string
     classroom_score: number
   }[] = []
 
-  student = new Student(email)
+  LocalRecords.student = new LocalStudent(email)
 
   await Promise.all([
     // Curriculums
@@ -74,22 +76,19 @@ export const populate = async (auth_token: string, email: string) => {
         }
       )
       const json = await res_get_curriculums.json()
-      const fetched_curriculums = json.content as {
-        academicProgramId: number
-        tittle: string
-      }[]
+      const fetched_curriculums = json.content as RawCurriculumFetched[]
 
       await Promise.all(
         fetched_curriculums.map(async ({ academicProgramId, tittle }) => {
-          const current_curriculum = new Curriculum(tittle)
-          curriculums.push(current_curriculum)
+          const current_curriculum = new LocalCurriculum(tittle)
+          LocalRecords.curriculums.push(current_curriculum)
 
-          const current_student_curriculum = new Student_Curriculum(
-            student,
+          const current_student_curriculum = new LocalStudent_Curriculum(
+            LocalRecords.student,
             current_curriculum
           )
 
-          student_curriculums.push(current_student_curriculum)
+          LocalRecords.student_curriculums.push(current_student_curriculum)
 
           const res_get_curriculum = await fetch(
             "https://api.utec.edu.pe/academico-api/alumnos/me/web/academic/curriculum",
@@ -106,47 +105,15 @@ export const populate = async (auth_token: string, email: string) => {
           )
           const json = await res_get_curriculum.json()
 
-          const fetched_levels = json.content.academicCurriculum as {
-            title: string
-            courses: {
-              codeCourse: string
-              course: string
-              idCourse: number
-              nameTeacher: string
-              times: number
-              summaryEnrolled: {
-                idPeriod: number
-                namePeriod: string
-                finalNote: number
-                classroomAverage: number
-                absences: string
-              }[]
-              beforeCourses: {
-                codeCourse: string
-                course: string
-                idCourse: number
-              }[]
-              afterCourses: {
-                codeCourse: string
-                course: string
-                idCourse: number
-              }[]
-              section: string
-              credits: number
-              score: string
-              status: string
-              period: string
-              syllabus?: any
-              isElective: boolean
-            }[]
-          }[]
+          const fetched_levels = json.content
+            .academicCurriculum as RawLevelFromCurriculumFetched[]
 
           fetched_levels.map(({ title, courses: raw_courses }) => {
-            const current_level = new Level(
+            const current_level = new LocalLevel(
               parseInt(title.split(" ")[1]),
               current_curriculum
             )
-            levels.push(current_level)
+            LocalRecords.levels.push(current_level)
 
             let elective_count: number = 0
 
@@ -155,11 +122,14 @@ export const populate = async (auth_token: string, email: string) => {
                 elective_count++
               } else {
                 let classroom_score =
-                  course.summaryEnrolled[0]?.classroomAverage || undefined
+                  course.summaryEnrolled[0]?.classroomAverage
+                let xd_period =
+                  course.summaryEnrolled[0]?.namePeriod.replaceAll(" ", "")
 
                 if (classroom_score) {
                   temp_classrooms_scores.push({
                     course_handle: course.codeCourse.trim(),
+                    period_handle: xd_period,
                     classroom_score,
                   })
                 }
@@ -168,21 +138,21 @@ export const populate = async (auth_token: string, email: string) => {
                 const parsed_handle = course.codeCourse.trim()
                 const parsed_name = course.course.trim()
 
-                let current_course = courses.find(
+                let current_course = LocalRecords.courses.find(
                   (course) => course.handle === parsed_handle
                 )
 
                 if (!current_course) {
-                  current_course = new Course(parsed_handle, parsed_name)
-                  courses.push(current_course)
+                  current_course = new LocalCourse(parsed_handle, parsed_name)
+                  LocalRecords.courses.push(current_course)
                 }
 
-                const current_level_course = new Level_Course(
+                const current_level_course = new LocalLevel_Course(
                   current_level,
                   current_course,
                   course.credits
                 )
-                level_courses.push(current_level_course)
+                LocalRecords.level_courses.push(current_level_course)
               }
             })
 
@@ -209,218 +179,148 @@ export const populate = async (auth_token: string, email: string) => {
       )
 
       const json = await res_get_periods.json()
-      const fetched_periods = json.content as {
-        codPeriodo: number
-        descPeriodo: string
-        fechaPeriodo: string
-        codProducto: number
-        descProducto: string
-        retirado: boolean
-        idAlumno: string
-      }[]
+      const fetched_periods = json.content as RawPeriodFetched[]
 
-      const forEachSeries = async (iterable, action) => {
-        for (const x of iterable) {
-          await action(x)
-        }
-      }
+      const handlePeriod = async ({ codPeriodo, descPeriodo }) => {
+        const current_period = new LocalPeriod(descPeriodo.replaceAll(" ", ""))
+        LocalRecords.periods.push(current_period)
 
-      await forEachSeries(
-        fetched_periods,
-        async ({ codPeriodo, descPeriodo }) => {
-          const current_period = new Period(descPeriodo.replaceAll(" ", ""))
-          periods.push(current_period)
+        const res_get_period = await retryFetch(
+          `https://api.utec.edu.pe/academico-api/alumnos/me/course/details`,
+          {
+            method: "POST",
+            headers: {
+              "x-auth-token": auth_token,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              period: codPeriodo,
+              program: "1",
+            }),
+          }
+        )
+        const json = await res_get_period.json()
+        const fetched_courses = json.content as RawCourseFromPeriodFetched[]
 
-          const res_get_period = await retryFetch(
-            `https://api.utec.edu.pe/academico-api/alumnos/me/course/details`,
-            {
-              method: "POST",
-              headers: {
-                "x-auth-token": auth_token,
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                period: codPeriodo,
-                program: "1",
-              }),
+        if (fetched_courses.length && fetched_courses.length > 0) {
+          fetched_courses.forEach((course) => {
+            // Check if course is in courses array
+
+            const parsed_handle = course.idCourse.trim()
+            const parsed_title = course.titleCourse.trim()
+
+            let current_course = LocalRecords.courses.find(
+              (c) => c.handle === parsed_handle
+            )
+            if (!current_course) {
+              current_course = new LocalCourse(parsed_handle, parsed_title)
+              LocalRecords.courses.push(current_course)
             }
-          )
-          const json = await res_get_period.json()
-          const fetched_courses = json.content as {
-            codeCourse: number
-            idCourse: string
-            titleCourse: string
-            teacher: string
-            finalScore: string
-            credits: number
-            level: string
-            times: number
-            section: string
-            comments: string
-            formula: string
-            sectionName: string
-            bellNumber: number
-            courseModality: string
-            scores: {
-              codCourseTypeNote: number
-              numSequence: number
-              weight: number
-              codCourseForm: number
-              name: string
-              codCourseSesion: number
-              score: string
-              delete: boolean
-              sesion: string
-              code: string
-            }[]
-          }[]
 
-          if (fetched_courses.length && fetched_courses.length > 0) {
-            fetched_courses.forEach((course) => {
-              // Check if course is in courses array
+            const current_clase = new LocalClase(current_course, current_period)
+            LocalRecords.clases.push(current_clase)
 
-              const parsed_handle = course.idCourse.trim()
-              const parsed_title = course.titleCourse.trim()
+            let [first_name, last_name] = course.teacher.split(", ")
+            first_name = first_name.trim()
+            last_name = last_name.trim()
 
-              let current_course = courses.find(
-                (c) => c.handle === parsed_handle
-              )
-              if (!current_course) {
-                current_course = new Course(parsed_handle, parsed_title)
-                courses.push(current_course)
+            let current_teacher = LocalRecords.teachers.find(
+              (teacher) =>
+                teacher.first_name === first_name &&
+                teacher.last_name === last_name
+            )
+
+            if (!current_teacher) {
+              current_teacher = new LocalTeacher(first_name, last_name)
+              LocalRecords.teachers.push(current_teacher)
+            }
+
+            const current_classroom = new LocalClassroom(
+              parseInt(course.sectionName),
+              current_clase,
+              current_teacher
+            )
+
+            LocalRecords.classrooms.push(current_classroom)
+
+            const dropped_out = course.finalScore === "RET"
+            const elective = course.level === "-" && course.credits === 3
+            const final_score = dropped_out
+              ? null
+              : parseFloat(course.finalScore)
+
+            const current_enrollment = new LocalEnrollment(
+              LocalRecords.student,
+              current_classroom,
+              final_score,
+              dropped_out,
+              elective
+            )
+            LocalRecords.enrollments.push(current_enrollment)
+
+            if (course.scores.length && course.scores.length > 0) {
+              const { evaluations: parsed_evaluations, wrong_formula } =
+                parseEvaluations(course.scores, course.formula)
+
+              if (wrong_formula) {
+                current_clase.setWrongFormula()
               }
 
-              const current_clase = new Clase(current_course, current_period)
-              clases.push(current_clase)
-
-              let [first_name, last_name] = course.teacher.split(", ")
-              first_name = first_name.trim()
-              last_name = last_name.trim()
-
-              let current_teacher = teachers.find(
-                (teacher) =>
-                  teacher.first_name === first_name &&
-                  teacher.last_name === last_name
-              )
-
-              if (!current_teacher) {
-                current_teacher = new Teacher(first_name, last_name)
-                teachers.push(current_teacher)
-              }
-
-              const current_classroom = new Classroom(
-                parseInt(course.sectionName),
-                current_clase,
-                current_teacher
-              )
-
-              classrooms.push(current_classroom)
-
-              const current_enrollment = new Enrollment(
-                student,
-                current_classroom,
-                parseFloat(course.finalScore)
-              )
-              enrollments.push(current_enrollment)
-
-              let current_evaluations: Evaluation[] = []
-              let current_scores: Score[] = []
-
-              if (course.scores.length && course.scores.length > 0) {
-                course.scores.map((score) => {
-                  let name = score.name.trim()
-                  let handle = score.code.split(" ")[0]
-
-                  let weight: number = 0
-                  let weightRegex = new RegExp(`\\d+\\%\\s${handle}`)
-                  let weightMatch = weightRegex.exec(course.formula)
-
-                  if (weightMatch) {
-                    const weightString = weightMatch[0].split("%")[0]
-                    weight = Number(weightString) / 100
-                  } else {
-                    name = name.replace(/[0-9]/g, "")
-
-                    weightRegex = new RegExp(`\\d+\\%\\s${name}`)
-                    weightMatch = weightRegex.exec(course.formula)
-
-                    if (weightMatch) {
-                      const weightString = weightMatch[0].split("%")[0]
-                      weight = Number(weightString) / 100
-                    }
-                  }
-
-                  // Check if evaluation is in evaluations array
-                  let current_evaluation = evaluations.find(
-                    (evaluation) =>
-                      evaluation.handle === handle &&
-                      evaluation.clase === current_clase
+              parsed_evaluations.forEach(
+                ({ handle, label, weight, can_be_deleted, score }) => {
+                  const current_evaluation = new LocalEvaluation(
+                    handle,
+                    label,
+                    weight,
+                    can_be_deleted,
+                    current_clase
                   )
+                  LocalRecords.evaluations.push(current_evaluation)
 
-                  if (!current_evaluation) {
-                    current_evaluation = new Evaluation(
-                      handle,
-                      name,
-                      weight,
-                      score.delete,
-                      current_clase
-                    )
-                    current_evaluations.push(current_evaluation)
-                    evaluations.push(current_evaluation)
-                  }
-
-                  let current_score = current_scores.find(
-                    (grade) => grade.evaluation === current_evaluation
-                  )
-
-                  if (!current_score) {
-                    current_score = new Score(
+                  if (score) {
+                    const current_score = new LocalGrade(
                       current_evaluation,
                       current_enrollment,
-                      [parseFloat(score.score)]
+                      score
                     )
-                    current_scores.push(current_score)
-                    scores.push(current_score)
-                  } else {
-                    current_score.addGrade(parseFloat(score.score))
+                    LocalRecords.grades.push(current_score)
                   }
-                })
-              }
-            })
-          }
+                }
+              )
+            }
+          })
         }
+      }
+      const start = Date.now()
+
+      console.log(fetched_periods.map(({ codPeriodo }) => codPeriodo))
+      // jeje
+      await ExecuteParallelHacked(fetched_periods, handlePeriod)
+      // pipi
+      const end = Date.now()
+      const elapsedSeconds = Math.floor((start - end) / 1000)
+      const minutes = Math.floor(elapsedSeconds / 60)
+      const seconds = elapsedSeconds % 60
+
+      console.log(
+        `Fetch periods took: ${minutes}:${seconds.toString().padStart(2, "0")}`
       )
     })(),
   ])
 
-  classrooms.forEach((classroom) => {
-    const course_handle = classroom.clase.course.handle
-
-    let final_classroom_score = temp_classrooms_scores.find(
-      (temp_classroom) => temp_classroom.course_handle === course_handle
+  temp_classrooms_scores.forEach((temp_classroom) => {
+    const matched_classroom = LocalRecords.classrooms.find(
+      (classroom) =>
+        classroom.clase.course.handle === temp_classroom.course_handle &&
+        classroom.clase.period.handle === temp_classroom.period_handle
     )
 
-    if (final_classroom_score) {
-      classroom.setScore(final_classroom_score.classroom_score)
+    if (matched_classroom) {
+      matched_classroom.setScore(temp_classroom.classroom_score)
     }
   })
 
-  /*   return {
-    curriculums,
-    periods,
-    courses,
-    student,
-    teachers,
-    levels,
-    clases,
-    student_curriculums,
-    level_courses,
-    evaluations,
-    classrooms,
-    enrollments,
-    scores,
-  } */
-
+  /*
   // Registering in Xata
 
   let XataRecords = {} as {
@@ -436,7 +336,7 @@ export const populate = async (auth_token: string, email: string) => {
     evaluations: EvaluationRecord[]
     classrooms: ClassroomRecord[]
     enrollments: EnrollmentRecord[]
-    scores: ScoreRecord[]
+    grades: GradeRecord[]
   }
 
   // 1st level of parallelism
@@ -444,10 +344,10 @@ export const populate = async (auth_token: string, email: string) => {
     // Register Curriculums
     (async () => {
       XataRecords.curriculums = await Promise.all(
-        curriculums.map(async (curriculum) => {
+        LocalRecords.curriculums.map(async (local_curriculum) => {
           const curriculums_matched = await Xata.db.curriculum
             .filter({
-              handle: curriculum.handle,
+              handle: local_curriculum.handle,
             })
             .getMany()
 
@@ -455,7 +355,7 @@ export const populate = async (auth_token: string, email: string) => {
             return curriculums_matched[0]
           } else {
             return await Xata.db.curriculum.create({
-              handle: curriculum.handle,
+              handle: local_curriculum.handle,
             })
           }
         })
@@ -465,10 +365,10 @@ export const populate = async (auth_token: string, email: string) => {
     // Register Periods
     (async () => {
       XataRecords.periods = await Promise.all(
-        periods.map(async (period) => {
+        LocalRecords.periods.map(async (local_period) => {
           const periods_matched = await Xata.db.period
             .filter({
-              handle: period.handle,
+              handle: local_period.handle,
             })
             .getMany()
 
@@ -476,7 +376,7 @@ export const populate = async (auth_token: string, email: string) => {
             return periods_matched[0]
           } else {
             return await Xata.db.period.create({
-              handle: period.handle,
+              handle: local_period.handle,
             })
           }
         })
@@ -486,10 +386,10 @@ export const populate = async (auth_token: string, email: string) => {
     // Register Courses
     (async () => {
       XataRecords.courses = await Promise.all(
-        courses.map(async (course) => {
+        LocalRecords.courses.map(async (local_course) => {
           const courses_matched = await Xata.db.course
             .filter({
-              handle: course.handle,
+              handle: local_course.handle,
             })
             .getMany()
 
@@ -497,8 +397,8 @@ export const populate = async (auth_token: string, email: string) => {
             return courses_matched[0]
           } else {
             return await Xata.db.course.create({
-              handle: course.handle,
-              name: course.name,
+              handle: local_course.handle,
+              name: local_course.name,
             })
           }
         })
@@ -509,7 +409,7 @@ export const populate = async (auth_token: string, email: string) => {
     (async () => {
       let student_matched = await Xata.db.student
         .filter({
-          email: student.email,
+          email: LocalRecords.student.email,
         })
         .getMany()
 
@@ -517,7 +417,7 @@ export const populate = async (auth_token: string, email: string) => {
         XataRecords.student = student_matched[0]
       } else {
         XataRecords.student = await Xata.db.student.create({
-          email: student.email,
+          email: LocalRecords.student.email,
         })
       }
     })(),
@@ -525,13 +425,13 @@ export const populate = async (auth_token: string, email: string) => {
     // Register Teachers
     (async () => {
       XataRecords.teachers = await Promise.all(
-        teachers.map(async (teacher) => {
+        LocalRecords.teachers.map(async (local_teacher) => {
           const teachers_matched = await Xata.db.teacher
             .filter({
-              first_name: teacher.first_name,
+              first_name: local_teacher.first_name,
             })
             .filter({
-              last_name: teacher.last_name,
+              last_name: local_teacher.last_name,
             })
             .getMany()
 
@@ -539,8 +439,8 @@ export const populate = async (auth_token: string, email: string) => {
             return teachers_matched[0]
           } else {
             return await Xata.db.teacher.create({
-              first_name: teacher.first_name,
-              last_name: teacher.last_name,
+              first_name: local_teacher.first_name,
+              last_name: local_teacher.last_name,
             })
           }
         })
@@ -554,21 +454,22 @@ export const populate = async (auth_token: string, email: string) => {
     // Register Levels
     (async () => {
       XataRecords.levels = await Promise.all(
-        levels.map(async (level) => {
-          const xata_curriculum = XataRecords.curriculums.find(
-            (curriculum) => curriculum.handle === level.curriculum.handle
+        LocalRecords.levels.map(async (loca_level) => {
+          const xata_curriculum_matching = XataRecords.curriculums.find(
+            (xata_curriculum) =>
+              xata_curriculum.handle === loca_level.curriculum.handle
           )
-          if (!xata_curriculum) {
+          if (!xata_curriculum_matching) {
             throw new Error("Curriculum not found")
           }
 
           const levels_matched = await Xata.db.level
             .select(["*", "curriculum.*"])
             .filter({
-              "curriculum.id": xata_curriculum.id,
+              "curriculum.id": xata_curriculum_matching.id,
             })
             .filter({
-              number: level.number,
+              order: loca_level.order,
             })
             .getMany()
 
@@ -576,13 +477,13 @@ export const populate = async (auth_token: string, email: string) => {
             return levels_matched[0]
           } else {
             const xata_level = await Xata.db.level.create({
-              number: level.number,
-              curriculum: xata_curriculum.id,
-              elective_count: level.elective_count,
+              order: loca_level.order,
+              curriculum: xata_curriculum_matching.id,
+              elective_count: loca_level.elective_count,
             })
 
             const fixed_xata_level = JSON.parse(JSON.stringify(xata_level))
-            fixed_xata_level.curriculum.handle = level.curriculum.handle
+            fixed_xata_level.curriculum.handle = loca_level.curriculum.handle
 
             return fixed_xata_level
           }
@@ -593,27 +494,27 @@ export const populate = async (auth_token: string, email: string) => {
     // Register Classes
     (async () => {
       XataRecords.classes = await Promise.all(
-        clases.map(async (clase) => {
-          const xata_course = XataRecords.courses.find(
-            (course) => course.handle === clase.course.handle
+        LocalRecords.clases.map(async (local_clase) => {
+          const xata_course_matching = XataRecords.courses.find(
+            (xata_course) => xata_course.handle === local_clase.course.handle
           )
 
-          if (!xata_course) {
+          if (!xata_course_matching) {
             throw new Error("Course not found")
           }
-          const xata_period = XataRecords.periods.find(
-            (period) => period.handle === clase.period.handle
+          const xata_period_matching = XataRecords.periods.find(
+            (xata_period) => xata_period.handle === local_clase.period.handle
           )
-          if (!xata_period) {
+          if (!xata_period_matching) {
             throw new Error("Period not found")
           }
 
           const classes_matched = await Xata.db.class
             .filter({
-              "course.id": xata_course.id,
+              "course.id": xata_course_matching.id,
             })
             .filter({
-              "period.id": xata_period.id,
+              "period.id": xata_period_matching.id,
             })
             .getMany()
 
@@ -621,8 +522,9 @@ export const populate = async (auth_token: string, email: string) => {
             return classes_matched[0] as ClassRecord
           } else {
             return (await Xata.db.class.create({
-              course: xata_course.id,
-              period: xata_period.id,
+              course: xata_course_matching.id,
+              period: xata_period_matching.id,
+              wrong_formula: local_clase.wrong_formula,
             })) as ClassRecord
           }
         })
@@ -632,17 +534,17 @@ export const populate = async (auth_token: string, email: string) => {
     // Register StudentCurriculums
     (async () => {
       XataRecords.student_curriculums = (await Promise.all(
-        student_curriculums.map(async (student_curriculum) => {
+        LocalRecords.student_curriculums.map(async (student_curriculum) => {
           const xata_student = XataRecords.student
           if (!xata_student) {
             throw new Error("Student not found")
           }
 
-          const xata_curriculum = XataRecords.curriculums.find(
-            (curriculum) =>
-              curriculum.handle === student_curriculum.curriculum.handle
+          const xata_curriculum_matching = XataRecords.curriculums.find(
+            (xata_curriculum) =>
+              xata_curriculum.handle === student_curriculum.curriculum.handle
           )
-          if (!xata_curriculum) {
+          if (!xata_curriculum_matching) {
             throw new Error("Curriculum not found")
           }
 
@@ -651,7 +553,7 @@ export const populate = async (auth_token: string, email: string) => {
               "student.id": xata_student.id,
             })
             .filter({
-              "curriculum.id": xata_curriculum.id,
+              "curriculum.id": xata_curriculum_matching.id,
             })
             .getMany()
 
@@ -660,7 +562,7 @@ export const populate = async (auth_token: string, email: string) => {
           } else {
             return await Xata.db.student_curriculum.create({
               student: xata_student.id,
-              curriculum: xata_curriculum.id,
+              curriculum: xata_curriculum_matching.id,
             })
           }
         })
@@ -674,30 +576,30 @@ export const populate = async (auth_token: string, email: string) => {
     // Register LevelCourses
     (async () => {
       XataRecords.level_courses = await Promise.all(
-        level_courses.map(async (level_course) => {
-          const xata_level = XataRecords.levels.find(
+        LocalRecords.level_courses.map(async (level_course) => {
+          const xata_level_matching = XataRecords.levels.find(
             (xata_level) =>
-              xata_level.number === level_course.level.number &&
+              xata_level.order === level_course.level.order &&
               xata_level.curriculum?.handle ===
                 level_course.level.curriculum.handle
           )
-          if (!xata_level) {
+          if (!xata_level_matching) {
             throw new Error("Level not found")
           }
 
-          const xata_course = XataRecords.courses.find(
+          const xata_course_matching = XataRecords.courses.find(
             (course) => course.handle === level_course.course.handle
           )
-          if (!xata_course) {
+          if (!xata_course_matching) {
             throw new Error("Course not found")
           }
 
           const level_courses_matched = await Xata.db.level_course
             .filter({
-              "level.id": xata_level.id,
+              "level.id": xata_level_matching.id,
             })
             .filter({
-              "course.id": xata_course.id,
+              "course.id": xata_course_matching.id,
             })
             .getMany()
 
@@ -705,8 +607,8 @@ export const populate = async (auth_token: string, email: string) => {
             return level_courses_matched[0] as LevelCourseRecord
           } else {
             return (await Xata.db.level_course.create({
-              level: xata_level.id,
-              course: xata_course.id,
+              level: xata_level_matching.id,
+              course: xata_course_matching.id,
               credits: level_course.credits,
             })) as LevelCourseRecord
           }
@@ -717,7 +619,7 @@ export const populate = async (auth_token: string, email: string) => {
     // Register Evaluations
     (async () => {
       XataRecords.evaluations = (await Promise.all(
-        evaluations.map(async (evaluation) => {
+        LocalRecords.evaluations.map(async (evaluation) => {
           const xata_class = XataRecords.classes.find((clase) => {
             const xata_course_id = clase.course?.id || "123"
             const xata_course = XataRecords.courses.find(
@@ -752,10 +654,10 @@ export const populate = async (auth_token: string, email: string) => {
           } else {
             return await Xata.db.evaluation.create({
               handle: evaluation.handle,
-              name: evaluation.name,
+              label: evaluation.label,
               class: xata_class.id,
               weight: evaluation.weight,
-              delete_lowest: evaluation.delete_lowest,
+              can_be_deleted: evaluation.can_be_deleted,
             })
           }
         })
@@ -765,7 +667,7 @@ export const populate = async (auth_token: string, email: string) => {
     // Register Classrooms
     (async () => {
       XataRecords.classrooms = await Promise.all(
-        classrooms.map(async (classroom) => {
+        LocalRecords.classrooms.map(async (classroom) => {
           const xata_class = XataRecords.classes.find((clase) => {
             const xata_course_id = clase.course?.id || "123"
             const xata_course = XataRecords.courses.find(
@@ -819,7 +721,7 @@ export const populate = async (auth_token: string, email: string) => {
   // 4th level of parallelism
 
   XataRecords.enrollments = await Promise.all(
-    enrollments.map(async (enrollment) => {
+    LocalRecords.enrollments.map(async (local_enrollment) => {
       const xata_student = XataRecords.student
       if (!xata_student) {
         throw new Error("Student not found")
@@ -836,7 +738,16 @@ export const populate = async (auth_token: string, email: string) => {
           (course) => course.id === xata_course_id
         )
 
-        return xata_course?.handle === enrollment.classroom.clase.course.handle
+        const xata_period_id = xata_class?.period?.id || "123"
+        const xata_period = XataRecords.periods.find(
+          (period) => period.id === xata_period_id
+        )
+
+        return (
+          xata_course?.handle ===
+            local_enrollment.classroom.clase.course.handle &&
+          xata_period?.handle === local_enrollment.classroom.clase.period.handle
+        )
       })
 
       if (!xata_classroom) {
@@ -859,7 +770,9 @@ export const populate = async (auth_token: string, email: string) => {
         return (await Xata.db.enrollment.create({
           student: xata_student.id,
           classroom: xata_classroom.id,
-          final_score: enrollment.final_score,
+          final_score: local_enrollment.final_score,
+          dropped_out: local_enrollment.dropped_out,
+          elective: local_enrollment.elective,
         })) as EnrollmentRecord
       }
     })
@@ -867,8 +780,8 @@ export const populate = async (auth_token: string, email: string) => {
 
   // 5th level of parallelism
 
-  XataRecords.scores = await Promise.all(
-    scores.map(async (score) => {
+  XataRecords.grades = await Promise.all(
+    LocalRecords.grades.map(async (score) => {
       const xata_enrollment = XataRecords.enrollments.find((enrollment) => {
         const xata_classroom_id = enrollment.classroom?.id || "123"
         const xata_classroom = XataRecords.classrooms.find(
@@ -913,7 +826,7 @@ export const populate = async (auth_token: string, email: string) => {
         return (
           xata_course?.handle === score.evaluation.clase.course.handle &&
           xata_period?.handle === score.evaluation.clase.period.handle &&
-          evaluation.name === score.evaluation.name
+          evaluation.label === score.evaluation.label
         )
       })
 
@@ -921,7 +834,7 @@ export const populate = async (auth_token: string, email: string) => {
         throw new Error("Evaluation not found")
       }
 
-      const scores_matched = await Xata.db.score
+      const scores_matched = await Xata.db.grade
         .filter({
           "enrollment.id": xata_enrollment.id,
         })
@@ -931,14 +844,18 @@ export const populate = async (auth_token: string, email: string) => {
         .getMany()
 
       if (scores_matched.length > 0) {
-        return scores_matched[0] as ScoreRecord
+        return scores_matched[0] as GradeRecord
       } else {
-        return (await Xata.db.score.create({
+        return (await Xata.db.grade.create({
           enrollment: xata_enrollment.id,
           evaluation: xata_evaluation.id,
-          raw_grades: score.grades.join(","),
-        })) as ScoreRecord
+          score: score.score,
+        })) as GradeRecord
       }
     })
   )
+  
+  */
+
+  return [LocalRecords]
 }

@@ -5,7 +5,6 @@ import {
 } from "next/server"
 
 import Xata from "@/lib/xata"
-import { populate } from "./pages/api/populate/script"
 
 export async function middleware(req: NextRequest, event: NextFetchEvent) {
   let session_token = req.cookies.get(

@@ -1,5 +1,5 @@
 const MAX_RETRIES = 10;
-const RETRY_INTERVAL = 500;
+const RETRY_INTERVAL = 1;
 
 export async function retryFetch(url: string, options: RequestInit = {}, retries = 0): Promise<Response> {
   try {

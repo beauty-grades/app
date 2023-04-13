@@ -12,12 +12,12 @@ const getCurriculum = async (handle: string) => {
     .getAll()
 
   const courses_by_levels: {
-    number: number
+    order: number
     courses: {
       id: string
       name: string
       handle: string
-      credits: number
+      credits: number | null
     }[]
     elective_count?: number | null
   }[] = []
@@ -26,7 +26,7 @@ const getCurriculum = async (handle: string) => {
     if (!raw_course.level) return
     if (!raw_course.course) return
     const level = courses_by_levels.find(
-      (level) => level.number === raw_course.level?.number
+      (level) => level.order === raw_course.level?.order
     )
 
     if (level) {
@@ -34,17 +34,17 @@ const getCurriculum = async (handle: string) => {
         id: raw_course.course?.id,
         name: raw_course.course?.name,
         handle: raw_course.course?.handle || "",
-        credits: raw_course.credits,
+        credits: raw_course.credits || null
       })
     } else {
       courses_by_levels.push({
-        number: raw_course.level?.number,
+        order: raw_course.level?.order || 0,
         courses: [
           {
             id: raw_course.course?.id,
             name: raw_course.course?.name,
             handle: raw_course.course?.handle || "",
-            credits: raw_course.credits,
+            credits: raw_course.credits || null
           },
         ],
         elective_count: raw_course.level?.elective_count,
@@ -52,7 +52,7 @@ const getCurriculum = async (handle: string) => {
     }
   })
 
-  return courses_by_levels.sort((a, b) => a.number - b.number)
+  return courses_by_levels.sort((a, b) => a.order - b.order)
 }
 
 const Page = async ({ params: { handle } }: { params: { handle: string } }) => {
@@ -65,8 +65,8 @@ const Page = async ({ params: { handle } }: { params: { handle: string } }) => {
 
         <ol>
           {courses_by_levels.map((level) => (
-            <li key={level.number}>
-              <Heading as="h3">Nivel {level.number}</Heading>
+            <li key={level.order}>
+              <Heading as="h3">Nivel {level.order}</Heading>
               <div className="mb-8 flex flex-wrap gap-4">
                 {level.courses.map((course) => (
                   <GlowBox

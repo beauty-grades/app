@@ -31,7 +31,7 @@ export const Heading = ({
 
   const styles = {
     h1: "text-4xl font-extrabold lg:text-5xl mb-4",
-    h2: "border-b border-b-zinc-200 pb-2 mb-3 text-3xl font-semibold transition-colors first:mt-0 dark:border-b-zinc-700",
+    h2: "pb-2 mb-3 text-3xl font-semibold transition-colors first:mt-0 dark:border-b-zinc-700",
     h3: "text-2xl font-semibold mb-2",
     h4: "text-xl font-semibold mb-1",
   }

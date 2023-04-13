@@ -4,7 +4,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/ui/accordion"
-import { Heading, Paragraph } from "@/ui/typography"
+import { Heading } from "@/ui/typography"
 
 import Xata from "@/lib/xata"
 import { LineChartGrades } from "./linechart-grades"
@@ -23,7 +23,7 @@ const getScoresByClassrooms = async (handle: string) => {
 
   const classrooms_by_period: {
     period: string
-    average: number
+    average: number | null
     classrooms: {
       id: string
       section: number
@@ -32,7 +32,7 @@ const getScoresByClassrooms = async (handle: string) => {
         first_name: string
         last_name: string
       }
-      score: number
+      score: number | null
     }[]
   }[] = []
 
@@ -48,26 +48,26 @@ const getScoresByClassrooms = async (handle: string) => {
 
     const parsed_classroom = {
       id: raw_classroom.id,
-      section: raw_classroom.section,
+      section: raw_classroom.section || -1,
       teacher: {
         id: raw_classroom.teacher?.id || "unknown",
         first_name: raw_classroom.teacher?.first_name || "Un",
         last_name: raw_classroom.teacher?.last_name || "Known",
       },
-      score: raw_classroom.score,
+      score: raw_classroom.score || null,
     }
 
     if (!classroom_by_period) {
       classrooms_by_period.push({
         period,
         classrooms: [parsed_classroom],
-        average: parsed_classroom.score,
+        average: parsed_classroom.score || null,
       })
     } else {
       classroom_by_period.classrooms.push(parsed_classroom)
       classroom_by_period.average =
         classroom_by_period.classrooms.reduce(
-          (acc, classroom) => acc + classroom.score,
+          (acc, classroom) => (classroom.score ? acc + classroom.score : acc),
           0
         ) / classroom_by_period.classrooms.length
     }
@@ -100,27 +100,27 @@ export const ClassroomsByPeriodGrades = async ({
 }) => {
   const classrooms_by_period = await getScoresByClassrooms(handle)
   return (
-    <>
+    <div className="my-4">
       <Heading as="h2">Notas generales</Heading>
 
-      <LineChartGrades
-        data={classrooms_by_period.map((classroom) => ({
-          Periodo: classroom.period,
-          Promedio: classroom.average,
-        }))}
-      />
+      {classrooms_by_period.length > 1 && (
+        <LineChartGrades
+          data={classrooms_by_period.map((classroom) => ({
+            Periodo: classroom.period,
+            Promedio: classroom.average,
+          }))}
+        />
+      )}
 
-      <Accordion type="single" collapsible className="mt-4">
+      <Accordion type="single" collapsible>
         {classrooms_by_period.map((classroom) => {
           return (
             <AccordionItem key={classroom.period} value={classroom.period}>
-              <AccordionTrigger>
-                <div className="space-x-4">
-                  <span className="mr-4">{classroom.period}</span>
-                  <span className="font-xs text-zinc-400">({classroom.average})</span>
-                </div>
-              </AccordionTrigger>
+              <AccordionTrigger>{classroom.period}</AccordionTrigger>
               <AccordionContent>
+                <span className="font-xs text-zinc-400">
+                  Promedio: {classroom.average}
+                </span>
                 <ul>
                   {classroom.classrooms.map(
                     ({ id, section, teacher, score }) => {
@@ -141,6 +141,6 @@ export const ClassroomsByPeriodGrades = async ({
           )
         })}
       </Accordion>
-    </>
+    </div>
   )
 }

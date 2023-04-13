@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next"
 
-import { populate } from "../script"
+import { populate } from "./script"
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
@@ -12,9 +12,19 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       return
     }
 
-    const data = await populate(auth_token, email)
+    // take the time it takes to populate the database
+    const start = Date.now()
+    const [local, xata] = await populate(auth_token, email)
+    const end = Date.now()
 
-    res.status(200).json({ message: "Populated", data })
+    const elapsedSeconds = Math.floor((start - end) / 1000)
+
+    const minutes = Math.floor(elapsedSeconds / 60)
+    const seconds = elapsedSeconds % 60
+
+    console.log(`${minutes}:${seconds.toString().padStart(2, "0")}`)
+
+    res.status(200).json({ message: "Populated", local, xata })
   } catch (error) {
     console.error(error)
     res.status(500).json({ error: error.message })
