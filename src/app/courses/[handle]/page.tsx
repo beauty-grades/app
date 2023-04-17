@@ -3,8 +3,8 @@ import { Button } from "@/ui/button"
 import { Heading, Paragraph } from "@/ui/typography"
 
 import Xata from "@/lib/xata"
-import { ClassroomsByPeriodGrades } from "./classrooms-grades"
-import { EvaluationsView } from "./evaluations-view"
+import { PeriodsView } from "./periods-view"
+import { UserGrades } from "./user-grades"
 
 const getCourse = async (handle: string) => {
   const raw_classrooms = await Xata.db.classroom
@@ -56,10 +56,8 @@ const Page = async ({ params: { handle } }: { params: { handle: string } }) => {
 
       <Heading as="h2">Periodos</Heading>
       {/* @ts-expect-error Async Server Component */}
-      <EvaluationsView course_handle={handle} />
+      <PeriodsView course_handle={handle} />
 
-      {/* @ts-expect-error Async Server Component */}
-      <ClassroomsByPeriodGrades handle={handle} />
 
       <Heading as="h2">Curriculums</Heading>
       <Paragraph>Este curso aparece en:</Paragraph>
@@ -72,6 +70,7 @@ const Page = async ({ params: { handle } }: { params: { handle: string } }) => {
           )
         })}
       </div>
+      <UserGrades course_handle={handle} />
     </div>
   )
 }

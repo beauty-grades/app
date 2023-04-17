@@ -1,4 +1,4 @@
-import { Execute2NParallelExtremes } from "./execute-n-parallel"
+import { ExecuteParallel2NExtremes } from "./execute-parallel/2n-extremes"
 
 const getPokemon = async (id) => {
   try {
@@ -17,7 +17,7 @@ const getPokemon = async (id) => {
 
 const handler = async (req, res) => {
   const pokemon_ids = [1, 2, 3, 40, 5, 6, 7, 80, 9, 10, 11000, 120, 130]
-  await Execute2NParallelExtremes(2, pokemon_ids, getPokemon)
+  await ExecuteParallel2NExtremes(pokemon_ids, getPokemon)
 
   res.status(200).json({ name: "John Doe" })
 }

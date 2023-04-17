@@ -320,10 +320,10 @@ export const populate = async (auth_token: string, email: string) => {
     }
   })
 
-  /*
   // Registering in Xata
 
   let XataRecords = {} as {
+
     curriculums: CurriculumRecord[]
     periods: PeriodRecord[]
     courses: CourseRecord[]
@@ -646,6 +646,7 @@ export const populate = async (auth_token: string, email: string) => {
             })
             .filter({
               handle: evaluation.handle,
+              label: evaluation.label
             })
             .getMany()
 
@@ -755,7 +756,6 @@ export const populate = async (auth_token: string, email: string) => {
       }
 
       const enrollments_matched = await Xata.db.enrollment
-
         .filter({
           "student.id": xata_student.id,
         })
@@ -779,7 +779,6 @@ export const populate = async (auth_token: string, email: string) => {
   )
 
   // 5th level of parallelism
-
   XataRecords.grades = await Promise.all(
     LocalRecords.grades.map(async (score) => {
       const xata_enrollment = XataRecords.enrollments.find((enrollment) => {
@@ -798,8 +797,14 @@ export const populate = async (auth_token: string, email: string) => {
           (course) => course.id === xata_course_id
         )
 
+        const xata_period_id = xata_class?.period?.id || "123"
+        const xata_period = XataRecords.periods.find(
+          (period) => period.id === xata_period_id
+        )
+
         return (
-          xata_course?.handle === score.enrollment.classroom.clase.course.handle
+          xata_course?.handle === score.enrollment.classroom.clase.course.handle &&
+          xata_period?.handle === score.enrollment.classroom.clase.period.handle
         )
       })
 
@@ -826,7 +831,8 @@ export const populate = async (auth_token: string, email: string) => {
         return (
           xata_course?.handle === score.evaluation.clase.course.handle &&
           xata_period?.handle === score.evaluation.clase.period.handle &&
-          evaluation.label === score.evaluation.label
+          evaluation.label === score.evaluation.label &&
+          evaluation.handle === score.evaluation.handle
         )
       })
 
@@ -854,8 +860,6 @@ export const populate = async (auth_token: string, email: string) => {
       }
     })
   )
-  
-  */
 
   return [LocalRecords]
 }

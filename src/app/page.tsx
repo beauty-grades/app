@@ -1,6 +1,7 @@
 "use client"
 
 import React from "react"
+
 import { Button } from "@/ui/button"
 import { GlowBox } from "@/ui/glow-box"
 import { Icons } from "@/ui/icons"
@@ -39,7 +40,7 @@ fetch("https://beauty-grades.vercel.app/api/populate", {
         </Heading>
       </div>
 
-      <div className="container mt-8 mb-24 flex flex-col items-center px-8">
+      <div className="container mb-24 mt-8 flex flex-col items-center px-8">
         <GlowBox
           colors="from-red-600 to-purple-500"
           className="max-w-sm md:max-w-full"

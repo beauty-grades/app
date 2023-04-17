@@ -2,6 +2,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/ui/tabs"
 
 import Xata from "@/lib/xata"
 
+interface Classroom {
+  id: string
+  section: number
+  score: number
+  teacher: {
+    id: string
+    first_name: string
+    last_name: string
+  }
+}
+
 interface Evaluation {
   handle: string
   label: string
@@ -10,17 +21,24 @@ interface Evaluation {
 }
 
 const getEvaluationsByPeriod = async (course_handle: string) => {
+  const raw_classrooms = await Xata.db.classroom
+    .select(["*", "class.course.*", "teacher.*", "class.period.handle"])
+    .filter({ "class.course.handle": course_handle })
+    .getAll()
+
   const raw_evaluations = await Xata.db.evaluation
     .select(["*", "class.*", "class.course.*", "class.period.*"])
     .filter({ "class.course.handle": course_handle })
     .getAll()
 
-  console.log(raw_evaluations)
 
-  // group by period
-  const evaluations_by_period: {
+  console.log(raw_evaluations)
+  console.log(raw_classrooms)
+
+  const periods: {
     period: string
     evaluations: Evaluation[]
+    classrooms: Classroom[]
   }[] = []
 
   raw_evaluations.forEach((raw_evaluation) => {
@@ -36,50 +54,70 @@ const getEvaluationsByPeriod = async (course_handle: string) => {
       can_be_deleted: raw_evaluation.can_be_deleted,
     }
 
-    const period_evaluations = evaluations_by_period.find(
+    const period_evaluations = periods.find(
       (period_evaluations) => period_evaluations.period === period
     )
 
     if (period_evaluations) {
       period_evaluations.evaluations.push(evaluation)
     } else {
-      evaluations_by_period.push({
+      periods.push({
         period,
         evaluations: [evaluation],
+        classrooms: []
       })
     }
   })
 
-  evaluations_by_period.sort(
+  raw_classrooms.forEach((raw_classroom) => {
+    const classroom_period = raw_classroom.class?.period?.handle
+
+    const existing_period = periods.find(
+      ({ period }) => classroom_period === period
+    )
+
+    existing_period?.classrooms.push({
+      id: raw_classroom.id,
+      section: raw_classroom.section || 0,
+      score: raw_classroom.score || 0,
+      teacher: {
+        first_name: raw_classroom.teacher?.first_name || "Unknown",
+        last_name: raw_classroom.teacher?.last_name || "Teacher",
+        id: raw_classroom.teacher?.id || "ukn"
+      }
+    })
+  })
+
+  periods.sort(
     (a, b) =>
       parseInt(a.period.replace("-", "")) - parseInt(b.period.replace("-", ""))
   )
-  return evaluations_by_period
+  return periods
 }
 
 interface Props {
   course_handle: string
 }
 
-export const EvaluationsView = async ({ course_handle }: Props) => {
-  const evaluations_by_period = await getEvaluationsByPeriod(course_handle)
+export const PeriodsView = async ({ course_handle }: Props) => {
+  const periods = await getEvaluationsByPeriod(course_handle)
 
   return (
     <div>
       <Tabs
-        defaultValue={evaluations_by_period[0].period}
         className="mb-4 w-full"
       >
         <TabsList>
-          {evaluations_by_period.map(({ period }) => (
+          {periods.map(({ period }) => (
             <TabsTrigger key={period} value={period}>
               {period}
             </TabsTrigger>
           ))}
         </TabsList>
-        {evaluations_by_period.map(({ period, evaluations }) => (
-          <TabsContent key={period} value={period}>
-            <View key={period} evaluations={evaluations} />
+        {periods.map(({ period, evaluations, classrooms }) => (
+          <TabsContent id={`period:${period}`} key={period} value={period}>
+            <Evaluations evaluations={evaluations} period={period} />
+            <Classrooms classrooms={classrooms} />
           </TabsContent>
         ))}
       </Tabs>
@@ -87,7 +125,27 @@ export const EvaluationsView = async ({ course_handle }: Props) => {
   )
 }
 
-const View = ({ evaluations }: { evaluations: Evaluation[] }) => {
+const Classrooms = ({ classrooms }: { classrooms: Classroom[] }) => {
+  return (
+    <ul className="mt-4 border-t border-t-zinc-600 pt-4">
+      {classrooms.map(
+        ({ id, section, teacher, score }) => {
+          return (
+            <li key={id}>
+              <p className="font-bold italic">Sección {section}</p>
+              <p className="ml-4">
+                {teacher.first_name} {teacher.last_name}
+              </p>
+              <p className="ml-4">{score}</p>
+            </li>
+          )
+        }
+      )}
+    </ul>
+  )
+}
+
+const Evaluations = ({ evaluations, period }: { evaluations: Evaluation[], period: string }) => {
   let grouped_evaluations: {
     label: string
     total_weight: number | null
@@ -129,7 +187,7 @@ const View = ({ evaluations }: { evaluations: Evaluation[] }) => {
   return (
     <div className="flex flex-col gap-4">
       {grouped_evaluations.map(
-        ({ label, total_weight, can_be_deleted }) =>
+        ({ label, total_weight }) =>
           total_weight && (
             <div key={label} className="flex items-center gap-2">
               <div className="flex w-60 items-center justify-between">
@@ -140,15 +198,17 @@ const View = ({ evaluations }: { evaluations: Evaluation[] }) => {
               </div>
               <div className="grow">
                 <div
+                  id={`${period}:${label}`}
                   style={{
                     width: `${total_weight * 100}%`,
                   }}
-                  className="relative h-14 rounded-lg bg-zinc-700"
+                  className="evaluation-weight relative h-14 overflow-hidden rounded-lg bg-zinc-700"
                 />
               </div>
             </div>
           )
       )}
+
     </div>
   )
 }

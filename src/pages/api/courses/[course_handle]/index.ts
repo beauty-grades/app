@@ -4,14 +4,18 @@ import { getServerSession } from "next-auth/next"
 
 import Xata from "@/lib/xata"
 
+interface Grade {
+  handle: string | null
+  label: string
+  score: number | null
+  weight: number
+}
+
 interface Enrollment {
   period: string
   section: number
   dropped_out: boolean
-  grades: {
-    evaluation_id: string
-    score: number | null
-  }[]
+  grades: Grade[]
 }
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -64,23 +68,23 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           const dropped_out = raw_enrollment.dropped_out
 
           const current_period = process.env.CURRENT_PERIOD as string
-          let grades: {
-            evaluation_id: string
-            score: number | null
-          }[] = []
+          let grades: Grade[] = []
 
           if (period !== current_period && !dropped_out) {
             const raw_grades = await Xata.db.grade
+              .select(["*", "evaluation.*"])
               .filter({
                 "enrollment.id": raw_enrollment.id,
               })
               .getAll()
 
             raw_grades.forEach((grade) => {
-              if (grade.evaluation) {
+              if (grade.evaluation?.handle) {
                 grades.push({
-                  evaluation_id: grade.evaluation.id,
+                  handle: grade.evaluation?.handle || null,
+                  label: grade.evaluation?.label || "",
                   score: grade.score || null,
+                  weight: grade.evaluation?.weight || 0
                 })
               }
             })
