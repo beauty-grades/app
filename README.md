@@ -2,4 +2,6 @@
 
 Build with Next.js 13 and Xata
 
-Check our [Feed API repo](https://github.com/beauty-grades/feed-api)
+It provides an enhanced experience to UTEC students to check their grades, schedule and more.
+
+Check out the [Feed API repo](https://github.com/beauty-grades/feed-api)
