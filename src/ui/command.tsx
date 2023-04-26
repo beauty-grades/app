@@ -6,7 +6,7 @@ import { DialogProps } from "@radix-ui/react-dialog"
 import { Command as CommandPrimitive, useCommandState } from "cmdk"
 import { ChevronsUpDown, Search } from "lucide-react"
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils/ui/cn"
 
 const Command = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive>,

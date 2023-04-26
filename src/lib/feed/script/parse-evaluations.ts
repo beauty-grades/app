@@ -1,4 +1,4 @@
-import { roundTo } from "@/lib/utils/round-to"
+import { roundTo } from "./round-to"
 
 interface RawScore {
   codCourseTypeNote: number

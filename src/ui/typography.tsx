@@ -1,6 +1,6 @@
 import Balancer from "react-wrap-balancer"
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils/ui/cn"
 
 interface ParagraphProps extends React.HTMLAttributes<HTMLParagraphElement> {
   children: React.ReactNode

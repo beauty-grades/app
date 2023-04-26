@@ -5,6 +5,7 @@ import { Button } from "@/ui/button"
 import { Heading } from "@/ui/typography"
 
 import Xata from "@/lib/xata"
+import { PopulateButton } from "./populate-button"
 
 const getCurriculums = async (email: string) => {
   const student_curriculums = await Xata.db.student_curriculum
@@ -63,12 +64,17 @@ const Page = async () => {
         </div>
       </div>
 
-      <div className="container mt-8 flex justify-center">
-        <Button variant="destructive">
-          <a href="/api/auth/signout" className="text-white">
+      <div className="container mt-8 flex justify-center gap-4">
+        <Link href="/dashboard/populate">
+          <Button variant="subtle">
+            Populate
+          </Button>
+        </Link>
+        <Link href="/api/auth/signout" className="text-white">
+          <Button variant="destructive">
             Sign out
-          </a>
-        </Button>
+          </Button>
+        </Link>
       </div>
     </>
   )

@@ -1,4 +1,4 @@
-import Xata from "@/lib/xata"
+import Xata from "../xata"
 import {
   ClassRecord,
   ClassroomRecord,
@@ -13,7 +13,7 @@ import {
   StudentCurriculumRecord,
   StudentRecord,
   TeacherRecord,
-} from "@/lib/xata/codegen"
+} from "../xata/codegen"
 import {
   LocalClase,
   LocalClassroom,
