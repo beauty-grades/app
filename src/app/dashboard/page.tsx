@@ -4,8 +4,8 @@ import { redirect } from "next/navigation"
 import { Button } from "@/ui/button"
 import { Heading } from "@/ui/typography"
 
+import { getEmail } from "@/lib/utils/auth/get-email"
 import Xata from "@/lib/xata"
-import { PopulateButton } from "./populate-button"
 
 const getCurriculums = async (email: string) => {
   const student_curriculums = await Xata.db.student_curriculum
@@ -22,22 +22,7 @@ const getCurriculums = async (email: string) => {
 
 const Page = async () => {
   const cookieStore = cookies()
-  const session_token = cookieStore.get(
-    process.env.VERCEL
-      ? "__Secure-next-auth.session-token"
-      : "next-auth.session-token"
-  )?.value
-
-  if (!session_token) {
-    redirect("/api/auth/signin")
-  }
-
-  const raw_session = await Xata.db.nextauth_sessions
-    .select(["*", "user.email"])
-    .filter({ sessionToken: session_token })
-    .getFirst()
-
-  const email = raw_session?.user?.email
+  const email = await getEmail(cookieStore)
 
   if (!email) {
     redirect("/api/auth/signin")
@@ -65,15 +50,11 @@ const Page = async () => {
       </div>
 
       <div className="container mt-8 flex justify-center gap-4">
-        <Link href="/dashboard/populate">
-          <Button variant="subtle">
-            Populate
-          </Button>
+        <Link href="/dashboard/feed">
+          <Button variant="subtle">Feed</Button>
         </Link>
         <Link href="/api/auth/signout" className="text-white">
-          <Button variant="destructive">
-            Sign out
-          </Button>
+          <Button variant="destructive">Sign out</Button>
         </Link>
       </div>
     </>

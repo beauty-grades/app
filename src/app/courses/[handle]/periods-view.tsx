@@ -31,7 +31,6 @@ const getEvaluationsByPeriod = async (course_handle: string) => {
     .filter({ "class.course.handle": course_handle })
     .getAll()
 
-
   console.log(raw_evaluations)
   console.log(raw_classrooms)
 
@@ -64,7 +63,7 @@ const getEvaluationsByPeriod = async (course_handle: string) => {
       periods.push({
         period,
         evaluations: [evaluation],
-        classrooms: []
+        classrooms: [],
       })
     }
   })
@@ -83,8 +82,8 @@ const getEvaluationsByPeriod = async (course_handle: string) => {
       teacher: {
         first_name: raw_classroom.teacher?.first_name || "Unknown",
         last_name: raw_classroom.teacher?.last_name || "Teacher",
-        id: raw_classroom.teacher?.id || "ukn"
-      }
+        id: raw_classroom.teacher?.id || "ukn",
+      },
     })
   })
 
@@ -104,16 +103,18 @@ export const PeriodsView = async ({ course_handle }: Props) => {
 
   return (
     <div>
-      <Tabs
-        className="mb-4 w-full"
-      >
+      <Tabs defaultValue="all" className="mb-4 w-full">
         <TabsList>
+          <TabsTrigger value="all">Todos</TabsTrigger>
           {periods.map(({ period }) => (
             <TabsTrigger key={period} value={period}>
               {period}
             </TabsTrigger>
           ))}
         </TabsList>
+        <TabsContent id="all" value="all">
+          TODO: Stats for all periods
+        </TabsContent>
         {periods.map(({ period, evaluations, classrooms }) => (
           <TabsContent id={`period:${period}`} key={period} value={period}>
             <Evaluations evaluations={evaluations} period={period} />
@@ -128,24 +129,28 @@ export const PeriodsView = async ({ course_handle }: Props) => {
 const Classrooms = ({ classrooms }: { classrooms: Classroom[] }) => {
   return (
     <ul className="mt-4 border-t border-t-zinc-600 pt-4">
-      {classrooms.map(
-        ({ id, section, teacher, score }) => {
-          return (
-            <li key={id}>
-              <p className="font-bold italic">Sección {section}</p>
-              <p className="ml-4">
-                {teacher.first_name} {teacher.last_name}
-              </p>
-              <p className="ml-4">{score}</p>
-            </li>
-          )
-        }
-      )}
+      {classrooms.map(({ id, section, teacher, score }) => {
+        return (
+          <li key={id}>
+            <p className="font-bold italic">Sección {section}</p>
+            <p className="ml-4">
+              {teacher.first_name} {teacher.last_name}
+            </p>
+            <p className="ml-4">{score}</p>
+          </li>
+        )
+      })}
     </ul>
   )
 }
 
-const Evaluations = ({ evaluations, period }: { evaluations: Evaluation[], period: string }) => {
+const Evaluations = ({
+  evaluations,
+  period,
+}: {
+  evaluations: Evaluation[]
+  period: string
+}) => {
   let grouped_evaluations: {
     label: string
     total_weight: number | null
@@ -208,7 +213,6 @@ const Evaluations = ({ evaluations, period }: { evaluations: Evaluation[], perio
             </div>
           )
       )}
-
     </div>
   )
 }

@@ -58,7 +58,6 @@ const Page = async ({ params: { handle } }: { params: { handle: string } }) => {
       {/* @ts-expect-error Async Server Component */}
       <PeriodsView course_handle={handle} />
 
-
       <Heading as="h2">Curriculums</Heading>
       <Paragraph>Este curso aparece en:</Paragraph>
       <div className="mb-4 flex flex-wrap gap-4">

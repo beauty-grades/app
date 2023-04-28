@@ -34,7 +34,7 @@ const getCurriculum = async (handle: string) => {
         id: raw_course.course?.id,
         name: raw_course.course?.name,
         handle: raw_course.course?.handle || "",
-        credits: raw_course.credits || null
+        credits: raw_course.credits || null,
       })
     } else {
       courses_by_levels.push({
@@ -44,7 +44,7 @@ const getCurriculum = async (handle: string) => {
             id: raw_course.course?.id,
             name: raw_course.course?.name,
             handle: raw_course.course?.handle || "",
-            credits: raw_course.credits || null
+            credits: raw_course.credits || null,
           },
         ],
         elective_count: raw_course.level?.elective_count,

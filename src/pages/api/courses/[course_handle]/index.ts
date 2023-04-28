@@ -84,7 +84,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                   handle: grade.evaluation?.handle || null,
                   label: grade.evaluation?.label || "",
                   score: grade.score || null,
-                  weight: grade.evaluation?.weight || 0
+                  weight: grade.evaluation?.weight || 0,
                 })
               }
             })

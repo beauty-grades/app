@@ -7,10 +7,9 @@
  *                   and the values are arrays of objects that have the same key value.
  */
 
-export const groupBy = (xs: object[], key:string) => {
-  return xs.reduce(function(rv, x) {
-    (rv[x[key]] = rv[x[key]] || []).push(x);
-    return rv;
-  }, {});
-};
-
+export const groupBy = (xs: object[], key: string) => {
+  return xs.reduce(function (rv, x) {
+    ;(rv[x[key]] = rv[x[key]] || []).push(x)
+    return rv
+  }, {})
+}
