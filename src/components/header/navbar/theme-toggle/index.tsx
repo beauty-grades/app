@@ -29,11 +29,11 @@ export function ThemeToggle() {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="sm">
           {theme === "dark" ? (
-            <Icons.moon className="hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100" />
+            <Icons.moon className="hover:text-background dark:text-slate-400 dark:hover:text-slate-100" />
           ) : theme === "light" ? (
-            <Icons.sun className="hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100" />
+            <Icons.sun className="hover:text-background dark:text-slate-400 dark:hover:text-slate-100" />
           ) : (
-            <Icons.laptop className="hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100" />
+            <Icons.laptop className="hover:text-background dark:text-slate-400 dark:hover:text-slate-100" />
           )}
           <span className="sr-only">Cambiar tema</span>
         </Button>
