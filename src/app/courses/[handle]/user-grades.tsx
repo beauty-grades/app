@@ -3,13 +3,13 @@
 import React from "react"
 import Link from "next/link"
 import { useToast } from "@/hooks/ui/use-toast"
-import { Button } from "@/components/ui/button"
 import { AnimatePresence, motion } from "framer-motion"
 import { useSession } from "next-auth/react"
 import * as ReactDOMClient from "react-dom/client"
 import useSWR from "swr"
 
 import { groupBy } from "@/lib/utils/group-by"
+import { Button } from "@/components/ui/button"
 
 interface UserGradesProps {
   course_handle: string
@@ -34,7 +34,13 @@ export const UserGrades = ({ course_handle }: UserGradesProps) => {
   }, [status, toast])
 
   const { data, error } = useSWR(
-    status === "authenticated" && `/api/courses/${course_handle}`
+    status === "authenticated" && `/api/courses/${course_handle}`,
+    {
+      refreshInterval: 0,
+      revalidateIfStale: false,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+    }
   )
 
   React.useEffect(() => {

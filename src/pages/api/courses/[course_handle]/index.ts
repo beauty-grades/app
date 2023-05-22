@@ -14,7 +14,7 @@ interface Grade {
 interface Enrollment {
   period: string
   section: number
-  dropped_out: boolean
+  status: "enrolled" | "dropped_out" | "failed" | "passed"
   grades: Grade[]
 }
 
@@ -63,12 +63,20 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
           const period = raw_enrollment.section.class.period.id
           const section = raw_enrollment.section.section || 0
-          const dropped_out = raw_enrollment.dropped_out
 
-          const current_period = process.env.CURRENT_PERIOD as string
+          let status: Enrollment["status"] = "passed"
+
+          if (raw_enrollment.dropped_out) {
+            status = "dropped_out"
+          } else if (raw_enrollment.score === null) {
+            status = "enrolled"
+          } else if (raw_enrollment?.score && raw_enrollment.score < 11) {
+            status = "failed"
+          }
+
           let grades: Grade[] = []
 
-          if (period !== current_period && !dropped_out) {
+          if (!raw_enrollment.dropped_out) {
             const raw_grades = await Xata.db.grade
               .select(["*", "evaluation.*"])
               .filter({
@@ -91,9 +99,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           return {
             period,
             section,
-            dropped_out,
+            status,
             grades,
-          }
+          } as Enrollment
         } catch {
           return null
         }
