@@ -26,6 +26,7 @@ export const columns: ColumnDef<Course>[] = [
       return (
         <Button
           variant="ghost"
+          className="h-max"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           ID
@@ -40,6 +41,7 @@ export const columns: ColumnDef<Course>[] = [
       return (
         <Button
           variant="ghost"
+          className="h-max"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Nombre
@@ -84,6 +86,7 @@ export const columns: ColumnDef<Course>[] = [
       return (
         <Button
           variant="ghost"
+          className="h-max"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Periodo
@@ -98,6 +101,7 @@ export const columns: ColumnDef<Course>[] = [
       return (
         <Button
           variant="ghost"
+          className="h-max"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Puntaje
@@ -112,6 +116,7 @@ export const columns: ColumnDef<Course>[] = [
       return (
         <Button
           variant="ghost"
+          className="h-max"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Sección
@@ -126,6 +131,7 @@ export const columns: ColumnDef<Course>[] = [
       return (
         <Button
           variant="ghost"
+          className="h-max"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Puntaje de la Sección
@@ -140,6 +146,7 @@ export const columns: ColumnDef<Course>[] = [
       return (
         <Button
           variant="ghost"
+          className="h-max w-full"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Profesor

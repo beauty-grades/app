@@ -54,10 +54,10 @@ export const CoursesTable = async ({
   const data = await getData(utec_account)
 
   return (
-    <div className="container mx-auto py-10">
+    <>
       <Heading as="h2">Cursos matriculados</Heading>
 
       <DataTable columns={columns} data={data} />
-    </div>
+    </>
   )
 }

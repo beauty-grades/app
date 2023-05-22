@@ -12,7 +12,7 @@ export const EvolutivesCharts = async ({
   const periods = await getScoreAndRankingByPeriod(utec_account)
 
   return (
-    <div className="container">
+    <>
       <Heading as="h2">Gráficos evolutivos</Heading>
       <Tabs defaultValue="score" className="w-full">
         <TabsList>
@@ -26,6 +26,6 @@ export const EvolutivesCharts = async ({
           <RankingChart data={periods} />
         </TabsContent>
       </Tabs>
-    </div>
+    </>
   )
 }
