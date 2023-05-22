@@ -1,6 +1,7 @@
 "use client"
 
 import React from "react"
+
 import { Button } from "@/components/ui/button"
 import { GlowBox } from "@/components/ui/glow-box"
 import { Icons } from "@/components/ui/icons"
@@ -11,16 +12,17 @@ const Page = () => {
   React.useEffect(() => {
     if (copied) {
       navigator.clipboard
-        .writeText(`const { email, tokenV1 } = JSON.parse(localStorage.session)
-
-fetch("https://beauty-grades.vercel.app/api/populate", {
+        .writeText(`fetch("https://coollege.up.railway.app/api/feed", {
   method: "POST",
   headers: {
-    Authorization: tokenV1,
     "Content-Type": "application/json",
   },
-  body: JSON.stringify({ email }),
-}).then((res) => res.json()).then(console.log)`)
+  body: localStorage.session,
+})
+  .then((r) => r.json())
+  .then(console.log)
+  .catch(console.warn)
+            `)
 
       setTimeout(() => {
         setCopied(false)
@@ -45,178 +47,19 @@ fetch("https://beauty-grades.vercel.app/api/populate", {
           className="max-w-sm md:max-w-full"
         >
           <pre className="javascript relative text-left font-mono text-xs font-bold tracking-wide text-slate-300 md:text-base">
-            <ol>
-              <li style={{ verticalAlign: "top" }}>
-                <div
-                  style={{
-                    margin: 0,
-                    padding: 0,
-                    background: "none",
-                    verticalAlign: "top",
-                  }}
-                >
-                  <span style={{ color: "#7f1d1d", fontWeight: "bold" }}>
-                    const
-                  </span>{" "}
-                  <span style={{ color: "#0369a1" }}>{"{"}</span> email
-                  <span style={{ color: "#e4e4e7" }}>,</span> tokenV1{" "}
-                  <span style={{ color: "#0369a1" }}>{"}"}</span>{" "}
-                  <span style={{ color: "#e4e4e7" }}>=</span> JSON.
-                  <span style={{ color: "#660066" }}>parse</span>
-                  <span style={{ color: "#0369a1" }}>(</span>localStorage.
-                  <span style={{ color: "#660066" }}>session</span>
-                  <span style={{ color: "#0369a1" }}>)</span>
-                </div>
-              </li>
-              <li style={{ verticalAlign: "top" }}>
-                <div
-                  style={{
-                    margin: 0,
-                    padding: 0,
-                    background: "none",
-                    verticalAlign: "top",
-                  }}
-                >
-                  &nbsp;
-                </div>
-              </li>
-              <li style={{ verticalAlign: "top" }}>
-                <div
-                  style={{
-                    margin: 0,
-                    padding: 0,
-                    background: "none",
-                    verticalAlign: "top",
-                  }}
-                >
-                  fetch<span style={{ color: "#0369a1" }}>(</span>
-                  <span style={{ color: "#e4e4e7" }}>
-                    &quot;https://beauty-grades.vercel.app/api/populate&quot;
-                  </span>
-                  <span style={{ color: "#e4e4e7" }}>,</span>{" "}
-                  <span style={{ color: "#0369a1" }}>{"{"}</span>
-                </div>
-              </li>
-              <li style={{ verticalAlign: "top" }}>
-                <div
-                  style={{
-                    margin: 0,
-                    padding: 0,
-                    background: "none",
-                    verticalAlign: "top",
-                  }}
-                >
-                  {"  "}method<span style={{ color: "#e4e4e7" }}>:</span>{" "}
-                  <span style={{ color: "#e4e4e7" }}>&quot;POST&quot;</span>
-                  <span style={{ color: "#e4e4e7" }}>,</span>
-                </div>
-              </li>
-              <li style={{ fontWeight: "bold", verticalAlign: "top" }}>
-                <div
-                  style={{
-                    margin: 0,
-                    padding: 0,
-                    background: "none",
-                    verticalAlign: "top",
-                  }}
-                >
-                  {"  "}headers<span style={{ color: "#e4e4e7" }}>:</span>{" "}
-                  <span style={{ color: "#0369a1" }}>{"{"}</span>
-                </div>
-              </li>
-              <li style={{ verticalAlign: "top" }}>
-                <div
-                  style={{
-                    margin: 0,
-                    padding: 0,
-                    background: "none",
-                    verticalAlign: "top",
-                  }}
-                >
-                  {"    "}Authorization
-                  <span style={{ color: "#e4e4e7" }}>:</span> tokenV1
-                  <span style={{ color: "#e4e4e7" }}>,</span>
-                </div>
-              </li>
-              <li style={{ verticalAlign: "top" }}>
-                <div
-                  style={{
-                    margin: 0,
-                    padding: 0,
-                    background: "none",
-                    verticalAlign: "top",
-                  }}
-                >
-                  {"    "}
-                  <span style={{ color: "#e4e4e7" }}>
-                    &quot;Content-Type&quot;
-                  </span>
-                  <span style={{ color: "#e4e4e7" }}>:</span>{" "}
-                  <span style={{ color: "#e4e4e7" }}>
-                    &quot;application/json&quot;
-                  </span>
-                  <span style={{ color: "#e4e4e7" }}>,</span>
-                </div>
-              </li>
-              <li style={{ verticalAlign: "top" }}>
-                <div
-                  style={{
-                    margin: 0,
-                    padding: 0,
-                    background: "none",
-                    verticalAlign: "top",
-                  }}
-                >
-                  {"  "}
-                  <span style={{ color: "#0369a1" }}>{"}"}</span>
-                  <span style={{ color: "#e4e4e7" }}>,</span>
-                </div>
-              </li>
-              <li style={{ verticalAlign: "top" }}>
-                <div
-                  style={{
-                    margin: 0,
-                    padding: 0,
-                    background: "none",
-                    verticalAlign: "top",
-                  }}
-                >
-                  {"  "}body<span style={{ color: "#e4e4e7" }}>:</span> JSON.
-                  <span style={{ color: "#660066" }}>stringify</span>
-                  <span style={{ color: "#0369a1" }}>(</span>
-                  <span style={{ color: "#0369a1" }}>{"{"}</span> email{" "}
-                  <span style={{ color: "#0369a1" }}>{"}"}</span>
-                  <span style={{ color: "#0369a1" }}>)</span>
-                  <span style={{ color: "#e4e4e7" }}>,</span>
-                </div>
-              </li>
-              <li style={{ fontWeight: "bold", verticalAlign: "top" }}>
-                <div
-                  style={{
-                    margin: 0,
-                    padding: 0,
-                    background: "none",
-                    verticalAlign: "top",
-                  }}
-                >
-                  <span style={{ color: "#0369a1" }}>{"}"}</span>
-                  <span style={{ color: "#0369a1" }}>)</span>.
-                  <span style={{ color: "#660066" }}>then</span>
-                  <span style={{ color: "#0369a1" }}>(</span>
-                  <span style={{ color: "#0369a1" }}>(</span>res
-                  <span style={{ color: "#0369a1" }}>)</span>{" "}
-                  <span style={{ color: "#e4e4e7" }}>=&gt;</span> res.
-                  <span style={{ color: "#660066" }}>json</span>
-                  <span style={{ color: "#0369a1" }}>(</span>
-                  <span style={{ color: "#0369a1" }}>)</span>
-                  <span style={{ color: "#0369a1" }}>)</span>.
-                  <span style={{ color: "#660066" }}>then</span>
-                  <span style={{ color: "#0369a1" }}>(</span>console.
-                  <span style={{ color: "#660066" }}>log</span>
-                  <span style={{ color: "#0369a1" }}>)</span>
-                </div>
-              </li>
-            </ol>
+            <code className="block p-4">
+              {`fetch("https://coollege.up.railway.app/api/feed", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: localStorage.session,
+})
+  .then((r) => r.json())
+  .then(console.log)
+  .catch(console.warn)
+    `}
+            </code>
             <div
               className="absolute bottom-2 right-2 rounded border border-transparent p-2 text-slate-700 hover:border-slate-500 hover:text-slate-500 "
               onClick={() => setCopied(true)}
