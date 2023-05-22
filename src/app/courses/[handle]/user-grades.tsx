@@ -9,6 +9,7 @@ import * as ReactDOMClient from "react-dom/client"
 import useSWR from "swr"
 
 import { groupBy } from "@/lib/utils/group-by"
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 
 interface UserGradesProps {
@@ -42,6 +43,62 @@ export const UserGrades = ({ course_handle }: UserGradesProps) => {
       revalidateOnReconnect: false,
     }
   )
+
+  React.useEffect(() => {
+    console.log(data)
+    if (error) return
+    if (!data) return
+    if (data.length === 0) return
+
+    console.log("hi")
+
+    const periods = data as {
+      period: string
+      status: "enrolled" | "dropped_out" | "failed" | "passed"
+    }[]
+
+    periods.forEach(({ period, status }) => {
+      const period_el = document.querySelector(`#badge-for-${period}`)
+      console.log(period_el)
+      if (period_el) {
+        const root = ReactDOMClient.createRoot(period_el)
+        let variant: "default" | "destructive" | "outline" | "secondary" =
+          "default"
+        switch (status) {
+          case "enrolled":
+            variant = "outline"
+            break
+          case "dropped_out":
+            variant = "destructive"
+            break
+          case "failed":
+            variant = "destructive"
+            break
+          case "passed":
+            variant = "default"
+            break
+        }
+
+        let label = ""
+        switch (status) {
+          case "enrolled":
+            label = "Cursando"
+            break
+          case "dropped_out":
+            label = "Retirado"
+            break
+          case "failed":
+            label = "Reprobado"
+            break
+          case "passed":
+            label = "Aprobado"
+            break
+        }
+
+        root.render(<Badge variant={variant}>{label}</Badge>)
+      }
+    })
+  }, [data, error])
 
   React.useEffect(() => {
     const observer = new MutationObserver((mutations) => {

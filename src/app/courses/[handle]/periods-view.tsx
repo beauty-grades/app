@@ -1,6 +1,6 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-
 import Xata from "@/lib/xata"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Badge } from "@/components/ui/badge"
 
 interface Classroom {
   id: string
@@ -103,7 +103,9 @@ export const PeriodsView = async ({ course_handle }: Props) => {
           <TabsTrigger value="all">Todos</TabsTrigger>
           {periods.map(({ period }) => (
             <TabsTrigger key={period} value={period}>
-              {period}
+              <span>{period}</span>
+              <div id={`badge-for-${period}`} className="ml-2">
+              </div>
             </TabsTrigger>
           ))}
         </TabsList>
@@ -128,9 +130,7 @@ const Classrooms = ({ classrooms }: { classrooms: Classroom[] }) => {
         return (
           <li key={id}>
             <p className="font-bold italic">Sección {section}</p>
-            <p className="ml-4">
-              {teacher.name}
-            </p>
+            <p className="ml-4">{teacher.name}</p>
             <p className="ml-4">{score}</p>
           </li>
         )
