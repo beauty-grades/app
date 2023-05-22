@@ -1,6 +1,5 @@
 import Xata from "@/lib/xata"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Badge } from "@/components/ui/badge"
 
 interface Classroom {
   id: string
@@ -34,6 +33,7 @@ const getEvaluationsByPeriod = async (course_handle: string) => {
     period: string
     evaluations: Evaluation[]
     classrooms: Classroom[]
+    wrong_formula: boolean
   }[] = []
 
   raw_evaluations.forEach((raw_evaluation) => {
@@ -60,6 +60,7 @@ const getEvaluationsByPeriod = async (course_handle: string) => {
         period,
         evaluations: [evaluation],
         classrooms: [],
+        wrong_formula: raw_evaluation.class?.wrong_formula || false,
       })
     }
   })
@@ -104,17 +105,23 @@ export const PeriodsView = async ({ course_handle }: Props) => {
           {periods.map(({ period }) => (
             <TabsTrigger key={period} value={period}>
               <span>{period}</span>
-              <div id={`badge-for-${period}`} className="ml-2">
-              </div>
+              <div id={`badge-for-${period}`} className="ml-2"></div>
             </TabsTrigger>
           ))}
         </TabsList>
         <TabsContent id="all" value="all">
           TODO: Stats for all periods
         </TabsContent>
-        {periods.map(({ period, evaluations, classrooms }) => (
+        {periods.map(({ period, evaluations, classrooms, wrong_formula }) => (
           <TabsContent id={`period:${period}`} key={period} value={period}>
-            <Evaluations evaluations={evaluations} period={period} />
+            {wrong_formula ? (
+              <WrongFormulaEvaluations
+                evaluations={evaluations}
+                period={period}
+              />
+            ) : (
+              <Evaluations evaluations={evaluations} period={period} />
+            )}
             <Classrooms classrooms={classrooms} />
           </TabsContent>
         ))}
@@ -136,6 +143,30 @@ const Classrooms = ({ classrooms }: { classrooms: Classroom[] }) => {
         )
       })}
     </ul>
+  )
+}
+
+const WrongFormulaEvaluations = ({
+  evaluations,
+  period,
+}: {
+  evaluations: Evaluation[]
+  period: string
+}) => {
+  return (
+    <div className="flex flex-col gap-4">
+      {evaluations.map(({ label, handle }) => (
+        <div key={label} className="flex items-center gap-2">
+          <div className="flex w-60 items-center justify-between">
+            <span className="font-bold">{label}</span>
+            <span
+              id={`grade-${period}-${handle}`}
+              className="text-slate-600"
+            ></span>
+          </div>
+        </div>
+      ))}
+    </div>
   )
 }
 

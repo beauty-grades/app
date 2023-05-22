@@ -44,13 +44,25 @@ export const UserGrades = ({ course_handle }: UserGradesProps) => {
     }
   )
 
+  const periods:
+    | {
+        status: string
+        section: number
+        period: string
+        grades: {
+          label: string
+          score: number | null
+          handle: string
+          weight: number
+        }[]
+      }[]
+    | undefined
+    | null = data
+
   React.useEffect(() => {
-    console.log(data)
     if (error) return
     if (!data) return
     if (data.length === 0) return
-
-    console.log("hi")
 
     const periods = data as {
       period: string
@@ -59,7 +71,6 @@ export const UserGrades = ({ course_handle }: UserGradesProps) => {
 
     periods.forEach(({ period, status }) => {
       const period_el = document.querySelector(`#badge-for-${period}`)
-      console.log(period_el)
       if (period_el) {
         const root = ReactDOMClient.createRoot(period_el)
         let variant: "default" | "destructive" | "outline" | "secondary" =
@@ -113,12 +124,27 @@ export const UserGrades = ({ course_handle }: UserGradesProps) => {
           const state = element.getAttribute("data-state")
 
           if (state === "active") {
-            if (data?.length > 0) {
+            if (!!periods) {
+              periods.forEach((period) => {
+                period.grades.forEach((grade) => {
+                  if (grade.score) {
+                    const grade_el = document.querySelector(
+                      `#grade-${period.period}-${grade.handle}`
+                    )
+
+                    if (grade_el) {
+                      grade_el.textContent = grade.score.toString()
+                    }
+                  }
+                })
+              })
+
               const current_period = data.find((p) => p.period === period)
               if (current_period?.grades?.length > 0) {
                 const resume_grades = groupBy(current_period.grades, "label")
                 const evaluation_weight_bars =
                   element.querySelectorAll(".evaluation-weight")
+
                 evaluation_weight_bars.forEach((el) => {
                   const [x, label] = el.id.split(":")
                   const ev = resume_grades[label]
