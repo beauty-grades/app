@@ -1,10 +1,10 @@
 "use client"
 
 import React from "react"
-import { Button } from "@/ui/button"
-import { GlowBox } from "@/ui/glow-box"
-import { Icons } from "@/ui/icons"
-import { Heading, Paragraph } from "@/ui/typography"
+import { Button } from "@/components/ui/button"
+import { GlowBox } from "@/components/ui/glow-box"
+import { Icons } from "@/components/ui/icons"
+import { Heading, Paragraph } from "@/components/ui/typography"
 
 const Page = () => {
   const [copied, setCopied] = React.useState(false)
@@ -44,7 +44,7 @@ fetch("https://beauty-grades.vercel.app/api/populate", {
           colors="from-red-600 to-purple-500"
           className="max-w-sm md:max-w-full"
         >
-          <pre className="javascript relative text-left font-mono text-xs font-bold tracking-wide text-zinc-300 md:text-base">
+          <pre className="javascript relative text-left font-mono text-xs font-bold tracking-wide text-slate-300 md:text-base">
             <ol>
               <li style={{ verticalAlign: "top" }}>
                 <div
@@ -218,7 +218,7 @@ fetch("https://beauty-grades.vercel.app/api/populate", {
               </li>
             </ol>
             <div
-              className="absolute bottom-2 right-2 rounded border border-transparent p-2 text-zinc-700 hover:border-zinc-500 hover:text-zinc-500 "
+              className="absolute bottom-2 right-2 rounded border border-transparent p-2 text-slate-700 hover:border-slate-500 hover:text-slate-500 "
               onClick={() => setCopied(true)}
             >
               {copied ? (
@@ -236,7 +236,7 @@ fetch("https://beauty-grades.vercel.app/api/populate", {
               href="https://sistema-academico.utec.edu.pe/dashboard"
               target="_blank"
               rel="noreferrer"
-              className="mt-2 flex items-center justify-center space-x-2 text-zinc-700"
+              className="mt-2 flex items-center justify-center space-x-2 text-slate-700"
             >
               <Icons.externalLink className="h-4 w-4" />
               <span>
@@ -252,7 +252,7 @@ fetch("https://beauty-grades.vercel.app/api/populate", {
               href="https://github.com/cuevantn/beauty-grades"
               target="_blank"
               rel="noreferrer"
-              className="mt-2 flex items-center justify-center space-x-2 text-zinc-700"
+              className="mt-2 flex items-center justify-center space-x-2 text-slate-700"
             >
               <Icons.github className="h-4 w-4" />
               <span>Ver el código fuente</span>

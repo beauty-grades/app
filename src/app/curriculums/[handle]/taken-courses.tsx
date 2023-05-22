@@ -4,13 +4,18 @@ import React from "react"
 import useSWR from "swr"
 
 export const TakenCourses = () => {
-  const { data, error } = useSWR("/api/courses/taken")
+  const { data, error } = useSWR("/api/courses/taken", {
+    refreshInterval: 0,
+    revalidateIfStale: false,
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+  })
 
   React.useEffect(() => {
     if (error) return
     if (!data?.ok) return
 
-    data.approved_courses.forEach((handle: string) => {
+    data.approved.forEach((handle: string) => {
       const course = document.querySelector("#course-" + handle)
       if (course) {
         course.classList.add("approved-course")
@@ -18,7 +23,7 @@ export const TakenCourses = () => {
     })
 
     let counter = 0
-    data.taken_courses.forEach((handle: string) => {
+    data.taking.forEach((handle: string) => {
       const course = document.querySelector("#course-" + handle)
       if (course) {
         course.classList.add("taken-course")
@@ -29,6 +34,31 @@ export const TakenCourses = () => {
         }
       }
     })
+
+    data.elective.forEach(
+      ({ id, name, taking }: { id: string; name: string; taking: boolean }) => {
+        const course = document.querySelector(".elective-box")
+        if (course) {
+          const id_el = course.querySelector(".elective-id")
+          if (id_el) {
+            id_el.textContent = id
+          }
+
+          const name_el = course.querySelector(".elective-name")
+          if (name_el) {
+            name_el.textContent = name
+          }
+
+          if (taking) {
+            course.classList.add("taken-course")
+          } else {
+            course.classList.add("approved-course")
+          }
+
+          course.classList.remove("elective-box")
+        }
+      }
+    )
   }, [data, error])
   return null
 }

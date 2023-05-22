@@ -24,7 +24,7 @@ export const metadata = {
 const Layout: React.FunctionComponent<MainLayoutProps> = ({ children }) => {
   return (
     <html lang="es" className={fontSans.className}>
-      <body className="bg-white font-sans text-zinc-900 antialiased dark:bg-zinc-900 dark:text-zinc-50">
+      <body className="bg-white font-sans text-slate-900 antialiased dark:bg-slate-900 dark:text-slate-50">
         <ClientLayout>{children}</ClientLayout>
       </body>
     </html>

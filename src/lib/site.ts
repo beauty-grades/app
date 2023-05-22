@@ -8,8 +8,8 @@ interface SiteConfig {
 }
 
 export const siteConfig: SiteConfig = {
-  name: "BeautyGrades",
-  description: "Tu historial académico como siempre lo deseaste",
+  name: "Coollege",
+  description: "Hagamos la universidad más cool",
   links: {
     facebook: "https://www.facebook.com/fitpeak.shop",
     instagram: "https://www.instagram.com/fitpeak.shop",

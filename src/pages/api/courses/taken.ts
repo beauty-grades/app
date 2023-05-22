@@ -14,43 +14,54 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       return
     }
 
-    const raw_courses = await Xata.db.enrollment
+    const data = await Xata.db.section_enrollment
       .select([
-        "classroom.class.course",
-        "classroom.class.period",
-        "student.email",
+        "*",
+        /* @ts-ignore */
+        "section.class.course.*",
+        "period_enrollment.utec_account.email",
       ])
       .filter({
-        "student.email": email,
+        "period_enrollment.utec_account.email": email,
       })
       .getAll()
 
-    const approved_courses: string[] = []
-    const taken_courses: string[] = []
+    const approved = new Set<string>()
+    const taking = new Set<string>()
+    const elective = new Map<string, { taking: boolean; name: string }>()
 
-    for (const course of raw_courses) {
-      if (!course.classroom?.class?.course?.handle) {
-        continue
-      }
-      if (
-        approved_courses.includes(course.classroom?.class?.course?.handle) ||
-        taken_courses.includes(course.classroom?.class?.course?.handle)
-      ) {
-        continue
-      }
+    data.forEach((enrollment) => {
+      if (enrollment.section?.class?.course?.name) {
+        const course = enrollment.section.class.course.id
+        const course_name = enrollment.section.class.course.name
+        const is_elective = enrollment.elective
+        const dropped_out = enrollment.dropped_out
+        const score = enrollment.score || null
 
-      if (
-        course.classroom?.class?.period?.handle === process.env.CURRENT_PERIOD
-      ) {
-        taken_courses.push(course.classroom?.class?.course?.handle)
-      } else {
-        approved_courses.push(course.classroom?.class?.course?.handle)
+        if (!dropped_out) {
+          if (is_elective) {
+            elective.set(course, {
+              name: course_name,
+              taking: score === null,
+            })
+          } else {
+            if (!score) {
+              taking.add(course)
+            } else {
+              approved.add(course)
+            }
+          }
+        }
       }
-    }
+    })
 
     res.status(200).json({
-      taken_courses,
-      approved_courses,
+      taking: Array.from(taking),
+      approved: Array.from(approved),
+      elective: Array.from(elective.entries()).map((e) => ({
+        id: e[0],
+        ...e[1],
+      })),
       ok: true,
     })
   } catch (error) {

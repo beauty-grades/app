@@ -3,7 +3,7 @@
 import React from "react"
 import Link from "next/link"
 import { useToast } from "@/hooks/ui/use-toast"
-import { Button } from "@/ui/button"
+import { Button } from "@/components/ui/button"
 import { AnimatePresence, motion } from "framer-motion"
 import { useSession } from "next-auth/react"
 import * as ReactDOMClient from "react-dom/client"
@@ -48,14 +48,12 @@ export const UserGrades = ({ course_handle }: UserGradesProps) => {
           const id = element.id
           const [x, period] = id.split(":")
           const state = element.getAttribute("data-state")
-          console.log(`${id} data-state has changed to ${state}`)
 
           if (state === "active") {
             if (data?.length > 0) {
               const current_period = data.find((p) => p.period === period)
               if (current_period?.grades?.length > 0) {
                 const resume_grades = groupBy(current_period.grades, "label")
-                console.log(resume_grades)
                 const evaluation_weight_bars =
                   element.querySelectorAll(".evaluation-weight")
                 evaluation_weight_bars.forEach((el) => {

@@ -22,7 +22,7 @@ export const GradeBar = ({
   const bg_color =
     weight > 0
       ? "bg-gradient-to-r from-red-600 to-purple-600"
-      : "bg-gradient-to-r from-zinc-600 to-slate-600"
+      : "bg-gradient-to-r from-slate-600 to-slate-600"
 
   return (
     <AnimatePresence>
@@ -33,7 +33,7 @@ export const GradeBar = ({
           style={{
             width: weight > 0 ? weight * 100 + "%" : "33.33%",
           }}
-          className="relative flex items-center justify-between overflow-hidden rounded-lg bg-zinc-700"
+          className="relative flex items-center justify-between overflow-hidden rounded-lg bg-slate-700"
         >
           <div className="z-10 flex w-full justify-between p-2">{handle}</div>
           <motion.div

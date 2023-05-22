@@ -74,7 +74,7 @@ dependencies:
     specifier: ^1.0.1
     version: 1.0.2(react-dom@18.2.0)(react@18.2.0)
   '@radix-ui/react-tabs':
-    specifier: ^1.0.2
+    specifier: ^1.0.3
     version: 1.0.3(react-dom@18.2.0)(react@18.2.0)
   '@radix-ui/react-toast':
     specifier: ^1.1.2
@@ -88,9 +88,12 @@ dependencies:
   '@radix-ui/react-tooltip':
     specifier: ^1.0.3
     version: 1.0.5(@types/react@18.0.33)(react-dom@18.2.0)(react@18.2.0)
+  '@tanstack/react-table':
+    specifier: ^8.9.1
+    version: 8.9.1(react-dom@18.2.0)(react@18.2.0)
   '@tremor/react':
-    specifier: ^2.1.0
-    version: 2.1.0(prop-types@15.8.1)(react-dom@18.2.0)(react@18.2.0)
+    specifier: ^2.7.0
+    version: 2.7.0(prop-types@15.8.1)(react-dom@18.2.0)(react@18.2.0)
   '@types/micro-cors':
     specifier: ^0.1.3
     version: 0.1.3
@@ -152,7 +155,7 @@ dependencies:
     specifier: ^2.0.4
     version: 2.1.2(react@18.2.0)
   tailwind-merge:
-    specifier: ^1.8.0
+    specifier: ^1.12.0
     version: 1.12.0
   tailwindcss-animate:
     specifier: ^1.0.5
@@ -1694,20 +1697,38 @@ packages:
       tslib: 2.5.0
     dev: false
 
-  /@tremor/react@2.1.0(prop-types@15.8.1)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-LOJoJqK/H4eL13kxFkp/5CyZo6hjDGYpQxS/eAQxAqwv+d51CcrnS2GE+Cp3U5wTVZ1ve8sdYaa5kuOAEvxQyg==}
+  /@tanstack/react-table@8.9.1(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-yHs2m6lk5J5RNcu2dNtsDGux66wNXZjEgzxos6MRCX8gL+nqxeW3ZglqP6eANN0bGElPnjvqiUHGQvdACOr3Cw==}
+    engines: {node: '>=12'}
+    peerDependencies:
+      react: '>=16'
+      react-dom: '>=16'
+    dependencies:
+      '@tanstack/table-core': 8.9.1
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+    dev: false
+
+  /@tanstack/table-core@8.9.1:
+    resolution: {integrity: sha512-2+R83n8vMZND0q3W1lSiF7co9nFbeWbjAErFf27xwbeA9E0wtUu5ZDfgj+TZ6JzdAEQAgfxkk/QNFAKiS8E4MA==}
+    engines: {node: '>=12'}
+    dev: false
+
+  /@tremor/react@2.7.0(prop-types@15.8.1)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-dyjdWLzyYdDyKqw7VxXM79rVo9TqP2NXtFqq+1PPkrFIEtGQzZKBICAeQ7BHltvNBx79fpc+N/rUK5HM6bR5IA==}
     peerDependencies:
       react: ^18.0.0
+      react-dom: '>=16.6.0'
     dependencies:
       '@floating-ui/react': 0.19.2(react-dom@18.2.0)(react@18.2.0)
       date-fns: 2.29.3
       react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
       react-transition-group: 4.4.5(react-dom@18.2.0)(react@18.2.0)
       recharts: 2.5.0(prop-types@15.8.1)(react-dom@18.2.0)(react@18.2.0)
       tailwind-merge: 1.12.0
     transitivePeerDependencies:
       - prop-types
-      - react-dom
     dev: false
 
   /@types/d3-array@3.0.4:

@@ -37,34 +37,32 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const handle = course_handle as string
 
-    const raw_enrollments = await Xata.db.enrollment
+    const raw_enrollments = await Xata.db.section_enrollment
       .select([
         "*",
-        "classroom.*",
-        "student.*",
-        "classroom.class.*",
-        "classroom.class.period",
-        "classroom.teacher.*",
-        "classroom.class.course",
+        "section.*",
+        "period_enrollment.utec_account.*",
+        "section.class.*",
+        "section.class.period",
+        "section.teacher.*",
+        "section.class.course",
       ])
-      .filter({ "student.email": email })
+      .filter({ "period_enrollment.utec_account.email": email })
       .filter({
-        "classroom.class.course": {
-          handle,
-        },
+        "section.class.course": handle,
       })
       .getAll()
 
-    // we need to know in wich periods the student is enrolled
+    // we need to know in wich periods the utec_account is enrolled
     const enrollments: (Enrollment | null)[] = await Promise.all(
       raw_enrollments.map(async (raw_enrollment) => {
         try {
-          if (!raw_enrollment.classroom?.class?.period?.handle) {
+          if (!raw_enrollment.section?.class?.period?.id) {
             return null
           }
 
-          const period = raw_enrollment.classroom.class.period.handle
-          const section = raw_enrollment.classroom.section || 0
+          const period = raw_enrollment.section.class.period.id
+          const section = raw_enrollment.section.section || 0
           const dropped_out = raw_enrollment.dropped_out
 
           const current_period = process.env.CURRENT_PERIOD as string
@@ -74,7 +72,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             const raw_grades = await Xata.db.grade
               .select(["*", "evaluation.*"])
               .filter({
-                "enrollment.id": raw_enrollment.id,
+                "section_enrollment.id": raw_enrollment.id,
               })
               .getAll()
 

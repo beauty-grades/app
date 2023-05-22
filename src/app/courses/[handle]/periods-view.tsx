@@ -1,4 +1,4 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/ui/tabs"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 import Xata from "@/lib/xata"
 
@@ -8,8 +8,7 @@ interface Classroom {
   score: number
   teacher: {
     id: string
-    first_name: string
-    last_name: string
+    name: string
   }
 }
 
@@ -21,18 +20,15 @@ interface Evaluation {
 }
 
 const getEvaluationsByPeriod = async (course_handle: string) => {
-  const raw_classrooms = await Xata.db.classroom
-    .select(["*", "class.course.*", "teacher.*", "class.period.handle"])
-    .filter({ "class.course.handle": course_handle })
+  const raw_classrooms = await Xata.db.section
+    .select(["*", "class.course.*", "teacher.*", "class.period"])
+    .filter({ "class.course": course_handle })
     .getAll()
 
   const raw_evaluations = await Xata.db.evaluation
     .select(["*", "class.*", "class.course.*", "class.period.*"])
-    .filter({ "class.course.handle": course_handle })
+    .filter({ "class.course": course_handle })
     .getAll()
-
-  console.log(raw_evaluations)
-  console.log(raw_classrooms)
 
   const periods: {
     period: string
@@ -44,7 +40,7 @@ const getEvaluationsByPeriod = async (course_handle: string) => {
     if (!raw_evaluation.class) return
     if (!raw_evaluation.class.course) return
 
-    const period = raw_evaluation.class.period?.handle || ""
+    const period = raw_evaluation.class.period?.id || ""
 
     const evaluation = {
       handle: raw_evaluation.handle || "",
@@ -69,7 +65,7 @@ const getEvaluationsByPeriod = async (course_handle: string) => {
   })
 
   raw_classrooms.forEach((raw_classroom) => {
-    const classroom_period = raw_classroom.class?.period?.handle
+    const classroom_period = raw_classroom.class?.period?.id
 
     const existing_period = periods.find(
       ({ period }) => classroom_period === period
@@ -80,8 +76,7 @@ const getEvaluationsByPeriod = async (course_handle: string) => {
       section: raw_classroom.section || 0,
       score: raw_classroom.score || 0,
       teacher: {
-        first_name: raw_classroom.teacher?.first_name || "Unknown",
-        last_name: raw_classroom.teacher?.last_name || "Teacher",
+        name: raw_classroom.teacher?.name || "Unknown",
         id: raw_classroom.teacher?.id || "ukn",
       },
     })
@@ -128,13 +123,13 @@ export const PeriodsView = async ({ course_handle }: Props) => {
 
 const Classrooms = ({ classrooms }: { classrooms: Classroom[] }) => {
   return (
-    <ul className="mt-4 border-t border-t-zinc-600 pt-4">
+    <ul className="mt-4 border-t border-t-slate-600 pt-4">
       {classrooms.map(({ id, section, teacher, score }) => {
         return (
           <li key={id}>
             <p className="font-bold italic">Sección {section}</p>
             <p className="ml-4">
-              {teacher.first_name} {teacher.last_name}
+              {teacher.name}
             </p>
             <p className="ml-4">{score}</p>
           </li>
@@ -197,7 +192,7 @@ const Evaluations = ({
             <div key={label} className="flex items-center gap-2">
               <div className="flex w-60 items-center justify-between">
                 <span className="font-bold">{label}</span>
-                <span className="text-zinc-600">
+                <span className="text-slate-600">
                   {Math.round(total_weight * 100)}%
                 </span>
               </div>
@@ -207,7 +202,7 @@ const Evaluations = ({
                   style={{
                     width: `${total_weight * 100}%`,
                   }}
-                  className="evaluation-weight relative h-14 overflow-hidden rounded-lg bg-zinc-700"
+                  className="evaluation-weight relative h-14 overflow-hidden rounded-lg bg-slate-700"
                 />
               </div>
             </div>

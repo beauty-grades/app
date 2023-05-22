@@ -1,15 +1,15 @@
 import Link from "next/link"
-import { Button } from "@/ui/button"
-import { Heading, Paragraph } from "@/ui/typography"
+import { Button } from "@/components/ui/button"
+import { Heading, Paragraph } from "@/components/ui/typography"
 
 import Xata from "@/lib/xata"
 import { PeriodsView } from "./periods-view"
 import { UserGrades } from "./user-grades"
 
 const getCourse = async (handle: string) => {
-  const raw_classrooms = await Xata.db.classroom
+  const raw_classrooms = await Xata.db.section
     .select(["*", "class.*", "teacher.*", "class.course.*"])
-    .filter({ "class.course.handle": handle })
+    .filter({ "class.course": handle })
     .getAll()
 
   const title = raw_classrooms[0]?.class?.course?.name || ""
@@ -18,9 +18,9 @@ const getCourse = async (handle: string) => {
 }
 
 const getCurriculums = async (handle: string) => {
-  const raw_level_courses = await Xata.db.level_course
+  const raw_level_courses = await Xata.db.rel_level_course
     .select(["*", "level.*", "course.*", "level.curriculum.*"])
-    .filter({ "course.handle": handle })
+    .filter({ "course": handle })
     .getAll()
 
   const curriculums: string[] = []
@@ -32,11 +32,11 @@ const getCurriculums = async (handle: string) => {
 
     // add the handles to the curriculum
     const curriculum = curriculums.find(
-      (curriculum) => curriculum === raw_level_course.level?.curriculum?.handle
+      (curriculum) => curriculum === raw_level_course.level?.curriculum?.id
     )
 
     if (!curriculum) {
-      const handle = raw_level_course?.level?.curriculum?.handle || ""
+      const handle = raw_level_course?.level?.curriculum?.id || ""
       curriculums.push(handle)
     }
   })
@@ -64,7 +64,7 @@ const Page = async ({ params: { handle } }: { params: { handle: string } }) => {
         {curriculums.map((curriculum) => {
           return (
             <Link href={`/curriculums/${curriculum}`} key={curriculum}>
-              <Button variant="subtle">{curriculum}</Button>
+              <Button variant="secondary">{curriculum}</Button>
             </Link>
           )
         })}

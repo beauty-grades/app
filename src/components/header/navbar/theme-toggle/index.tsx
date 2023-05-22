@@ -1,14 +1,14 @@
 "use client"
 
 import * as React from "react"
-import { Button } from "@/ui/button"
+import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/ui/dropdown-menu"
-import { Icons } from "@/ui/icons"
+} from "@/components/ui/dropdown-menu"
+import { Icons } from "@/components/ui/icons"
 import { useTheme } from "next-themes"
 
 export function ThemeToggle() {
@@ -29,11 +29,11 @@ export function ThemeToggle() {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="sm">
           {theme === "dark" ? (
-            <Icons.moon className="hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100" />
+            <Icons.moon className="hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100" />
           ) : theme === "light" ? (
-            <Icons.sun className="hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100" />
+            <Icons.sun className="hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100" />
           ) : (
-            <Icons.laptop className="hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100" />
+            <Icons.laptop className="hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100" />
           )}
           <span className="sr-only">Cambiar tema</span>
         </Button>

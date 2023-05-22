@@ -1,6 +1,6 @@
 "use client"
 
-import { Toaster } from "@/ui/toaster"
+import { Toaster } from "@/components/ui/toaster"
 import { Analytics } from "@vercel/analytics/react"
 import { SessionProvider } from "next-auth/react"
 import { ThemeProvider } from "next-themes"
