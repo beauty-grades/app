@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import { ColumnDef } from "@tanstack/react-table"
 import { ArrowUpDown } from "lucide-react"
 
@@ -68,10 +69,12 @@ export const columns: ColumnDef<Course>[] = [
       }
 
       return (
-        <div className="flex items-center">
-          {label && <Badge variant={variant}>{label}</Badge>}
-          <span className="ml-2">{name}</span>
-        </div>
+        <Link href={`/courses/${row.original.id}`}>
+          <div className="flex items-center">
+            {label && <Badge variant={variant}>{label}</Badge>}
+            <span className="ml-2">{name}</span>
+          </div>
+        </Link>
       )
     },
   },

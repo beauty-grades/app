@@ -21,12 +21,19 @@ const Page = async () => {
   if (!utec_account?.id) {
     redirect("/api/auth/signin")
   }
+
+  const nextauth_user = await Xata.db.nextauth_users
+    .filter({ email })
+    .getFirst()
+
   return (
     <>
       <div className="container">
-        <Heading>Anthony Ivan</Heading>
+        <Heading>{nextauth_user?.name}</Heading>
         <Heading as="h3">{utec_account?.id}</Heading>
-        <Heading as="h4">{utec_account?.curriculum?.id}</Heading>
+        <Link href={`/curriculums/${utec_account.curriculum?.id}`}>
+          <Heading as="h4">{utec_account?.curriculum?.id}</Heading>
+        </Link>
       </div>
 
       {/* @ts-expect-error Async Server Component*/}
