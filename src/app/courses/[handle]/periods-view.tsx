@@ -1,4 +1,13 @@
 import Xata from "@/lib/xata"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 interface Classroom {
@@ -114,15 +123,30 @@ export const PeriodsView = async ({ course_handle }: Props) => {
         </TabsContent>
         {periods.map(({ period, evaluations, classrooms, wrong_formula }) => (
           <TabsContent id={`period:${period}`} key={period} value={period}>
-            {wrong_formula ? (
-              <WrongFormulaEvaluations
-                evaluations={evaluations}
-                period={period}
-              />
-            ) : (
-              <Evaluations evaluations={evaluations} period={period} />
-            )}
-            <Classrooms classrooms={classrooms} />
+            <Card>
+              <CardHeader>
+                <CardTitle>{period}</CardTitle>
+                <CardDescription>Conoce más de esta clase</CardDescription>
+              </CardHeader>
+              <CardContent>
+                {wrong_formula ? (
+                  <WrongFormulaEvaluations
+                    evaluations={evaluations}
+                    period={period}
+                  />
+                ) : (
+                  <Evaluations evaluations={evaluations} period={period} />
+                )}
+  
+                <div
+                  id={`final_score-${period}`}
+                  className="text-lg font-bold ml-60 mt-2 pl-2"
+                ></div>
+
+                <Separator className="my-4" />
+                <Classrooms classrooms={classrooms} />
+              </CardContent>
+            </Card>
           </TabsContent>
         ))}
       </Tabs>
@@ -132,7 +156,7 @@ export const PeriodsView = async ({ course_handle }: Props) => {
 
 const Classrooms = ({ classrooms }: { classrooms: Classroom[] }) => {
   return (
-    <ul className="mt-4 border-t border-t-slate-600 pt-4">
+    <ul>
       {classrooms.map(({ id, section, teacher, score }) => {
         return (
           <li key={id}>

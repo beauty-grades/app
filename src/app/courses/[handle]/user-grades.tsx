@@ -49,6 +49,7 @@ export const UserGrades = ({ course_handle }: UserGradesProps) => {
         status: string
         section: number
         period: string
+        final_score: number | null
         grades: {
           label: string
           score: number | null
@@ -126,6 +127,17 @@ export const UserGrades = ({ course_handle }: UserGradesProps) => {
           if (state === "active") {
             if (!!periods) {
               periods.forEach((period) => {
+                if (period.final_score) {
+                  const final_score_el = document.querySelector(
+                    `#final_score-${period.period}`
+                  )
+
+                  if (final_score_el) {
+                    final_score_el.textContent =
+                      "Promedio final: " + period.final_score?.toString()
+                  }
+                }
+
                 period.grades.forEach((grade) => {
                   if (grade.score) {
                     const grade_el = document.querySelector(

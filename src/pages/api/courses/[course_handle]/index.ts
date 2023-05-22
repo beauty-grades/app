@@ -101,6 +101,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             section,
             status,
             grades,
+            final_score: raw_enrollment.score || null,
           } as Enrollment
         } catch {
           return null
