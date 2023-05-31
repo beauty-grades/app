@@ -20,7 +20,7 @@ const ClientLayout = ({ children }) => {
             fetch(resource, init).then((res) => res.json()),
         }}
       >
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           <WrapBalancerProvider>
             <div className="flex min-h-[150vh] flex-col">
               <Header />

@@ -2,7 +2,7 @@
 
 import React from "react"
 import Link from "next/link"
-import { useToast } from "@/hooks/ui/use-toast"
+import { useToast } from "@/components/ui/use-toast"
 import { AnimatePresence, motion } from "framer-motion"
 import { useSession } from "next-auth/react"
 import * as ReactDOMClient from "react-dom/client"

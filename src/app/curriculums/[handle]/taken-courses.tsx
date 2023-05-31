@@ -4,7 +4,7 @@ import React from "react"
 import useSWR from "swr"
 
 export const TakenCourses = () => {
-  const { data, error } = useSWR("/api/courses/taken", {
+  const { data, error } = useSWR("/api/courses/taking", {
     refreshInterval: 0,
     revalidateIfStale: false,
     revalidateOnFocus: false,

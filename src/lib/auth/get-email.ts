@@ -1,12 +1,9 @@
-import { type RequestCookies } from "next/dist/compiled/@edge-runtime/cookies"
-import { type ReadonlyRequestCookies } from "next/dist/server/app-render"
+import { cookies } from "next/headers"
 
 import Xata from "@/lib/xata"
 
-export const getEmail = async (
-  cookies: RequestCookies | ReadonlyRequestCookies
-) => {
-  const session_token = cookies.get(
+export const getEmail = async () => {
+  const session_token = cookies().get(
     process.env.VERCEL
       ? "__Secure-next-auth.session-token"
       : "next-auth.session-token"

@@ -2,7 +2,7 @@ import { cookies } from "next/headers"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 
-import { getEmail } from "@/lib/utils/auth/get-email"
+import { getEmail } from "@/lib/auth/get-email"
 import Xata from "@/lib/xata"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
@@ -11,8 +11,7 @@ import { CoursesTable } from "./courses-table"
 import { EvolutivesCharts } from "./evolutives-charts"
 
 const Page = async () => {
-  const cookieStore = cookies()
-  const email = await getEmail(cookieStore)
+  const email = await getEmail()
 
   if (!email) {
     redirect("/api/auth/signin")

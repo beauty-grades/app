@@ -1,17 +1,28 @@
-import { NextApiRequest, NextApiResponse } from "next"
-import { authOptions } from "@/pages/api/auth/[...nextauth]"
-import { getServerSession } from "next-auth/next"
+import { NextResponse } from "next/server"
 
+import { getEmail } from "@/lib/auth/get-email"
 import Xata from "@/lib/xata"
 
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+interface Grade {
+  handle: string | null
+  label: string
+  score: number | null
+  weight: number
+}
+
+interface Enrollment {
+  period: string
+  section: number
+  status: "enrolled" | "dropped_out" | "failed" | "passed"
+  grades: Grade[]
+}
+
+export async function GET(request: Request, { params }) {
   try {
-    const session = await getServerSession(req, res, authOptions)
-    const email = session?.user?.email
+    const email = await getEmail()
 
     if (!email) {
-      res.status(401).json({ error: "Unauthenticated" })
-      return
+      return NextResponse.json({ error: "Unauthenticated" }, { status: 401 })
     }
 
     const data = await Xata.db.section_enrollment
@@ -55,7 +66,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       }
     })
 
-    res.status(200).json({
+    return NextResponse.json({
       taking: Array.from(taking),
       approved: Array.from(approved),
       elective: Array.from(elective.entries()).map((e) => ({
@@ -65,10 +76,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       ok: true,
     })
   } catch (error) {
-    res.status(500).json({
-      error: error.message,
-    })
+    return NextResponse.json(
+      {
+        error: error.message,
+      },
+      {
+        status: 500,
+      }
+    )
   }
 }
-
-export default handler

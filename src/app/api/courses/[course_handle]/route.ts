@@ -1,7 +1,6 @@
-import { NextApiRequest, NextApiResponse } from "next"
-import { authOptions } from "@/pages/api/auth/[...nextauth]"
-import { getServerSession } from "next-auth/next"
+import { NextResponse } from "next/server"
 
+import { getEmail } from "@/lib/auth/get-email"
 import Xata from "@/lib/xata"
 
 interface Grade {
@@ -18,21 +17,21 @@ interface Enrollment {
   grades: Grade[]
 }
 
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+export async function GET(request: Request, { params }) {
   try {
-    const session = await getServerSession(req, res, authOptions)
-    const email = session?.user?.email
+    const email = await getEmail()
 
     if (!email) {
-      res.status(401).json({ error: "Unauthenticated" })
-      return
+      return NextResponse.json({ error: "Unauthenticated" }, { status: 401 })
     }
 
-    const { course_handle } = req.query
+    const { course_handle } = params
 
     if (!course_handle) {
-      res.status(400).json({ error: "Missing course handle" })
-      return
+      return NextResponse.json(
+        { error: "Missing course handle" },
+        { status: 400 }
+      )
     }
 
     const handle = course_handle as string
@@ -109,12 +108,15 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       })
     )
 
-    res.status(200).json(enrollments)
+    return NextResponse.json(enrollments)
   } catch (error) {
-    res.status(500).json({
-      error: error.message,
-    })
+    return NextResponse.json(
+      {
+        error: error.message,
+      },
+      {
+        status: 500,
+      }
+    )
   }
 }
-
-export default handler

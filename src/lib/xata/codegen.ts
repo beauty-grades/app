@@ -135,6 +135,19 @@ const tables = [
       { name: "handle", type: "string", unique: true },
       { name: "name", type: "string" },
       { name: "bio", type: "string" },
+      { name: "profile_picture", type: "string" },
+      { name: "cover_picture", type: "string" },
+      { name: "ig_handle", type: "string" },
+      { name: "tw_handle", type: "string" },
+      { name: "gh_handle", type: "string" },
+    ],
+  },
+  {
+    name: "metadata",
+    columns: [
+      { name: "email", type: "email", unique: true },
+      { name: "feeding", type: "bool", notNull: true, defaultValue: "false" },
+      { name: "last_fed_at", type: "datetime" },
     ],
   },
   {
@@ -255,6 +268,9 @@ export type GradeRecord = Grade & XataRecord;
 export type Profile = InferredTypes["profile"];
 export type ProfileRecord = Profile & XataRecord;
 
+export type Metadata = InferredTypes["metadata"];
+export type MetadataRecord = Metadata & XataRecord;
+
 export type NextauthUsers = InferredTypes["nextauth_users"];
 export type NextauthUsersRecord = NextauthUsers & XataRecord;
 
@@ -292,6 +308,7 @@ export type DatabaseSchema = {
   section_enrollment: SectionEnrollmentRecord;
   grade: GradeRecord;
   profile: ProfileRecord;
+  metadata: MetadataRecord;
   nextauth_users: NextauthUsersRecord;
   nextauth_accounts: NextauthAccountsRecord;
   nextauth_verificationTokens: NextauthVerificationTokensRecord;
