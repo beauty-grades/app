@@ -1,12 +1,14 @@
 import { Inter as FontSans } from "next/font/google"
 
+import "@uploadthing/react/styles.css"
 import "@/styles/globals.css"
+
 import { siteConfig } from "@/lib/site"
 import ClientLayout from "./client-layout"
-import "@uploadthing/react/styles.css"
 
 const fontSans = FontSans({
   subsets: ["latin"],
+  display: "swap",
   variable: "--font-sans",
 })
 
@@ -24,9 +26,9 @@ export const metadata = {
 
 const Layout: React.FunctionComponent<MainLayoutProps> = ({ children }) => {
   return (
-    <html lang="es" suppressHydrationWarning>
+    <html className={fontSans.variable} lang="es" suppressHydrationWarning>
       <head />
-      <body className={`${fontSans.className} font-sans antialiased`}>
+      <body>
         <ClientLayout>{children}</ClientLayout>
       </body>
     </html>

@@ -3,9 +3,7 @@
 
 import * as React from "react"
 import { useRouter } from "next/navigation"
-import { OurFileRouter } from "@/app/api/uploadthing/core"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { UploadButton } from "@uploadthing/react"
 import { useForm } from "react-hook-form"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -21,6 +19,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
+import { UploadImageButton } from "@/components/upload-image-button"
 import {
   profileFormSchema,
   type ProfileFormValues,
@@ -54,8 +53,7 @@ export function ProfileForm({
           <AvatarFallback>{initial_values.name[0]}</AvatarFallback>
         </Avatar>
 
-        <UploadButton<OurFileRouter>
-          endpoint="imageUploader"
+        <UploadImageButton
           onClientUploadComplete={(files) => {
             // Do something with the response
             files && files[0]?.fileUrl && setProfilePic(files[0].fileUrl)

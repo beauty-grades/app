@@ -4,7 +4,9 @@ import { notFound } from "next/navigation"
 import Xata from "@/lib/xata"
 import { AspectRatio } from "@/components/ui/aspect-ratio"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Badge } from "@/components/ui/badge"
 import { Heading } from "@/components/ui/typography"
+import { getRanking } from "./get-ranking"
 
 const Layout = async ({ children, params }) => {
   const handle = params["handle"].replace("%40", "")
@@ -14,6 +16,16 @@ const Layout = async ({ children, params }) => {
   if (!profile) {
     notFound()
   }
+
+  const utec_account = await Xata.db.utec_account
+    .filter({ email: profile.email })
+    .getFirst()
+
+  const ranking = await getRanking({
+    utec_account: utec_account?.id,
+    career: utec_account?.curriculum?.id?.split("-")[0],
+  })
+
   return (
     <div className="container">
       <div className="relative mb-20">
@@ -28,9 +40,9 @@ const Layout = async ({ children, params }) => {
         <div className="absolute -bottom-20 left-4">
           <Avatar className="h-40 w-40">
             <AvatarImage src={profile.profile_picture || ""} />
-            <AvatarFallback className="font-bold text-3xl">
+            <AvatarFallback className="text-3xl font-bold">
               {profile.name
-                ? profile.name.split(" ")[0][0] + profile.name.split(" ")[1][0]
+                ? profile.name.split(" ")[0][0]
                 : profile.handle
                 ? profile.handle[0]
                 : "A"}
@@ -38,7 +50,13 @@ const Layout = async ({ children, params }) => {
           </Avatar>
         </div>
       </div>
-      <Heading as="h3">{profile.name}</Heading>
+      <div className="flex items-center gap-2">
+        <h1 className="text-2xl font-semibold">{profile.name}</h1>
+        {ranking?.label && <Badge>{ranking?.label}</Badge>}
+      </div>
+      <Heading as="h4" className="text-md -mt-2 font-medium">
+        @{profile.handle}
+      </Heading>
       <p>{profile.bio}</p>
       {children}
     </div>
