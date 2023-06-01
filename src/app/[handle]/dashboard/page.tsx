@@ -33,9 +33,11 @@ const Page = async ({ params }) => {
         <div className="text-xl font-bold">
           Promedio Histórico {utec_account.score}
         </div>
-        <Separator orientation="vertical" />
         {ranking && (
-          <div className="text-xl font-bold">Puesto {ranking?.nums}</div>
+          <>
+            <Separator orientation="vertical" />
+            <div className="text-xl font-bold">Puesto {ranking?.nums}</div>
+          </>
         )}
       </div>
 

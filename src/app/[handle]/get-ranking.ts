@@ -7,33 +7,33 @@ export const getRanking = cache(
     try {
       let ranking: string | null = null
 
-      const OM_PERIOD = process.env.OM_PERIOD as string
+      const MO_PERIOD = process.env.MO_PERIOD as string
       const rel_career_period = await Xata.db.rel_career_period.read(
-        `${career}-${OM_PERIOD}`
+        `${career}-${MO_PERIOD}`
       )
 
       const period_enrollment = await Xata.db.period_enrollment.read(
-        `${OM_PERIOD}-${utec_account}`
+        `${MO_PERIOD}-${utec_account}`
       )
 
       if (
         rel_career_period?.enrolled_students &&
         period_enrollment?.merit_order
       ) {
-        const om =
+        const mo =
           period_enrollment.merit_order / rel_career_period.enrolled_students
 
-        if (om <= 1 / 10) {
+        if (mo <= 1 / 10) {
           ranking = "Décimo superior"
-        } else if (om <= 1 / 5) {
+        } else if (mo <= 1 / 5) {
           ranking = "Quinto superior"
-        } else if (om <= 1 / 3) {
+        } else if (mo <= 1 / 3) {
           ranking = "Tercio superior"
         }
 
         return {
-          label: ranking ? `${ranking} (${OM_PERIOD})` : null,
-          nums: `${period_enrollment.merit_order} / ${rel_career_period.enrolled_students} (${OM_PERIOD})`,
+          label: ranking ? `${ranking} (${MO_PERIOD})` : null,
+          nums: `${period_enrollment.merit_order} / ${rel_career_period.enrolled_students} (${MO_PERIOD})`,
         }
       } else {
         throw new Error("No se encontró el ranking")
