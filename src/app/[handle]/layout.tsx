@@ -1,3 +1,5 @@
+export const revalidate = 1000
+
 import Image from "next/image"
 import { notFound } from "next/navigation"
 
@@ -21,10 +23,10 @@ const Layout = async ({ children, params }) => {
     .filter({ email: profile.email })
     .getFirst()
 
-  const ranking = await getRanking({
-    utec_account: utec_account?.id,
-    career: utec_account?.curriculum?.id?.split("-")[0],
-  })
+  const ranking = await getRanking(
+    utec_account?.id,
+    utec_account?.curriculum?.id?.split("-")[0]
+  )
 
   return (
     <div className="container">
