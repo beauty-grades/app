@@ -1,8 +1,9 @@
 import { notFound } from "next/navigation"
 
-import Xata from "@/lib/xata"
 import { Separator } from "@/components/ui/separator"
+import { getProfile } from "../get-profile"
 import { getRanking } from "../get-ranking"
+import { getUtecAccount } from "../get-utec-account"
 import { CoursesTable } from "./courses-table"
 import { EvolutivesCharts } from "./evolutives-charts"
 
@@ -11,16 +12,13 @@ export const revalidate = 1000000
 const Page = async ({ params }) => {
   const handle = params["handle"].replace("%40", "")
 
-  const profile = await Xata.db.profile.filter({ handle }).getFirst()
+  const profile = await getProfile(handle)
 
   if (!profile) {
     notFound()
   }
 
-  const utec_account = await Xata.db.utec_account
-    .filter({ email: profile.email })
-    .select(["*", "curriculum.career.*"])
-    .getFirst()
+  const utec_account = await getUtecAccount(profile.email)
 
   if (!utec_account) return
 

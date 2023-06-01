@@ -1,5 +1,3 @@
-export const revalidate = 1000
-
 import Image from "next/image"
 import { notFound } from "next/navigation"
 
@@ -9,19 +7,35 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Heading } from "@/components/ui/typography"
 import { getRanking } from "./get-ranking"
+import { getUtecAccount } from "./get-utec-account"
+import { getProfile } from "./get-profile"
+
+export const revalidate = 1000
+
+export async function generateStaticParams() {
+  const profiles = await Xata.db.profile.select(["handle"]).getPaginated({
+    pagination: {
+      size: 50,
+    },
+  })
+
+  return profiles.records.map((profile) => ({
+    params: {
+      handle: profile.handle,
+    },
+  }))
+}
 
 const Layout = async ({ children, params }) => {
   const handle = params["handle"].replace("%40", "")
 
-  const profile = await Xata.db.profile.filter({ handle }).getFirst()
+  const profile = await getProfile(handle)
 
   if (!profile) {
     notFound()
   }
 
-  const utec_account = await Xata.db.utec_account
-    .filter({ email: profile.email })
-    .getFirst()
+  const utec_account = await getUtecAccount(profile.email)
 
   const ranking = await getRanking(
     utec_account?.id,
