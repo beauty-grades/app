@@ -41,7 +41,7 @@ const Layout = async ({ children, params }) => {
           />
         </AspectRatio>
         <div className="absolute -bottom-20 left-4">
-          <Avatar className="h-40 w-40">
+          <Avatar className="h-40 w-40 border-4 border-white">
             <AvatarImage src={profile.profile_picture || ""} />
             <AvatarFallback className="text-3xl font-bold">
               {profile.name
