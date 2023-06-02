@@ -2,9 +2,9 @@
 const nextConfig = {
   reactStrictMode: true,
   experimental: {
-    appDir: true,
     serverComponentsExternalPackages: ["@tremor/react"],
     serverActions: true,
+    appDir: true,
   },
   images: {
     domains: [
@@ -17,9 +17,6 @@ const nextConfig = {
       "cdn.discordapp.com",
       "i.imgur.com",
     ],
-  },
-  httpAgentOptions: {
-    keepAlive: false,
   },
 }
 

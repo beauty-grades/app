@@ -6,25 +6,12 @@ import { AspectRatio } from "@/components/ui/aspect-ratio"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Heading } from "@/components/ui/typography"
+import { getProfile } from "./get-profile"
 import { getRanking } from "./get-ranking"
 import { getUtecAccount } from "./get-utec-account"
-import { getProfile } from "./get-profile"
+import { ProfileInteractions } from "./profile-interactions/profile-interactions"
 
 export const revalidate = 1000
-
-export async function generateStaticParams() {
-  const profiles = await Xata.db.profile.select(["handle"]).getPaginated({
-    pagination: {
-      size: 50,
-    },
-  })
-
-  return profiles.records.map((profile) => ({
-    params: {
-      handle: profile.handle,
-    },
-  }))
-}
 
 const Layout = async ({ children, params }) => {
   const handle = params["handle"].replace("%40", "")
@@ -47,7 +34,7 @@ const Layout = async ({ children, params }) => {
       <div className="relative mb-20">
         <AspectRatio ratio={3 / 1} className="bg-muted">
           <Image
-            src="https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=800&dpr=2&q=80"
+            src="https://pbs.twimg.com/profile_banners/44196397/1576183471/1500x500"
             alt="Photo by Drew Beamer"
             fill
             className="rounded-md object-cover"
@@ -64,6 +51,9 @@ const Layout = async ({ children, params }) => {
                 : "A"}
             </AvatarFallback>
           </Avatar>
+        </div>
+        <div className="absolute right-4">
+          <ProfileInteractions />
         </div>
       </div>
       <div className="flex items-center gap-2">

@@ -3,6 +3,7 @@
 
 import * as React from "react"
 import { useRouter } from "next/navigation"
+import { follow } from "@/actions/follow"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 
@@ -20,6 +21,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { UploadImageButton } from "@/components/upload-image-button"
+import { ProfileInteractions } from "../[handle]/profile-interactions/profile-interactions"
 import {
   profileFormSchema,
   type ProfileFormValues,
@@ -44,6 +46,7 @@ export function ProfileForm({
 
   return (
     <>
+      <ProfileInteractions />
       <div className="flex flex-col items-center justify-center gap-4">
         <Avatar className="h-32 w-32">
           <AvatarImage
@@ -69,6 +72,7 @@ export function ProfileForm({
         <form
           action={async (data: FormData) => {
             data.append("profile_picture", profile_pic)
+            await follow()
             await updateProfile(data)
             router.push(`/@${data.get("handle")}`)
           }}
