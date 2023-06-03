@@ -54,7 +54,7 @@ export const ProfileInteractionsClient = ({
     : "after:content-['Seguir']"
 
   return (
-    <div className="flex h-20 items-center gap-4">
+    <div className="flex flex-col-reverse sm:flex-row sm:h-20 sm:items-center gap-1 sm:gap-4 flex-reverse">
       <div className="flex gap-4">
         <Link href={`/user/${handle}/following`}>
           <strong>{initial_following_count}</strong> Siguiendo
@@ -65,7 +65,7 @@ export const ProfileInteractionsClient = ({
       </div>
 
       {is_my_profile ? (
-        <div className="flex h-20 items-center gap-4">
+        <div className="flex items-center gap-4">
           <Link
             className={cn(
               buttonVariants({ variant: "outline" }),

@@ -46,7 +46,7 @@ const Page = () => {
           colors="from-red-600 to-purple-500"
           className="max-w-sm md:max-w-full"
         >
-          <pre className="javascript relative text-left font-mono text-xs font-bold tracking-wide text-slate-300 md:text-base">
+          <pre className="javascript relative text-left font-mono text-xs font-bold tracking-wide text-muted-foreground md:text-base">
             <code className="block p-4">
               {`fetch("https://coollege.up.railway.app/api/feed", {
   method: "POST",

@@ -26,7 +26,7 @@ const Layout = async ({ children, params }) => {
 
   return (
     <div className="container">
-      <div className="relative mb-20">
+      <div className="relative mb-28 sm:mb-20">
         <AspectRatio ratio={3 / 1} className="bg-muted">
           <Image
             src="https://pbs.twimg.com/profile_banners/44196397/1576183471/1500x500"
@@ -35,10 +35,10 @@ const Layout = async ({ children, params }) => {
             className="rounded-md object-cover"
           />
         </AspectRatio>
-        <div className="absolute -bottom-20 left-4">
-          <Avatar className="h-40 w-40 border-4 border-white">
+        <div className="absolute -bottom-10 left-4 sm:-bottom-20">
+          <Avatar className="h-20 w-20 border-4 border-white sm:h-40 sm:w-40">
             <AvatarImage src={profile.profile_picture || ""} />
-            <AvatarFallback className="text-3xl font-bold">
+            <AvatarFallback className="text-lg font-bold sm:text-3xl">
               {profile.name
                 ? profile.name.split(" ")[0][0]
                 : profile.handle
@@ -47,7 +47,7 @@ const Layout = async ({ children, params }) => {
             </AvatarFallback>
           </Avatar>
         </div>
-        <div className="absolute right-4">
+        <div className="absolute -bottom-[6.5rem] sm:-bottom-20 sm:right-4">
           <Suspense>
             {/* @ts-ignore */}
             <ProfileInteractions profile_id={profile.id} handle={handle} />
