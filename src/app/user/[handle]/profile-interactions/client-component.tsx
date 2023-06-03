@@ -49,8 +49,12 @@ export const ProfileInteractionsClient = ({
   return (
     <div className="flex h-20 items-center gap-4">
       <div className="flex gap-2">
-        <p>{initial_following_count} Siguiendo</p>
-        <p>{optimisticStatus.follower_count} Seguidores</p>
+        <p>
+          <strong>{initial_following_count}</strong> Siguiendo
+        </p>
+        <p>
+          <strong>{optimisticStatus.follower_count}</strong> Seguidores
+        </p>
       </div>
 
       <form
