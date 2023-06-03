@@ -31,8 +31,8 @@ export const ProfileListPaginated = ({
 const ProfileCard = ({ profile }: { profile: ProfileRecord }) => {
   return (
     <Link href={`/user/${profile.handle}`}>
-      <div className="flex gap-8">
-        <Avatar className="h-14 w-14 border-2 border-white">
+      <div className="flex gap-4 sm:gap-8">
+        <Avatar className="h-14 w-14 border sm:border-2">
           <AvatarImage src={profile.profile_picture || ""} />
           <AvatarFallback className="font-bold">
             {profile.name
