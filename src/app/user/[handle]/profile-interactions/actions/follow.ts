@@ -52,5 +52,7 @@ export async function follow(profile_id: string) {
     })
   }
 
+  
+
   revalidatePath(`/${profile_b.handle}`)
 }

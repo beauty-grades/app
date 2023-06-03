@@ -55,6 +55,7 @@ const Page = async ({ params: { handle } }: { params: { handle: string } }) => {
       </Heading>
 
       <Heading as="h2">Periodos</Heading>
+      {/* @ts-ignore */}
       <PeriodsView course_handle={handle} />
 
       <Heading as="h2">Curriculums</Heading>
