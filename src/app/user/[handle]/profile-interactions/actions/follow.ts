@@ -52,6 +52,4 @@ export async function follow(profile_id: string) {
   await profile_a_stats.update({
     following_count: { $increment: 1 },
   })
-
-  revalidatePath("/user/[handle]")
 }

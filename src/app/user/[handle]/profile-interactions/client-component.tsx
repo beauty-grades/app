@@ -1,6 +1,7 @@
 "use client"
 
 import { experimental_useOptimistic as useOptimistic } from "react"
+import Link from "next/link"
 
 import { Button } from "@/components/ui/button"
 import { follow } from "./actions/follow"
@@ -8,6 +9,7 @@ import { unfollow } from "./actions/unfollow"
 
 interface ProfileInteractionsProps {
   profile_id: string
+  handle: string
   initial_following: boolean
   initial_follower_count: number
   initial_following_count: number
@@ -21,6 +23,7 @@ interface Status {
 
 export const ProfileInteractionsClient = ({
   profile_id,
+  handle,
   initial_following,
   initial_follower_count,
   initial_following_count,
@@ -48,13 +51,13 @@ export const ProfileInteractionsClient = ({
 
   return (
     <div className="flex h-20 items-center gap-4">
-      <div className="flex gap-2">
-        <p>
+      <div className="flex gap-4">
+        <Link href={`/user/${handle}/following`}>
           <strong>{initial_following_count}</strong> Siguiendo
-        </p>
-        <p>
+        </Link>
+        <Link href={`/user/${handle}/followers`}>
           <strong>{optimisticStatus.follower_count}</strong> Seguidores
-        </p>
+        </Link>
       </div>
 
       <form

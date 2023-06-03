@@ -10,7 +10,7 @@ import { EvolutivesCharts } from "./evolutives-charts"
 export const revalidate = 1000000
 
 const Page = async ({ params }) => {
-  const handle = params["handle"].replace("%40", "")
+  const handle = params["handle"]
 
   const profile = await getProfile(handle)
 
@@ -42,11 +42,11 @@ const Page = async ({ params }) => {
       </div>
 
       <Separator className="my-4" />
-
+      {/* @ts-ignore */}
       <EvolutivesCharts utec_account={utec_account?.id} />
 
       <Separator className="my-4" />
-
+      {/* @ts-ignore */}
       <CoursesTable utec_account={utec_account?.id} />
     </div>
   )

@@ -2,7 +2,13 @@ import { getEmail } from "@/lib/auth/get-email"
 import Xata from "@/lib/xata"
 import { ProfileInteractionsClient } from "./client-component"
 
-export const ProfileInteractions = async ({ profile_id }: { profile_id: string }) => {
+export const ProfileInteractions = async ({
+  profile_id,
+  handle,
+}: {
+  profile_id: string
+  handle: string
+}) => {
   const email = await getEmail()
 
   if (!email) throw new Error("Unauthorized")
@@ -25,6 +31,7 @@ export const ProfileInteractions = async ({ profile_id }: { profile_id: string }
   return (
     <ProfileInteractionsClient
       profile_id={profile_id}
+      handle={handle}
       initial_following={!!rel_profiles?.a_follows_b}
       initial_follower_count={profile_stats.follower_count}
       initial_following_count={profile_stats.following_count}

@@ -1,6 +1,5 @@
 import { Suspense } from "react"
 import Image from "next/image"
-import { notFound } from "next/navigation"
 
 import { AspectRatio } from "@/components/ui/aspect-ratio"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -14,13 +13,9 @@ import { ProfileInteractions } from "./profile-interactions"
 export const revalidate = 10000
 
 const Layout = async ({ children, params }) => {
-  const handle = params["handle"].replace("%40", "")
+  const handle = params["handle"]
 
   const profile = await getProfile(handle)
-
-  if (!profile) {
-    notFound()
-  }
 
   const utec_account = await getUtecAccount(profile.email)
 
@@ -55,7 +50,7 @@ const Layout = async ({ children, params }) => {
         <div className="absolute right-4">
           <Suspense>
             {/* @ts-ignore */}
-            <ProfileInteractions profile_id={profile.id} />
+            <ProfileInteractions profile_id={profile.id} handle={handle} />
           </Suspense>
         </div>
       </div>
