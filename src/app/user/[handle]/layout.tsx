@@ -1,7 +1,7 @@
+import { Suspense } from "react"
 import Image from "next/image"
 import { notFound } from "next/navigation"
 
-import Xata from "@/lib/xata"
 import { AspectRatio } from "@/components/ui/aspect-ratio"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
@@ -9,9 +9,9 @@ import { Heading } from "@/components/ui/typography"
 import { getProfile } from "./get-profile"
 import { getRanking } from "./get-ranking"
 import { getUtecAccount } from "./get-utec-account"
-import { ProfileInteractions } from "./profile-interactions/profile-interactions"
+import { ProfileInteractions } from "./profile-interactions"
 
-export const revalidate = 1000
+export const revalidate = 10000
 
 const Layout = async ({ children, params }) => {
   const handle = params["handle"].replace("%40", "")
@@ -53,7 +53,10 @@ const Layout = async ({ children, params }) => {
           </Avatar>
         </div>
         <div className="absolute right-4">
-          <ProfileInteractions />
+          <Suspense>
+            {/* @ts-ignore */}
+            <ProfileInteractions profile_id={profile.id} />
+          </Suspense>
         </div>
       </div>
       <div className="flex items-center gap-2">

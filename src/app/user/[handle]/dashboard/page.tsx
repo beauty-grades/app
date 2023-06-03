@@ -43,12 +43,10 @@ const Page = async ({ params }) => {
 
       <Separator className="my-4" />
 
-      {/* @ts-expect-error Async Server Component*/}
       <EvolutivesCharts utec_account={utec_account?.id} />
 
       <Separator className="my-4" />
 
-      {/* @ts-expect-error Async Server Component*/}
       <CoursesTable utec_account={utec_account?.id} />
     </div>
   )

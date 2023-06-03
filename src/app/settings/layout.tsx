@@ -1,6 +1,5 @@
 import { Metadata } from "next"
-import Image from "next/image"
-import { SidebarNav } from "@/app/settings/components/sidebar-nav"
+import { SidebarNav } from "./sidebar-nav"
 
 import { Separator } from "@/components/ui/separator"
 
@@ -13,10 +12,6 @@ const sidebarNavItems = [
   {
     title: "Perfil",
     href: "/settings",
-  },
-  {
-    title: "Privacy",
-    href: "/settings/privacy",
   },
 ]
 

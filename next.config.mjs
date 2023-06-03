@@ -4,7 +4,6 @@ const nextConfig = {
   experimental: {
     serverComponentsExternalPackages: ["@tremor/react"],
     serverActions: true,
-    appDir: true,
   },
   images: {
     domains: [

@@ -7,7 +7,12 @@ import useSWR  from 'swr';
 
 export const AuthButton = () => {
   const { status } = useSession()
-  const {data, error} = useSWR('/api/user')
+  const {data, error} = useSWR('/api/user', {
+    refreshInterval: 0,
+    revalidateIfStale: false,
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+  })
 
 
   if (status === "authenticated" && data?.profile && !error) {
@@ -19,7 +24,7 @@ export const AuthButton = () => {
       )
     }
     return (
-      <Link href={`/@${data.profile.handle}`}>
+      <Link href={`/user/${data.profile.handle}`}>
         <Button variant="secondary">@{data.profile.handle}</Button>
       </Link>
     )

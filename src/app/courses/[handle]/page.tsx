@@ -1,8 +1,8 @@
 import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Heading, Paragraph } from "@/components/ui/typography"
 
 import Xata from "@/lib/xata"
+import { Button } from "@/components/ui/button"
+import { Heading, Paragraph } from "@/components/ui/typography"
 import { PeriodsView } from "./periods-view"
 import { UserGrades } from "./user-grades"
 
@@ -20,7 +20,7 @@ const getCourse = async (handle: string) => {
 const getCurriculums = async (handle: string) => {
   const raw_level_courses = await Xata.db.rel_level_course
     .select(["*", "level.*", "course.*", "level.curriculum.*"])
-    .filter({ "course": handle })
+    .filter({ course: handle })
     .getAll()
 
   const curriculums: string[] = []
@@ -55,7 +55,6 @@ const Page = async ({ params: { handle } }: { params: { handle: string } }) => {
       </Heading>
 
       <Heading as="h2">Periodos</Heading>
-      {/* @ts-expect-error Async Server Component */}
       <PeriodsView course_handle={handle} />
 
       <Heading as="h2">Curriculums</Heading>

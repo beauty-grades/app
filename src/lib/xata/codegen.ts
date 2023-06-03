@@ -215,6 +215,37 @@ const tables = [
       { name: "user", type: "link", link: { table: "nextauth_users" } },
     ],
   },
+  {
+    name: "profile_stats",
+    columns: [
+      {
+        name: "profile",
+        type: "link",
+        link: { table: "profile" },
+        unique: true,
+      },
+      { name: "follower_count", type: "int", notNull: true, defaultValue: "0" },
+      {
+        name: "following_count",
+        type: "int",
+        notNull: true,
+        defaultValue: "0",
+      },
+    ],
+  },
+  {
+    name: "rel_profiles",
+    columns: [
+      { name: "profile_a", type: "link", link: { table: "profile" } },
+      { name: "profile_b", type: "link", link: { table: "profile" } },
+      {
+        name: "a_follows_b",
+        type: "bool",
+        notNull: true,
+        defaultValue: "false",
+      },
+    ],
+  },
 ] as const;
 
 export type SchemaTables = typeof tables;
@@ -291,6 +322,12 @@ export type NextauthUsersSessionsRecord = NextauthUsersSessions & XataRecord;
 export type NextauthSessions = InferredTypes["nextauth_sessions"];
 export type NextauthSessionsRecord = NextauthSessions & XataRecord;
 
+export type ProfileStats = InferredTypes["profile_stats"];
+export type ProfileStatsRecord = ProfileStats & XataRecord;
+
+export type RelProfiles = InferredTypes["rel_profiles"];
+export type RelProfilesRecord = RelProfiles & XataRecord;
+
 export type DatabaseSchema = {
   career: CareerRecord;
   course: CourseRecord;
@@ -315,6 +352,8 @@ export type DatabaseSchema = {
   nextauth_users_accounts: NextauthUsersAccountsRecord;
   nextauth_users_sessions: NextauthUsersSessionsRecord;
   nextauth_sessions: NextauthSessionsRecord;
+  profile_stats: ProfileStatsRecord;
+  rel_profiles: RelProfilesRecord;
 };
 
 const DatabaseClient = buildClient();

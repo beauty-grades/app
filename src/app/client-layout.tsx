@@ -1,6 +1,5 @@
 "use client"
 
-import { Toaster } from "@/components/ui/toaster"
 import { Analytics } from "@vercel/analytics/react"
 import { SessionProvider } from "next-auth/react"
 import { ThemeProvider } from "next-themes"
@@ -9,6 +8,7 @@ import { SWRConfig } from "swr"
 
 import { Footer } from "@/components/footer"
 import Header from "@/components/header"
+import { Toaster } from "@/components/ui/toaster"
 
 const ClientLayout = ({ children }) => {
   return (

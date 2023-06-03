@@ -1,6 +1,5 @@
 import { Inter as FontSans } from "next/font/google"
 
-import "@uploadthing/react/styles.css"
 import "@/styles/globals.css"
 
 import { siteConfig } from "@/lib/site"

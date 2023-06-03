@@ -1,8 +1,9 @@
 "use client"
 
 import { OurFileRouter } from "@/app/api/uploadthing/core"
-import { UploadButton as UTUploadButton } from "@uploadthing/react"
 import { DANGEROUS__uploadFiles } from "uploadthing/client"
+
+import { UploadButton as UTUploadButton } from "./uploadthing-button"
 
 interface UploadImageButtonProps {
   multiple?: boolean | undefined
