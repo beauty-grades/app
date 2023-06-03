@@ -39,20 +39,19 @@ export async function follow(profile_id: string) {
 
   const profile_b_stats = await Xata.db.profile_stats
     .filter({ profile: profile_b.id })
-    .getFirst()
+    .getFirstOrThrow()
 
-  if (profile_b_stats) {
-    await profile_b_stats.update({
-      follower_count: { $increment: 1 },
-    })
-  } else {
-    await Xata.db.profile_stats.create({
-      profile: profile_b.id,
-      follower_count: 1,
-    })
-  }
+  await profile_b_stats.update({
+    follower_count: { $increment: 1 },
+  })
 
-  
+  const profile_a_stats = await Xata.db.profile_stats
+    .filter({ profile: profile_a.id })
+    .getFirstOrThrow()
 
-  revalidatePath(`/${profile_b.handle}`)
+  await profile_a_stats.update({
+    following_count: { $increment: 1 },
+  })
+
+  revalidatePath("/user/[handle]")
 }

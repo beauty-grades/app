@@ -18,14 +18,9 @@ export const ProfileInteractions = async ({ profile_id }: { profile_id: string }
     })
     .getFirst()
 
-  let profile_stats = await Xata.db.profile_stats
+  const profile_stats = await Xata.db.profile_stats
     .filter({ "profile.id": profile_id })
-    .getFirst()
-  if (!profile_stats) {
-    profile_stats = await Xata.db.profile_stats.create({
-      profile: profile_id,
-    })
-  }
+    .getFirstOrThrow()
 
   return (
     <ProfileInteractionsClient

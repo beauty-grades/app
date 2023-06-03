@@ -45,5 +45,13 @@ export async function unfollow(profile_id: string) {
     follower_count: { $decrement: 1 },
   })
 
-  revalidatePath(`/${profile_b.handle}`)
+  const profile_a_stats = await Xata.db.profile_stats
+    .filter({ profile: profile_a.id })
+    .getFirstOrThrow()
+
+  await profile_a_stats.update({
+    following_count: { $decrement: 1 },
+  })
+
+  revalidatePath("/user/[handle]")
 }
