@@ -2,12 +2,15 @@
 
 import { experimental_useOptimistic as useOptimistic } from "react"
 import Link from "next/link"
+import { Settings } from "lucide-react"
 
-import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
+import { Button, buttonVariants } from "@/components/ui/button"
 import { follow } from "./actions/follow"
 import { unfollow } from "./actions/unfollow"
 
 interface ProfileInteractionsProps {
+  is_my_profile: boolean
   profile_id: string
   handle: string
   initial_following: boolean
@@ -22,6 +25,7 @@ interface Status {
 }
 
 export const ProfileInteractionsClient = ({
+  is_my_profile,
   profile_id,
   handle,
   initial_following,
@@ -60,27 +64,50 @@ export const ProfileInteractionsClient = ({
         </Link>
       </div>
 
-      <form
-        action={async () => {
-          if (!optimisticStatus.server_working) {
-            const _action = optimisticStatus.following ? "unfollow" : "follow"
-            updateOptimisticStatus(_action)
-            if (_action === "unfollow") {
-              await unfollow(profile_id)
-            } else {
-              await follow(profile_id)
+      {is_my_profile ? (
+        <div className="flex h-20 items-center gap-4">
+          <Link
+            className={cn(
+              buttonVariants({ variant: "outline" }),
+              "flex h-8 w-8 items-center justify-center rounded-full p-0"
+            )}
+            href="/settings"
+          >
+            <Settings className="h-4 w-4" />
+          </Link>
+          <Link
+            className={cn(
+              buttonVariants({ variant: "outline" }),
+              "h-8 rounded-full px-6 py-0 font-bold"
+            )}
+            href={`/user/${handle}/dashboard`}
+          >
+            Dashboard
+          </Link>
+        </div>
+      ) : (
+        <form
+          action={async () => {
+            if (!optimisticStatus.server_working) {
+              const _action = optimisticStatus.following ? "unfollow" : "follow"
+              updateOptimisticStatus(_action)
+              if (_action === "unfollow") {
+                await unfollow(profile_id)
+              } else {
+                await follow(profile_id)
+              }
             }
-          }
-        }}
-      >
-        <Button
-          type="submit"
-          variant={optimisticStatus.following ? "outline" : "default"}
-          className={
-            "h-8 rounded-full px-6 py-0 font-bold" + " " + custom_style
-          }
-        />
-      </form>
+          }}
+        >
+          <Button
+            type="submit"
+            variant={optimisticStatus.following ? "outline" : "default"}
+            className={
+              "h-8 rounded-full px-6 py-0 font-bold" + " " + custom_style
+            }
+          />
+        </form>
+      )}
     </div>
   )
 }

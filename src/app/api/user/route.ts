@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server"
 
-import { getEmail } from "@/lib/auth/get-email"
+import { getMyEmail } from "@/lib/auth/get-my-email"
 import Xata from "@/lib/xata"
 
 export async function GET() {
-  const email = await getEmail()
+  const email = await getMyEmail()
 
   if (!email) {
     return NextResponse.json({ error: "Not authorized" }, { status: 401 })

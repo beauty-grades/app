@@ -1,16 +1,10 @@
 "use server"
 
-import { revalidatePath } from "next/cache"
-
-import { getEmail } from "@/lib/auth/get-email"
+import { getMyProfile } from "@/lib/auth/get-my-profile"
 import Xata from "@/lib/xata"
 
 export async function follow(profile_id: string) {
-  const email = await getEmail()
-
-  if (!email) throw new Error("Unauthorized")
-
-  const profile_a = await Xata.db.profile.filter({ email }).getFirstOrThrow()
+  const profile_a = await getMyProfile()
   const profile_b = await Xata.db.profile.read(profile_id)
   if (!profile_b) throw new Error("Profile not found")
 

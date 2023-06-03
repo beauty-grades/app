@@ -2,7 +2,7 @@
 
 import { zfd } from "zod-form-data"
 
-import { getEmail } from "@/lib/auth/get-email"
+import { getMyEmailOrThrow } from "@/lib/auth/get-my-email"
 import Xata from "@/lib/xata"
 import { profileFormSchema } from "./profile-form-schema"
 
@@ -12,11 +12,7 @@ export const updateProfile = async (data: FormData) => {
 
     const data_parsed = schema.parse(data)
 
-    const email = await getEmail()
-
-    if (!email) {
-      throw new Error("No email found")
-    }
+    const email = await getMyEmailOrThrow()
 
     const profile = await Xata.db.profile.filter({ email }).getFirst()
     if (!profile) {
