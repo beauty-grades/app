@@ -1,6 +1,6 @@
 import Balancer from "react-wrap-balancer"
 
-import { cn } from "@/lib/utils/ui/cn"
+import { cn } from "@/lib/utils"
 
 interface ParagraphProps extends React.HTMLAttributes<HTMLParagraphElement> {
   children: React.ReactNode
@@ -9,7 +9,10 @@ interface ParagraphProps extends React.HTMLAttributes<HTMLParagraphElement> {
 
 export const Paragraph = ({ children, className, ...rest }: ParagraphProps) => {
   return (
-    <p className={cn("my-2 leading-7 dark:text-slate-300", className)} {...rest}>
+    <p
+      className={cn("my-2 leading-7 dark:text-slate-300", className)}
+      {...rest}
+    >
       {children}
     </p>
   )

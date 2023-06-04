@@ -38,8 +38,8 @@ export function ProfileForm({
     mode: "onChange",
   })
 
-  const [profile_pic, setProfilePic] = React.useState<string>(
-    initial_values.profile_picture || ""
+  const [profile_pic, setProfilePic] = React.useState<string | undefined>(
+    initial_values.profile_picture
   )
 
   return (
@@ -68,9 +68,11 @@ export function ProfileForm({
       <Form {...form}>
         <form
           action={async (data: FormData) => {
-            data.append("profile_picture", profile_pic)
+            if (profile_pic) {
+              data.append("profile_picture", profile_pic)
+            }
             await updateProfile(data)
-            router.push(`/user/${data.get("handle")}`)
+            router.push(`/u/${data.get("handle")}`)
           }}
           className="space-y-8"
         >

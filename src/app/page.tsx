@@ -32,7 +32,7 @@ const Page = () => {
 
   return (
     <>
-      <div className="container">
+      <div id="hero">
         <Heading className="text-center">
           Tu historial académico{" "}
           <span className="bg-gradient-to-r from-purple-500 to-red-600 bg-clip-text text-transparent">
@@ -41,7 +41,7 @@ const Page = () => {
         </Heading>
       </div>
 
-      <div className="container mb-24 mt-8 flex flex-col items-center px-8">
+      <div className="mb-24 mt-8 flex flex-col items-center px-8">
         <GlowBox
           colors="from-red-600 to-purple-500"
           className="max-w-sm md:max-w-full"
@@ -104,7 +104,7 @@ const Page = () => {
         </div>
       </div>
 
-      <div className="container">
+      <div id="faq">
         <Heading as="h3">¿Cómo funciona?</Heading>
         <Paragraph>
           Guardamos los datos de tu historial académico en Xata, una base de

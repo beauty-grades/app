@@ -4,7 +4,7 @@ import * as React from "react"
 import * as ContextMenuPrimitive from "@radix-ui/react-context-menu"
 import { Check, ChevronRight, Circle } from "lucide-react"
 
-import { cn } from "@/lib/utils/ui/cn"
+import { cn } from "@/lib/utils"
 
 const ContextMenu = ContextMenuPrimitive.Root
 
@@ -171,7 +171,10 @@ const ContextMenuShortcut = ({
 }: React.HTMLAttributes<HTMLSpanElement>) => {
   return (
     <span
-      className={cn("ml-auto text-xs tracking-widest text-slate-500", className)}
+      className={cn(
+        "ml-auto text-xs tracking-widest text-slate-500",
+        className
+      )}
       {...props}
     />
   )

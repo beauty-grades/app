@@ -3,6 +3,8 @@ import { Inter as FontSans } from "next/font/google"
 import "@/styles/globals.css"
 
 import { siteConfig } from "@/lib/site"
+import { Footer } from "@/components/footer"
+import Header from "@/components/header"
 import ClientLayout from "./client-layout"
 
 const fontSans = FontSans({
@@ -28,7 +30,13 @@ const Layout: React.FunctionComponent<MainLayoutProps> = ({ children }) => {
     <html className={fontSans.variable} lang="es" suppressHydrationWarning>
       <head />
       <body>
-        <ClientLayout>{children}</ClientLayout>
+        <ClientLayout>
+          <div className="flex min-h-[150vh] flex-col">
+            <Header />
+            <div className="container">{children}</div>
+            <Footer />
+          </div>
+        </ClientLayout>
       </body>
     </html>
   )

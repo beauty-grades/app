@@ -6,8 +6,6 @@ import { ThemeProvider } from "next-themes"
 import { Provider as WrapBalancerProvider } from "react-wrap-balancer"
 import { SWRConfig } from "swr"
 
-import { Footer } from "@/components/footer"
-import Header from "@/components/header"
 import { Toaster } from "@/components/ui/toaster"
 
 const ClientLayout = ({ children }) => {
@@ -22,11 +20,7 @@ const ClientLayout = ({ children }) => {
       >
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           <WrapBalancerProvider>
-            <div className="flex min-h-[150vh] flex-col">
-              <Header />
-              {children}
-              <Footer />
-            </div>
+            {children}
             <Toaster />
           </WrapBalancerProvider>
           <Analytics />

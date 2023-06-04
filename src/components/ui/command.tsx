@@ -1,12 +1,12 @@
 "use client"
 
 import * as React from "react"
-import { Dialog, DialogContent } from "@/components/ui/dialog"
 import { DialogProps } from "@radix-ui/react-dialog"
 import { Command as CommandPrimitive, useCommandState } from "cmdk"
 import { ChevronsUpDown, Search } from "lucide-react"
 
-import { cn } from "@/lib/utils/ui/cn"
+import { cn } from "@/lib/utils"
+import { Dialog, DialogContent } from "@/components/ui/dialog"
 
 const Command = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive>,
@@ -135,7 +135,10 @@ const CommandShortcut = ({
 }: React.HTMLAttributes<HTMLSpanElement>) => {
   return (
     <span
-      className={cn("ml-auto text-xs tracking-widest text-slate-500", className)}
+      className={cn(
+        "ml-auto text-xs tracking-widest text-slate-500",
+        className
+      )}
       {...props}
     />
   )

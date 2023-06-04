@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils/ui/cn"
+import { cn } from "@/lib/utils"
 
 interface Props extends React.ButtonHTMLAttributes<HTMLDivElement> {
   colors?: string

@@ -14,8 +14,8 @@ export default async function SettingsProfilePage() {
     name: profile?.name || "",
     handle: profile?.handle || "",
     bio: profile?.bio || "",
-    profile_picture: profile?.profile_picture || "",
-    cover_picture: profile?.cover_picture || "",
+    profile_picture: profile?.profile_picture || undefined,
+    cover_picture: profile?.cover_picture || undefined,
   }
 
   return (

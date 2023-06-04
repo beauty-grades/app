@@ -1,7 +1,7 @@
 import { Metadata } from "next"
-import { SidebarNav } from "./sidebar-nav"
 
 import { Separator } from "@/components/ui/separator"
+import { SidebarNav } from "./sidebar-nav"
 
 export const metadata: Metadata = {
   title: "Forms",
@@ -21,7 +21,7 @@ interface SettingsLayoutProps {
 
 export default function SettingsLayout({ children }: SettingsLayoutProps) {
   return (
-    <div className="container">
+    <div>
       <div className="space-y-6">
         <div className="space-y-0.5">
           <h2 className="text-2xl font-bold tracking-tight">Configuración</h2>
