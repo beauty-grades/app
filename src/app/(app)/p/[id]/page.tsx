@@ -3,7 +3,7 @@ import { SelectedPick } from "@xata.io/client"
 
 import Xata from "@/lib/xata"
 import { PostRecord } from "@/lib/xata/codegen"
-import { PostList } from "@/components/post-list"
+import { PostDynamicBody, PostList } from "@/components/post-list"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Separator } from "@/components/ui/separator"
 
@@ -63,9 +63,7 @@ const PostPage = async ({ params }: { params: { id: string } }) => {
         </Link>
       </div>
 
-      <div className="mt-2">
-        <p className="text-lg">{post.body}</p>
-      </div>
+      <PostDynamicBody className="text-lg">{post.body}</PostDynamicBody>
 
       <Separator className="my-4" />
 
