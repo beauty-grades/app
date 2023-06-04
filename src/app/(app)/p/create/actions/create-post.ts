@@ -23,7 +23,7 @@ export const createPost = async (data: FormData) => {
 
     const embedding = response.data.data[0].embedding
 
-    await Xata.db.post.create({
+    const post = await Xata.db.post.create({
       body,
       author_profile: profile.id,
       embedding: embedding,
@@ -42,7 +42,9 @@ export const createPost = async (data: FormData) => {
         embedding: updated_matrix.getColumn(0),
       })
     }
+
+    return post.id.replace("rec_", "")
   } catch (error) {
-    return error
+    console.log(error)
   }
 }

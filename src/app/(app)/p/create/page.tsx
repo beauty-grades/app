@@ -1,5 +1,6 @@
 "use client"
 
+import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 
@@ -23,11 +24,13 @@ export default function TextareaReactHookForm() {
     resolver: zodResolver(FormSchema),
   })
 
+  const router = useRouter()
+
   return (
     <Form {...form}>
       <form
         action={async (data: FormData) => {
-          await createPost(data)
+          const id = await createPost(data)
 
           toast({
             title: "Recibimos los siguientes datos:",
@@ -39,6 +42,8 @@ export default function TextareaReactHookForm() {
               </pre>
             ),
           })
+
+          router.push(`/p/${id}`)
         }}
         className="space-y-6"
       >
