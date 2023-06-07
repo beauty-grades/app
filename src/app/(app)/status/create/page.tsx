@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/form"
 import { Textarea } from "@/components/ui/textarea"
 import { toast } from "@/components/ui/use-toast"
-import { createPost } from "./actions/create-post"
+import { createStatus } from "./actions/create-status"
 import { FormSchema, InferedFormType } from "./form-schema"
 
 export default function TextareaReactHookForm() {
@@ -30,7 +30,7 @@ export default function TextareaReactHookForm() {
     <Form {...form}>
       <form
         action={async (data: FormData) => {
-          const id = await createPost(data)
+          const id = await createStatus(data)
 
           toast({
             title: "Recibimos los siguientes datos:",
@@ -43,7 +43,7 @@ export default function TextareaReactHookForm() {
             ),
           })
 
-          router.push(`/p/${id}`)
+          router.push(`/status/${id}`)
         }}
         className="space-y-6"
       >
@@ -52,7 +52,7 @@ export default function TextareaReactHookForm() {
           name="body"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Nuevo post</FormLabel>
+              <FormLabel>Nuevo estado</FormLabel>
               <FormControl>
                 <Textarea
                   placeholder="¿Qué está ocurriendo?"

@@ -1,0 +1,682 @@
+{
+  "tables": [
+    {
+      "name": "career",
+      "columns": [
+        {
+          "name": "name",
+          "type": "string",
+          "unique": true
+        }
+      ]
+    },
+    {
+      "name": "course",
+      "columns": [
+        {
+          "name": "name",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "teacher",
+      "columns": [
+        {
+          "name": "name",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "period",
+      "columns": [
+        {
+          "name": "utec_id",
+          "type": "int",
+          "unique": true
+        }
+      ]
+    },
+    {
+      "name": "class",
+      "columns": [
+        {
+          "name": "course",
+          "type": "link",
+          "link": {
+            "table": "course"
+          }
+        },
+        {
+          "name": "period",
+          "type": "link",
+          "link": {
+            "table": "period"
+          }
+        },
+        {
+          "name": "wrong_formula",
+          "type": "bool",
+          "defaultValue": "false"
+        }
+      ]
+    },
+    {
+      "name": "curriculum",
+      "columns": [
+        {
+          "name": "career",
+          "type": "link",
+          "link": {
+            "table": "career"
+          }
+        },
+        {
+          "name": "utec_id",
+          "type": "int",
+          "unique": true
+        }
+      ]
+    },
+    {
+      "name": "rel_career_period",
+      "columns": [
+        {
+          "name": "career",
+          "type": "link",
+          "link": {
+            "table": "career"
+          }
+        },
+        {
+          "name": "period",
+          "type": "link",
+          "link": {
+            "table": "period"
+          }
+        },
+        {
+          "name": "enrolled_students",
+          "type": "int"
+        }
+      ]
+    },
+    {
+      "name": "section",
+      "columns": [
+        {
+          "name": "teacher",
+          "type": "link",
+          "link": {
+            "table": "teacher"
+          }
+        },
+        {
+          "name": "class",
+          "type": "link",
+          "link": {
+            "table": "class"
+          }
+        },
+        {
+          "name": "score",
+          "type": "float"
+        },
+        {
+          "name": "section",
+          "type": "int"
+        }
+      ]
+    },
+    {
+      "name": "level",
+      "columns": [
+        {
+          "name": "curriculum",
+          "type": "link",
+          "link": {
+            "table": "curriculum"
+          }
+        },
+        {
+          "name": "elective_count",
+          "type": "int"
+        },
+        {
+          "name": "order",
+          "type": "int"
+        }
+      ]
+    },
+    {
+      "name": "utec_account",
+      "columns": [
+        {
+          "name": "email",
+          "type": "email",
+          "unique": true
+        },
+        {
+          "name": "curriculum",
+          "type": "link",
+          "link": {
+            "table": "curriculum"
+          }
+        },
+        {
+          "name": "first_period",
+          "type": "link",
+          "link": {
+            "table": "period"
+          }
+        },
+        {
+          "name": "last_period",
+          "type": "link",
+          "link": {
+            "table": "period"
+          }
+        },
+        {
+          "name": "score",
+          "type": "float"
+        },
+        {
+          "name": "merit_order",
+          "type": "int"
+        },
+        {
+          "name": "ranking",
+          "type": "int"
+        }
+      ]
+    },
+    {
+      "name": "evaluation",
+      "columns": [
+        {
+          "name": "handle",
+          "type": "string"
+        },
+        {
+          "name": "label",
+          "type": "string"
+        },
+        {
+          "name": "class",
+          "type": "link",
+          "link": {
+            "table": "class"
+          }
+        },
+        {
+          "name": "can_be_deleted",
+          "type": "bool",
+          "notNull": true,
+          "defaultValue": "false"
+        },
+        {
+          "name": "weight",
+          "type": "float"
+        }
+      ]
+    },
+    {
+      "name": "rel_level_course",
+      "columns": [
+        {
+          "name": "level",
+          "type": "link",
+          "link": {
+            "table": "level"
+          }
+        },
+        {
+          "name": "course",
+          "type": "link",
+          "link": {
+            "table": "course"
+          }
+        },
+        {
+          "name": "credits",
+          "type": "float"
+        }
+      ]
+    },
+    {
+      "name": "period_enrollment",
+      "columns": [
+        {
+          "name": "period",
+          "type": "link",
+          "link": {
+            "table": "period"
+          }
+        },
+        {
+          "name": "utec_account",
+          "type": "link",
+          "link": {
+            "table": "utec_account"
+          }
+        },
+        {
+          "name": "curriculum",
+          "type": "link",
+          "link": {
+            "table": "curriculum"
+          }
+        },
+        {
+          "name": "score",
+          "type": "float"
+        },
+        {
+          "name": "merit_order",
+          "type": "int"
+        }
+      ]
+    },
+    {
+      "name": "section_enrollment",
+      "columns": [
+        {
+          "name": "period_enrollment",
+          "type": "link",
+          "link": {
+            "table": "period_enrollment"
+          }
+        },
+        {
+          "name": "section",
+          "type": "link",
+          "link": {
+            "table": "section"
+          }
+        },
+        {
+          "name": "score",
+          "type": "float"
+        },
+        {
+          "name": "dropped_out",
+          "type": "bool",
+          "notNull": true,
+          "defaultValue": "false"
+        },
+        {
+          "name": "elective",
+          "type": "bool",
+          "notNull": true,
+          "defaultValue": "false"
+        },
+        {
+          "name": "elective_order",
+          "type": "int"
+        }
+      ]
+    },
+    {
+      "name": "grade",
+      "columns": [
+        {
+          "name": "section_enrollment",
+          "type": "link",
+          "link": {
+            "table": "section_enrollment"
+          }
+        },
+        {
+          "name": "evaluation",
+          "type": "link",
+          "link": {
+            "table": "evaluation"
+          }
+        },
+        {
+          "name": "score",
+          "type": "float"
+        }
+      ]
+    },
+    {
+      "name": "profile",
+      "columns": [
+        {
+          "name": "email",
+          "type": "email",
+          "unique": true
+        },
+        {
+          "name": "handle",
+          "type": "string",
+          "unique": true
+        },
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "bio",
+          "type": "string"
+        },
+        {
+          "name": "profile_picture",
+          "type": "string"
+        },
+        {
+          "name": "cover_picture",
+          "type": "string"
+        },
+        {
+          "name": "ig_handle",
+          "type": "string"
+        },
+        {
+          "name": "tw_handle",
+          "type": "string"
+        },
+        {
+          "name": "gh_handle",
+          "type": "string"
+        },
+        {
+          "name": "embedding",
+          "type": "vector",
+          "vector": {
+            "dimension": 1536
+          }
+        }
+      ]
+    },
+    {
+      "name": "metadata",
+      "columns": [
+        {
+          "name": "email",
+          "type": "email",
+          "unique": true
+        },
+        {
+          "name": "feeding",
+          "type": "bool",
+          "notNull": true,
+          "defaultValue": "false"
+        },
+        {
+          "name": "last_fed_at",
+          "type": "datetime"
+        }
+      ]
+    },
+    {
+      "name": "nextauth_users",
+      "columns": [
+        {
+          "name": "email",
+          "type": "email"
+        },
+        {
+          "name": "emailVerified",
+          "type": "datetime"
+        },
+        {
+          "name": "links",
+          "type": "object",
+          "columns": [
+            {
+              "name": "content",
+              "type": "string"
+            },
+            {
+              "name": "payments",
+              "type": "string"
+            }
+          ]
+        },
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "image",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "nextauth_accounts",
+      "columns": [
+        {
+          "name": "user",
+          "type": "link",
+          "link": {
+            "table": "nextauth_users"
+          }
+        },
+        {
+          "name": "type",
+          "type": "string"
+        },
+        {
+          "name": "provider",
+          "type": "string"
+        },
+        {
+          "name": "providerAccountId",
+          "type": "string"
+        },
+        {
+          "name": "refresh_token",
+          "type": "string"
+        },
+        {
+          "name": "access_token",
+          "type": "string"
+        },
+        {
+          "name": "expires_at",
+          "type": "int"
+        },
+        {
+          "name": "token_type",
+          "type": "string"
+        },
+        {
+          "name": "scope",
+          "type": "string"
+        },
+        {
+          "name": "id_token",
+          "type": "text"
+        },
+        {
+          "name": "session_state",
+          "type": "string"
+        },
+        {
+          "name": "oauth_token",
+          "type": "string"
+        },
+        {
+          "name": "oauth_token_secret",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "nextauth_verificationTokens",
+      "columns": [
+        {
+          "name": "identifier",
+          "type": "string"
+        },
+        {
+          "name": "token",
+          "type": "string"
+        },
+        {
+          "name": "expires",
+          "type": "datetime"
+        }
+      ]
+    },
+    {
+      "name": "nextauth_users_accounts",
+      "columns": [
+        {
+          "name": "user",
+          "type": "link",
+          "link": {
+            "table": "nextauth_users"
+          }
+        },
+        {
+          "name": "account",
+          "type": "link",
+          "link": {
+            "table": "nextauth_accounts"
+          }
+        }
+      ]
+    },
+    {
+      "name": "nextauth_users_sessions",
+      "columns": [
+        {
+          "name": "user",
+          "type": "link",
+          "link": {
+            "table": "nextauth_users"
+          }
+        },
+        {
+          "name": "session",
+          "type": "link",
+          "link": {
+            "table": "nextauth_sessions"
+          }
+        }
+      ]
+    },
+    {
+      "name": "nextauth_sessions",
+      "columns": [
+        {
+          "name": "sessionToken",
+          "type": "string"
+        },
+        {
+          "name": "expires",
+          "type": "datetime"
+        },
+        {
+          "name": "user",
+          "type": "link",
+          "link": {
+            "table": "nextauth_users"
+          }
+        }
+      ]
+    },
+    {
+      "name": "profile_stats",
+      "columns": [
+        {
+          "name": "profile",
+          "type": "link",
+          "link": {
+            "table": "profile"
+          },
+          "unique": true
+        },
+        {
+          "name": "follower_count",
+          "type": "int",
+          "notNull": true,
+          "defaultValue": "0"
+        },
+        {
+          "name": "following_count",
+          "type": "int",
+          "notNull": true,
+          "defaultValue": "0"
+        },
+        {
+          "name": "like_count",
+          "type": "int",
+          "notNull": true,
+          "defaultValue": "0"
+        }
+      ]
+    },
+    {
+      "name": "rel_profiles",
+      "columns": [
+        {
+          "name": "profile_a",
+          "type": "link",
+          "link": {
+            "table": "profile"
+          }
+        },
+        {
+          "name": "profile_b",
+          "type": "link",
+          "link": {
+            "table": "profile"
+          }
+        },
+        {
+          "name": "a_follows_b",
+          "type": "bool",
+          "notNull": true,
+          "defaultValue": "false"
+        }
+      ]
+    },
+    {
+      "name": "status",
+      "columns": [
+        {
+          "name": "embedding",
+          "type": "vector",
+          "vector": {
+            "dimension": 1536
+          }
+        },
+        {
+          "name": "author_profile",
+          "type": "link",
+          "link": {
+            "table": "profile"
+          }
+        },
+        {
+          "name": "like_count",
+          "type": "int"
+        },
+        {
+          "name": "body",
+          "type": "string"
+        },
+        {
+          "name": "reply_to",
+          "type": "link",
+          "link": {
+            "table": "status"
+          }
+        },
+        {
+          "name": "quote_from",
+          "type": "link",
+          "link": {
+            "table": "status"
+          }
+        }
+      ]
+    }
+  ]
+}

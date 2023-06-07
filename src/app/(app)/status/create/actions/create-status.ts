@@ -8,7 +8,7 @@ import OpenAI from "@/lib/openai"
 import Xata from "@/lib/xata"
 import { FormSchema } from "../form-schema"
 
-export const createPost = async (data: FormData) => {
+export const createStatus = async (data: FormData) => {
   try {
     const schema = zfd.formData(FormSchema)
 
@@ -23,7 +23,7 @@ export const createPost = async (data: FormData) => {
 
     const embedding = response.data.data[0].embedding
 
-    const post = await Xata.db.post.create({
+    const status = await Xata.db.status.create({
       body,
       author_profile: profile.id,
       embedding: embedding,
@@ -43,7 +43,7 @@ export const createPost = async (data: FormData) => {
       })
     }
 
-    return post.id.replace("rec_", "")
+    return status.id.replace("rec_", "")
   } catch (error) {
     console.log(error)
   }

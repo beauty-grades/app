@@ -2,12 +2,12 @@ import { Page, SelectedPick } from "@xata.io/client"
 
 import { getProfile } from "@/lib/queries/get-profile"
 import Xata from "@/lib/xata"
-import { PostRecord } from "@/lib/xata/codegen"
-import { PostListPaginated } from "@/components/post-list"
+import { StatusRecord } from "@/lib/xata/codegen"
+import { StatusListPaginated } from "@/components/status-list/status-list-paginated"
 
 const HomePage = async ({ params }) => {
   const profile = await getProfile(params.handle)
-  const raw_page = await Xata.db.post
+  const raw_page = await Xata.db.status
     .filter({ author_profile: profile.id })
     .select(["*", "author_profile.id"])
     .getPaginated({
@@ -15,14 +15,17 @@ const HomePage = async ({ params }) => {
     })
   const parsed_page = {
     ...raw_page,
-    records: raw_page.records.map((post) => ({
-      ...post,
+    records: raw_page.records.map((status) => ({
+      ...status,
       author_profile: profile,
-      xata: post.xata,
+      xata: status.xata,
     })),
-  } as Page<PostRecord, SelectedPick<PostRecord, ("author_profile.*" | "*")[]>>
+  } as Page<
+    StatusRecord,
+    SelectedPick<StatusRecord, ("author_profile.*" | "*")[]>
+  >
 
-  return <PostListPaginated page={parsed_page} />
+  return <StatusListPaginated page={parsed_page} />
 }
 
 export default HomePage

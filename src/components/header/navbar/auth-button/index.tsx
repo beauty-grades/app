@@ -18,7 +18,7 @@ export const AuthButton = async () => {
     if (profile) {
       return (
         <>
-          <Link href="/p/create">
+          <Link href="/status/create">
             <Button variant="secondary">Publicar</Button>
           </Link>
           <Link href={`/u/${profile.handle}`}>
