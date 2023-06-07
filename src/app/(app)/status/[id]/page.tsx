@@ -3,7 +3,9 @@ import { SelectedPick } from "@xata.io/client"
 
 import Xata from "@/lib/xata"
 import { StatusRecord } from "@/lib/xata/codegen"
+import { ProfileHoverCard } from "@/components/profile-list/profile-hover-card"
 import { StatusList } from "@/components/status-list"
+import { StatusActions } from "@/components/status-list/status-actions"
 import { StatusDynamicBody } from "@/components/status-list/status-dynamic-body"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Separator } from "@/components/ui/separator"
@@ -14,6 +16,13 @@ const StatusPage = async ({ params }: { params: { id: string } }) => {
   const status = await Xata.db.status.read(status_id, ["*", "author_profile.*"])
 
   if (!status?.author_profile || !status.embedding) return null
+
+  const quoted_status = await Xata.db.status
+    .filter({
+      id: status.quote_from?.id ?? "ref_that_dont_exists",
+    })
+    .select(["*", "author_profile.*"])
+    .getFirst()
 
   const raw_similar_statuses = await Xata.db.status.vectorSearch(
     "embedding",
@@ -65,6 +74,25 @@ const StatusPage = async ({ params }: { params: { id: string } }) => {
       </div>
 
       <StatusDynamicBody className="text-lg">{status.body}</StatusDynamicBody>
+      {quoted_status && (
+        <div className="my-2 ml-7 border-l py-2 pl-4 text-lg text-muted-foreground">
+          <Link href={`/status/${quoted_status.id.replace("rec_", "")}`}>
+            <StatusDynamicBody>{quoted_status.body}</StatusDynamicBody>
+          </Link>
+
+          {quoted_status?.author_profile?.name && (
+            <ProfileHoverCard profile={quoted_status.author_profile}>
+              <Link
+                href={`/u/${status.author_profile.handle}`}
+                className="font-bold text-muted-foreground"
+              >
+                {quoted_status.author_profile.name}
+              </Link>
+            </ProfileHoverCard>
+          )}
+        </div>
+      )}
+      <StatusActions status={status} />
 
       <Separator className="my-4" />
 

@@ -1,20 +1,27 @@
 import Link from "next/link"
 import { SelectedPick } from "@xata.io/client"
 
+import Xata from "@/lib/xata"
 import { StatusRecord } from "@/lib/xata/codegen"
 import { DateHoverCard } from "@/components/date-hover-card"
-import { ProfileHoverCard } from "@/components/profile-hover-card"
+import { ProfileHoverCard } from "@/components/profile-list/profile-hover-card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Separator } from "@/components/ui/separator"
 import { StatusActions } from "./status-actions"
 import { StatusDynamicBody } from "./status-dynamic-body"
 
-const StatusCard = ({
+const StatusCard = async ({
   status,
 }: {
   status: SelectedPick<StatusRecord, ["*", "author_profile.*"]>
 }) => {
   if (!status.author_profile) return null
+
+  const quoted_status = await Xata.db.status
+    .filter({
+      id: status.quote_from?.id ?? "ref_that_dont_exists",
+    })
+    .select(["*", "author_profile.*"])
+    .getFirst()
 
   return (
     <div className="flex gap-4">
@@ -47,11 +54,9 @@ const StatusCard = ({
           <ProfileHoverCard profile={status.author_profile}>
             <Link
               href={`/u/${status.author_profile.handle}`}
-              className="flex gap-x-2"
+              className="text-muted-foreground"
             >
-              <span className="text-muted-foreground">
-                @{status.author_profile.handle}
-              </span>
+              <span>@{status.author_profile.handle}</span>
             </Link>
           </ProfileHoverCard>
           {status.xata.createdAt && (
@@ -59,14 +64,29 @@ const StatusCard = ({
           )}
         </div>
         <div className="text-muted"></div>
-        <Link
-          href={`/status/${status.id.replace("rec_", "")}`}
-          className="w-full"
-        >
+        <Link href={`/status/${status.id.replace("rec_", "")}`}>
           <StatusDynamicBody>{status.body}</StatusDynamicBody>
         </Link>
 
-        <StatusActions />
+        {quoted_status && (
+          <div className="my-2 border-l py-2 pl-4 text-muted-foreground">
+            <Link href={`/status/${quoted_status.id.replace("rec_", "")}`}>
+              <StatusDynamicBody>{quoted_status.body}</StatusDynamicBody>
+            </Link>
+
+            {quoted_status?.author_profile?.name && (
+              <ProfileHoverCard profile={quoted_status.author_profile}>
+                <Link
+                  href={`/u/${status.author_profile.handle}`}
+                  className="font-bold text-muted-foreground"
+                >
+                  {quoted_status.author_profile.name}
+                </Link>
+              </ProfileHoverCard>
+            )}
+          </div>
+        )}
+        <StatusActions status={status} />
       </div>
     </div>
   )

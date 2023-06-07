@@ -3,11 +3,11 @@ import Link from "next/link"
 
 import { cn } from "@/lib/utils"
 import Xata from "@/lib/xata"
-import { ProfileHoverCard } from "@/components/profile-hover-card"
+import { ProfileHoverCard } from "@/components/profile-list/profile-hover-card"
 
 const StatusDynamicBody = React.forwardRef<
   HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
+  React.HTMLAttributes<HTMLParagraphElement>
 >(async ({ className, children, ...props }, ref) => {
   if (typeof children !== "string") return
 
@@ -18,9 +18,9 @@ const StatusDynamicBody = React.forwardRef<
 
   if (!matches || matches.length === 0)
     return (
-      <div ref={ref} className={(cn(className), "w-full")} {...props}>
+      <p ref={ref} className={cn(className)} {...props}>
         <span>{children}</span>
-      </div>
+      </p>
     )
 
   const profiles = await Xata.db.profile
@@ -33,9 +33,9 @@ const StatusDynamicBody = React.forwardRef<
 
   if (existing_profiles.length === 0)
     return (
-      <div ref={ref} className={(cn(className), "w-full")} {...props}>
+      <p ref={ref} className={cn(className)} {...props}>
         <span>{children}</span>
-      </div>
+      </p>
     )
 
   let react_nodes: Array<React.ReactNode> = []
@@ -88,9 +88,9 @@ const StatusDynamicBody = React.forwardRef<
   }
 
   return (
-    <div ref={ref} className={(cn(className), "w-full")} {...props}>
+    <p ref={ref} className={cn(className)} {...props}>
       {react_nodes}
-    </div>
+    </p>
   )
 })
 

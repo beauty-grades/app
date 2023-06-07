@@ -15,7 +15,7 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Textarea } from "@/components/ui/textarea"
-import { toast } from "@/components/ui/use-toast"
+import { useToast } from "@/components/ui/use-toast"
 import { createStatus } from "./actions/create-status"
 import { FormSchema, InferedFormType } from "./form-schema"
 
@@ -23,6 +23,7 @@ export default function TextareaReactHookForm() {
   const form = useForm<InferedFormType>({
     resolver: zodResolver(FormSchema),
   })
+  const { toast } = useToast()
 
   const router = useRouter()
 
