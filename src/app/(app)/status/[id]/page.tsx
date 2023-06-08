@@ -7,13 +7,19 @@ import { ProfileHoverCard } from "@/components/profile-list/profile-hover-card"
 import { StatusList } from "@/components/status-list"
 import { StatusActions } from "@/components/status-list/status-actions"
 import { StatusDynamicBody } from "@/components/status-list/status-dynamic-body"
+import { StatusWithParent } from "@/components/status-list/with-parent"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Separator } from "@/components/ui/separator"
 
 const StatusPage = async ({ params }: { params: { id: string } }) => {
   const status_id = "rec_" + params.id
 
-  const status = await Xata.db.status.read(status_id, ["*", "author_profile.*"])
+  const status = await Xata.db.status.read(status_id, [
+    "*",
+    "author_profile.*",
+    "quote_from.*",
+    "quote_from.author_profile.*",
+  ])
 
   if (!status?.author_profile || !status.embedding) return null
 
@@ -52,28 +58,30 @@ const StatusPage = async ({ params }: { params: { id: string } }) => {
 
   return (
     <div>
-      <div className="flex gap-4">
-        <Link href={`/u/${status.author_profile.handle}`}>
-          <Avatar className="h-14 w-14">
-            <AvatarImage src={status.author_profile.profile_picture || ""} />
-            <AvatarFallback className="font-bold">
-              {status.author_profile.name
-                ? status.author_profile.name.split(" ")[0][0]
-                : status.author_profile.handle
-                ? status.author_profile.handle[0]
-                : "*"}
-            </AvatarFallback>
-          </Avatar>
-        </Link>
-        <Link href={`/u/${status.author_profile.handle}`}>
-          <p className="font-bold">{status.author_profile.name}</p>
-          <p className="-mt-1 mb-1 text-sm text-muted-foreground">
-            @{status.author_profile.handle}
-          </p>
-        </Link>
-      </div>
+      <StatusWithParent replied_status_id={status.reply_to?.id}>
+        <div className="flex gap-4" id="#feature">
+          <Link href={`/u/${status.author_profile.handle}`}>
+            <Avatar className="h-14 w-14">
+              <AvatarImage src={status.author_profile.profile_picture || ""} />
+              <AvatarFallback className="font-bold">
+                {status.author_profile.name
+                  ? status.author_profile.name.split(" ")[0][0]
+                  : status.author_profile.handle
+                  ? status.author_profile.handle[0]
+                  : "*"}
+              </AvatarFallback>
+            </Avatar>
+          </Link>
+          <Link href={`/u/${status.author_profile.handle}`}>
+            <p className="font-bold">{status.author_profile.name}</p>
+            <p className="-mt-1 mb-1 text-sm text-muted-foreground">
+              @{status.author_profile.handle}
+            </p>
+          </Link>
+        </div>
+        <StatusDynamicBody className="text-lg">{status.body}</StatusDynamicBody>
+      </StatusWithParent>
 
-      <StatusDynamicBody className="text-lg">{status.body}</StatusDynamicBody>
       {quoted_status && (
         <div className="my-2 ml-7 border-l py-2 pl-4 text-lg text-muted-foreground">
           <Link href={`/status/${quoted_status.id.replace("rec_", "")}`}>
@@ -82,12 +90,7 @@ const StatusPage = async ({ params }: { params: { id: string } }) => {
 
           {quoted_status?.author_profile?.name && (
             <ProfileHoverCard profile={quoted_status.author_profile}>
-              <Link
-                href={`/u/${status.author_profile.handle}`}
-                className="font-bold text-muted-foreground"
-              >
-                {quoted_status.author_profile.name}
-              </Link>
+              {quoted_status.author_profile.name}
             </ProfileHoverCard>
           )}
         </div>

@@ -17,7 +17,9 @@ const ProfileHoverCard = ({
   children: React.ReactNode
 }) => (
   <HoverCard>
-    <HoverCardTrigger asChild>{children}</HoverCardTrigger>
+    <HoverCardTrigger asChild>
+      <Link href={`/u/${profile.handle}`}>{children}</Link>
+    </HoverCardTrigger>
     <HoverCardContent className="w-64">
       <div>
         <Link href={`/u/${profile.handle}`}>
