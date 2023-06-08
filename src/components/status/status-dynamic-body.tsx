@@ -3,7 +3,7 @@ import Link from "next/link"
 
 import { cn } from "@/lib/utils"
 import Xata from "@/lib/xata"
-import { ProfileHoverCard } from "@/components/profile-list/profile-hover-card"
+import { ProfileHoverCard } from "@/components/profile/profile-hover-card"
 
 const StatusDynamicBody = React.forwardRef<
   HTMLDivElement,

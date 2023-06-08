@@ -1,6 +1,6 @@
 import { getProfile } from "@/lib/queries/get-profile"
 import Xata from "@/lib/xata"
-import { ProfileListPaginated } from "@/components/profile-list"
+import { ProfileListPaginated } from "@/components/profile"
 import { Heading } from "@/components/ui/typography"
 
 export const revalidate = 1000

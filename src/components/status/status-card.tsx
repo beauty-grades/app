@@ -4,7 +4,8 @@ import { SelectedPick } from "@xata.io/client"
 import Xata from "@/lib/xata"
 import { StatusRecord } from "@/lib/xata/codegen"
 import { DateHoverCard } from "@/components/date-hover-card"
-import { ProfileHoverCard } from "@/components/profile-list/profile-hover-card"
+import { ProfileAvatarHoverCard } from "@/components/profile/profile-avatar"
+import { ProfileHoverCard } from "@/components/profile/profile-hover-card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { StatusActions } from "./status-actions"
 import { StatusDynamicBody } from "./status-dynamic-body"
@@ -25,39 +26,16 @@ const StatusCard = async ({
 
   return (
     <div className="flex gap-4">
-      <ProfileHoverCard profile={status.author_profile}>
-        <Link href={`/u/${status.author_profile.handle}`}>
-          <Avatar className="h-14 w-14">
-            <AvatarImage src={status.author_profile.profile_picture || ""} />
-            <AvatarFallback className="font-bold">
-              {status.author_profile.name
-                ? status.author_profile.name.split(" ")[0][0]
-                : status.author_profile.handle
-                ? status.author_profile.handle[0]
-                : "*"}
-            </AvatarFallback>
-          </Avatar>
-        </Link>
-      </ProfileHoverCard>
+      <ProfileAvatarHoverCard profile={status.author_profile} size="small" />
       <div className="flex grow flex-col">
         <div className="flex flex-wrap items-center gap-x-2">
           <ProfileHoverCard profile={status.author_profile}>
-            <Link
-              href={`/u/${status.author_profile.handle}`}
-              className="flex gap-x-2"
-            >
-              <span className="font-bold hover:underline">
-                {status.author_profile.name}
-              </span>
-            </Link>
+            <span className="font-bold hover:underline">
+              {status.author_profile.name}
+            </span>
           </ProfileHoverCard>
           <ProfileHoverCard profile={status.author_profile}>
-            <Link
-              href={`/u/${status.author_profile.handle}`}
-              className="text-muted-foreground"
-            >
-              <span>@{status.author_profile.handle}</span>
-            </Link>
+            <span>@{status.author_profile.handle}</span>
           </ProfileHoverCard>
           {status.xata.createdAt && (
             <DateHoverCard date={status.xata.createdAt} />

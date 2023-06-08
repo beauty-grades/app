@@ -4,10 +4,10 @@ import { SelectedPick } from "@xata.io/client"
 import Xata from "@/lib/xata"
 import { StatusRecord } from "@/lib/xata/codegen"
 import { DateHoverCard } from "@/components/date-hover-card"
-import { ProfileHoverCard } from "@/components/profile-list/profile-hover-card"
-import { StatusActions } from "@/components/status-list/status-actions"
-import { StatusDynamicBody } from "@/components/status-list/status-dynamic-body"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { ProfileAvatarHoverCard } from "@/components/profile/profile-avatar"
+import { ProfileHoverCard } from "@/components/profile/profile-hover-card"
+import { StatusActions } from "@/components/status/status-actions"
+import { StatusDynamicBody } from "@/components/status/status-dynamic-body"
 
 interface Props {
   replied_status_id?: string | null
@@ -33,20 +33,7 @@ const StatusWithParent = async ({ replied_status_id, children }: Props) => {
     <StatusWithParent replied_status_id={replied_status.reply_to?.id}>
       <div className="flex gap-4">
         <div className="flex flex-col items-center">
-          <ProfileHoverCard profile={replied_status.author_profile}>
-            <Avatar className="h-14 w-14">
-              <AvatarImage
-                src={replied_status.author_profile.profile_picture || ""}
-              />
-              <AvatarFallback className="font-bold">
-                {replied_status.author_profile.name
-                  ? replied_status.author_profile.name.split(" ")[0][0]
-                  : replied_status.author_profile.handle
-                  ? replied_status.author_profile.handle[0]
-                  : "*"}
-              </AvatarFallback>
-            </Avatar>
-          </ProfileHoverCard>
+          <ProfileAvatarHoverCard profile={replied_status.author_profile} />
           <div className="w-0.5 flex-grow bg-muted-foreground"></div>
         </div>
         <div className="flex flex-col">

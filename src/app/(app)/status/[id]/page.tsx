@@ -1,14 +1,16 @@
 import Link from "next/link"
 import { SelectedPick } from "@xata.io/client"
 
+import { cn } from "@/lib/utils"
 import Xata from "@/lib/xata"
 import { StatusRecord } from "@/lib/xata/codegen"
-import { ProfileHoverCard } from "@/components/profile-list/profile-hover-card"
-import { StatusList } from "@/components/status-list"
-import { StatusActions } from "@/components/status-list/status-actions"
-import { StatusDynamicBody } from "@/components/status-list/status-dynamic-body"
-import { StatusWithParent } from "@/components/status-list/with-parent"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { DateHoverCard } from "@/components/date-hover-card"
+import { ProfileAvatarHoverCard } from "@/components/profile/profile-avatar"
+import { ProfileHoverCard } from "@/components/profile/profile-hover-card"
+import { StatusList } from "@/components/status"
+import { StatusActions } from "@/components/status/status-actions"
+import { StatusDynamicBody } from "@/components/status/status-dynamic-body"
+import { StatusWithParent } from "@/components/status/with-parent"
 import { Separator } from "@/components/ui/separator"
 
 const StatusPage = async ({ params }: { params: { id: string } }) => {
@@ -60,18 +62,10 @@ const StatusPage = async ({ params }: { params: { id: string } }) => {
     <div>
       <StatusWithParent replied_status_id={status.reply_to?.id}>
         <div className="flex gap-4" id="#feature">
-          <Link href={`/u/${status.author_profile.handle}`}>
-            <Avatar className="h-14 w-14">
-              <AvatarImage src={status.author_profile.profile_picture || ""} />
-              <AvatarFallback className="font-bold">
-                {status.author_profile.name
-                  ? status.author_profile.name.split(" ")[0][0]
-                  : status.author_profile.handle
-                  ? status.author_profile.handle[0]
-                  : "*"}
-              </AvatarFallback>
-            </Avatar>
-          </Link>
+          <div className="flex items-center">
+            {quoted_status && <div className="h-0.5 w-4 bg-muted"></div>}
+            <ProfileAvatarHoverCard profile={status.author_profile} />
+          </div>
           <Link href={`/u/${status.author_profile.handle}`}>
             <p className="font-bold">{status.author_profile.name}</p>
             <p className="-mt-1 mb-1 text-sm text-muted-foreground">
@@ -79,20 +73,47 @@ const StatusPage = async ({ params }: { params: { id: string } }) => {
             </p>
           </Link>
         </div>
-        <StatusDynamicBody className="text-lg">{status.body}</StatusDynamicBody>
+
+        <StatusDynamicBody
+          className={cn(
+            quoted_status &&
+              "-mb-6 -mt-7 border-l-[2px] border-muted pb-8 pl-4 pt-7"
+          )}
+        >
+          {status.body}
+        </StatusDynamicBody>
       </StatusWithParent>
 
-      {quoted_status && (
-        <div className="my-2 ml-7 border-l py-2 pl-4 text-lg text-muted-foreground">
-          <Link href={`/status/${quoted_status.id.replace("rec_", "")}`}>
-            <StatusDynamicBody>{quoted_status.body}</StatusDynamicBody>
-          </Link>
+      {quoted_status && quoted_status.author_profile?.id && (
+        <div className="mb-4 flex space-x-4">
+          <div className="flex-grow-0">
+            <div className="flex items-center">
+              <div className="h-0.5 w-16 bg-muted"></div>
+              <ProfileAvatarHoverCard
+                profile={quoted_status.author_profile}
+                size="small"
+              />
+            </div>
+          </div>
 
-          {quoted_status?.author_profile?.name && (
-            <ProfileHoverCard profile={quoted_status.author_profile}>
-              {quoted_status.author_profile.name}
-            </ProfileHoverCard>
-          )}
+          <div className="text-sm">
+            <div className="flex flex-wrap items-center gap-x-2">
+              <ProfileHoverCard profile={status.author_profile}>
+                <span className="font-bold hover:underline">
+                  {status.author_profile.name}
+                </span>
+              </ProfileHoverCard>
+              <ProfileHoverCard profile={status.author_profile}>
+                @{status.author_profile.handle}
+              </ProfileHoverCard>
+              {status.xata.createdAt && (
+                <DateHoverCard date={status.xata.createdAt} />
+              )}
+            </div>
+            <Link href={`/status/${quoted_status.id.replace("rec_", "")}`}>
+              <StatusDynamicBody>{quoted_status.body}</StatusDynamicBody>
+            </Link>
+          </div>
         </div>
       )}
       <StatusActions status={status} />

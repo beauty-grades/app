@@ -3,7 +3,7 @@ import { Page, SelectedPick } from "@xata.io/client"
 import { getProfile } from "@/lib/queries/get-profile"
 import Xata from "@/lib/xata"
 import { StatusRecord } from "@/lib/xata/codegen"
-import { StatusListPaginated } from "@/components/status-list/status-list-paginated"
+import { StatusListPaginated } from "@/components/status/status-list-paginated"
 
 const HomePage = async ({ params }) => {
   const profile = await getProfile(params.handle)
