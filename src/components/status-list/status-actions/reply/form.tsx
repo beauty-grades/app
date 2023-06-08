@@ -6,9 +6,9 @@ import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/components/ui/use-toast"
-import { QuoteStatusAction } from "./actions/quote-status"
+import { ReplyStatusAction } from "./actions/reply-status"
 
-const QuoteStatusForm = ({
+const ReplyStatusForm = ({
   children,
   status_id,
 }: {
@@ -24,16 +24,16 @@ const QuoteStatusForm = ({
         let data = base_data
 
         data.append("original_status", status_id)
-        const id = await QuoteStatusAction(data)
+        const id = await ReplyStatusAction(data)
 
         const pretty_ob = {
           id,
           body: data.get("body"),
-          quoted_from: status_id.replace("rec_", ""),
+          reply_to: status_id.replace("rec_", ""),
         }
 
         toast({
-          title: "Quote status created!",
+          title: "Reply status created!",
           description: (
             <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
               <code className="text-white">
@@ -63,4 +63,4 @@ const QuoteStatusForm = ({
   )
 }
 
-export { QuoteStatusForm }
+export { ReplyStatusForm }
