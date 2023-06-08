@@ -50,6 +50,8 @@ const QuoteStatusForm = ({
         />
       </div>
 
+      {children}
+
       <div className="mt-4 flex justify-end">
         <Button type="submit">Publicar</Button>
       </div>
