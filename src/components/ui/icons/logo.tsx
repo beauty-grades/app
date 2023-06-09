@@ -1,4 +1,4 @@
-import { LucideProps } from "lucide-react"
+import { LucideProps } from "lucide-react";
 
 export const Logo = (props: LucideProps) => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" {...props}>
@@ -7,4 +7,4 @@ export const Logo = (props: LucideProps) => (
         c-21.3,0-42.7,0-64,0c8.2-10.8,16.4-21.6,24.6-32.4C28.9,21.4,33.1,26.9,37.3,32.5z"
     />
   </svg>
-)
+);

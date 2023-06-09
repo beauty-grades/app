@@ -1,24 +1,24 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import Link from "next/link"
-import { AnimatePresence, motion } from "framer-motion"
-import { useSession } from "next-auth/react"
-import * as ReactDOMClient from "react-dom/client"
-import useSWR from "swr"
+import * as React from "react";
+import Link from "next/link";
+import { AnimatePresence, motion } from "framer-motion";
+import { useSession } from "next-auth/react";
+import * as ReactDOMClient from "react-dom/client";
+import useSWR from "swr";
 
-import { groupBy } from "@/lib/utils/group-by"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { useToast } from "@/components/ui/use-toast"
+import { groupBy } from "@/lib/utils/group-by";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
 
 interface UserGradesProps {
-  course_handle: string
+  course_handle: string;
 }
 
 export const UserGrades = ({ course_handle }: UserGradesProps) => {
-  const { toast } = useToast()
-  const { status } = useSession()
+  const { toast } = useToast();
+  const { status } = useSession();
 
   React.useEffect(() => {
     if (status === "unauthenticated") {
@@ -30,9 +30,9 @@ export const UserGrades = ({ course_handle }: UserGradesProps) => {
             <Button variant="outline">Sign In</Button>
           </Link>
         ),
-      })
+      });
     }
-  }, [status, toast])
+  }, [status, toast]);
 
   const { data, error } = useSWR(
     status === "authenticated" && `/api/courses/${course_handle}`,
@@ -42,75 +42,75 @@ export const UserGrades = ({ course_handle }: UserGradesProps) => {
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
     }
-  )
+  );
 
   const periods:
     | {
-        status: string
-        section: number
-        period: string
-        final_score: number | null
+        status: string;
+        section: number;
+        period: string;
+        final_score: number | null;
         grades: {
-          label: string
-          score: number | null
-          handle: string
-          weight: number
-        }[]
+          label: string;
+          score: number | null;
+          handle: string;
+          weight: number;
+        }[];
       }[]
     | undefined
-    | null = data
+    | null = data;
 
   React.useEffect(() => {
-    if (error) return
-    if (!data) return
-    if (data.length === 0) return
+    if (error) return;
+    if (!data) return;
+    if (data.length === 0) return;
 
     const periods = data as {
-      period: string
-      status: "enrolled" | "dropped_out" | "failed" | "passed"
-    }[]
+      period: string;
+      status: "enrolled" | "dropped_out" | "failed" | "passed";
+    }[];
 
     periods.forEach(({ period, status }) => {
-      const period_el = document.querySelector(`#badge-for-${period}`)
+      const period_el = document.querySelector(`#badge-for-${period}`);
       if (period_el) {
-        const root = ReactDOMClient.createRoot(period_el)
+        const root = ReactDOMClient.createRoot(period_el);
         let variant: "default" | "destructive" | "outline" | "secondary" =
-          "default"
+          "default";
         switch (status) {
           case "enrolled":
-            variant = "outline"
-            break
+            variant = "outline";
+            break;
           case "dropped_out":
-            variant = "destructive"
-            break
+            variant = "destructive";
+            break;
           case "failed":
-            variant = "destructive"
-            break
+            variant = "destructive";
+            break;
           case "passed":
-            variant = "default"
-            break
+            variant = "default";
+            break;
         }
 
-        let label = ""
+        let label = "";
         switch (status) {
           case "enrolled":
-            label = "Cursando"
-            break
+            label = "Cursando";
+            break;
           case "dropped_out":
-            label = "Retirado"
-            break
+            label = "Retirado";
+            break;
           case "failed":
-            label = "Reprobado"
-            break
+            label = "Reprobado";
+            break;
           case "passed":
-            label = "Aprobado"
-            break
+            label = "Aprobado";
+            break;
         }
 
-        root.render(<Badge variant={variant}>{label}</Badge>)
+        root.render(<Badge variant={variant}>{label}</Badge>);
       }
-    })
-  }, [data, error])
+    });
+  }, [data, error]);
 
   React.useEffect(() => {
     const observer = new MutationObserver((mutations) => {
@@ -119,10 +119,10 @@ export const UserGrades = ({ course_handle }: UserGradesProps) => {
           mutation.type === "attributes" &&
           mutation.attributeName === "data-state"
         ) {
-          const element = mutation.target as Element
-          const id = element.id
-          const [x, period] = id.split(":")
-          const state = element.getAttribute("data-state")
+          const element = mutation.target as Element;
+          const id = element.id;
+          const [x, period] = id.split(":");
+          const state = element.getAttribute("data-state");
 
           if (state === "active") {
             if (!!periods) {
@@ -130,11 +130,11 @@ export const UserGrades = ({ course_handle }: UserGradesProps) => {
                 if (period.final_score) {
                   const final_score_el = document.querySelector(
                     `#final_score-${period.period}`
-                  )
+                  );
 
                   if (final_score_el) {
                     final_score_el.textContent =
-                      "Promedio final: " + period.final_score?.toString()
+                      "Promedio final: " + period.final_score?.toString();
                   }
                 }
 
@@ -142,59 +142,59 @@ export const UserGrades = ({ course_handle }: UserGradesProps) => {
                   if (grade.score) {
                     const grade_el = document.querySelector(
                       `#grade-${period.period}-${grade.handle}`
-                    )
+                    );
 
                     if (grade_el) {
-                      grade_el.textContent = grade.score.toString()
+                      grade_el.textContent = grade.score.toString();
                     }
                   }
-                })
-              })
+                });
+              });
 
-              const current_period = data.find((p) => p.period === period)
+              const current_period = data.find((p) => p.period === period);
               if (current_period?.grades?.length > 0) {
-                const resume_grades = groupBy(current_period.grades, "label")
+                const resume_grades = groupBy(current_period.grades, "label");
                 const evaluation_weight_bars =
-                  element.querySelectorAll(".evaluation-weight")
+                  element.querySelectorAll(".evaluation-weight");
 
                 evaluation_weight_bars.forEach((el) => {
-                  const [x, label] = el.id.split(":")
-                  const ev = resume_grades[label]
+                  const [x, label] = el.id.split(":");
+                  const ev = resume_grades[label];
                   const final_s = ev.reduce(
                     (acc, cur) => acc + cur.score * cur.weight,
                     0
-                  )
-                  const s_w = ev.reduce((acc, cur) => acc + cur.weight, 0)
-                  const root = ReactDOMClient.createRoot(el)
-                  root.render(<GradeBar w={final_s / 20 / s_w} />)
-                })
+                  );
+                  const s_w = ev.reduce((acc, cur) => acc + cur.weight, 0);
+                  const root = ReactDOMClient.createRoot(el);
+                  root.render(<GradeBar w={final_s / 20 / s_w} />);
+                });
               }
             }
           }
         }
-      })
-    })
+      });
+    });
 
-    const elements = document.querySelectorAll("[data-state]")
+    const elements = document.querySelectorAll("[data-state]");
     elements.forEach(
       (element) =>
         element.id.startsWith("period") &&
         observer.observe(element, { attributes: true })
-    )
+    );
 
     return () => {
-      observer.disconnect()
-    }
-  }, [data])
+      observer.disconnect();
+    };
+  }, [data]);
 
-  if (error || data?.error) return <div>failed to load</div>
+  if (error || data?.error) return <div>failed to load</div>;
 
-  return null
-}
+  return null;
+};
 
 export interface GradeBarProps {
-  average: number
-  weight: number
+  average: number;
+  weight: number;
 }
 
 export const GradeBar = ({ w }: { w: number }) => {
@@ -210,5 +210,5 @@ export const GradeBar = ({ w }: { w: number }) => {
         }
       />
     </AnimatePresence>
-  )
-}
+  );
+};

@@ -1,4 +1,4 @@
-import * as z from "zod"
+import * as z from "zod";
 
 export const profileFormSchema = z.object({
   name: z
@@ -32,6 +32,6 @@ export const profileFormSchema = z.object({
   bio: z.string().min(4).max(160),
   profile_picture: z.string().url().optional(),
   cover_picture: z.string().url().optional(),
-})
+});
 
-export type ProfileFormValues = z.infer<typeof profileFormSchema>
+export type ProfileFormValues = z.infer<typeof profileFormSchema>;

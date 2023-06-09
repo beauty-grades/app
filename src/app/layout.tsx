@@ -1,20 +1,20 @@
-import { Inter as FontSans } from "next/font/google"
+import { Inter as FontSans } from "next/font/google";
 
-import "@/styles/globals.css"
+import "@/styles/globals.css";
 
-import { siteConfig } from "@/lib/site"
-import { Footer } from "@/components/footer"
-import Header from "@/components/header"
-import ClientLayout from "./client-layout"
+import { siteConfig } from "@/lib/site";
+import { Footer } from "@/components/footer";
+import Header from "@/components/header";
+import ClientLayout from "./client-layout";
 
 const fontSans = FontSans({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-sans",
-})
+});
 
 interface MainLayoutProps {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
 export const metadata = {
@@ -23,7 +23,7 @@ export const metadata = {
   icons: {
     icon: "/icon.svg",
   },
-}
+};
 
 const Layout: React.FunctionComponent<MainLayoutProps> = ({ children }) => {
   return (
@@ -39,7 +39,7 @@ const Layout: React.FunctionComponent<MainLayoutProps> = ({ children }) => {
         </ClientLayout>
       </body>
     </html>
-  )
-}
+  );
+};
 
-export default Layout
+export default Layout;

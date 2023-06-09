@@ -1,19 +1,19 @@
-import { ProfileRecord } from "@/lib/xata/codegen"
-import { ProfileHoverCard } from "@/components/profile/profile-hover-card"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { ProfileRecord } from "@/lib/xata/codegen";
+import { ProfileHoverCard } from "@/components/profile/profile-hover-card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 interface Props {
-  profile: ProfileRecord
-  size?: "small" | "medium" | "large"
+  profile: ProfileRecord;
+  size?: "small" | "medium" | "large";
 }
 
 function getSize(size: string) {
   if (size === "small") {
-    return "h-12 w-12"
+    return "h-12 w-12";
   } else if (size === "medium") {
-    return "h-14 w-14"
+    return "h-14 w-14";
   } else {
-    return "h-16 w-16"
+    return "h-16 w-16";
   }
 }
 
@@ -30,6 +30,6 @@ const ProfileAvatarHoverCard = ({ profile, size = "medium" }: Props) => (
       </AvatarFallback>
     </Avatar>
   </ProfileHoverCard>
-)
+);
 
-export { ProfileAvatarHoverCard }
+export { ProfileAvatarHoverCard };

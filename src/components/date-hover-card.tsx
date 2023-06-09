@@ -1,17 +1,28 @@
-import { CalendarDays } from "lucide-react"
+import { CalendarDays } from "lucide-react";
 
-import { getRelativeTimeString } from "@/lib/utils"
+import { cn, getRelativeTimeString } from "@/lib/utils";
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
-} from "@/components/ui/hover-card"
+} from "@/components/ui/hover-card";
 
-export function DateHoverCard({ date }: { date: Date }) {
+export function DateHoverCard({
+  date,
+  className,
+}: {
+  date: Date;
+  className?: string | null;
+}) {
   return (
     <HoverCard>
       <HoverCardTrigger asChild>
-        <span className="h-max p-0 font-light text-muted-foreground hover:cursor-pointer">
+        <span
+          className={cn(
+            "h-max p-0 font-light text-muted-foreground hover:cursor-pointer",
+            className
+          )}
+        >
           {getRelativeTimeString(date)}
         </span>
       </HoverCardTrigger>
@@ -22,5 +33,5 @@ export function DateHoverCard({ date }: { date: Date }) {
         </div>
       </HoverCardContent>
     </HoverCard>
-  )
+  );
 }

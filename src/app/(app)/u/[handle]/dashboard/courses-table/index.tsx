@@ -1,7 +1,7 @@
-import Xata from "@/lib/xata"
-import { Heading } from "@/components/ui/typography"
-import { columns, Course } from "./columns"
-import { DataTable } from "./data-table"
+import Xata from "@/lib/xata";
+import { Heading } from "@/components/ui/typography";
+import { columns, Course } from "./columns";
+import { DataTable } from "./data-table";
 
 async function getData(utec_account: string): Promise<Course[]> {
   const section_enrollments = await Xata.db.section_enrollment
@@ -19,9 +19,9 @@ async function getData(utec_account: string): Promise<Course[]> {
       "period_enrollment.period.*",
       "period_enrollment.utec_account.*",
     ])
-    .getAll()
+    .getAll();
 
-  const courses: Course[] = []
+  const courses: Course[] = [];
 
   section_enrollments.forEach((section_enrollment) => {
     if (
@@ -39,19 +39,19 @@ async function getData(utec_account: string): Promise<Course[]> {
         dropped_out: section_enrollment.dropped_out,
         is_elective: section_enrollment.elective,
         teacher: section_enrollment.section.teacher?.name || null,
-      })
+      });
     }
-  })
+  });
 
-  return courses
+  return courses;
 }
 
 export const CoursesTable = async ({
   utec_account,
 }: {
-  utec_account: string
+  utec_account: string;
 }) => {
-  const data = await getData(utec_account)
+  const data = await getData(utec_account);
 
   return (
     <>
@@ -59,5 +59,5 @@ export const CoursesTable = async ({
 
       <DataTable columns={columns} data={data} />
     </>
-  )
-}
+  );
+};

@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server"
-import type { NextRequest } from "next/server"
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
 // This function can be marked `async` if using `await` inside
 export function middleware(request: NextRequest) {
@@ -7,16 +7,16 @@ export function middleware(request: NextRequest) {
     process.env.VERCEL
       ? "__Secure-next-auth.session-token"
       : "next-auth.session-token"
-  )?.value
+  )?.value;
 
   if (!session_token) {
-    return NextResponse.redirect(new URL("/", request.url))
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
-  return NextResponse.next()
+  return NextResponse.next();
 }
 
 // See "Matching Paths" below to learn more
 export const config = {
   matcher: ["/u/:path*", "/settings/:path*"],
-}
+};

@@ -1,19 +1,19 @@
-import { SelectedPick } from "@xata.io/client"
+import { SelectedPick } from "@xata.io/client";
 
-import { StatusRecord } from "@/lib/xata/codegen"
+import { StatusRecord } from "@/lib/xata/codegen";
 import {
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { StatusDynamicBody } from "../../status-dynamic-body"
-import { ReplyStatusForm } from "./form"
+} from "@/components/ui/dialog";
+import { StatusDynamicBody } from "../../status-dynamic-body";
+import { ReplyStatusForm } from "./form";
 
 const ReplyDialog = ({
   status,
 }: {
-  status: SelectedPick<StatusRecord, ["*", "author_profile.*"]>
+  status: SelectedPick<StatusRecord, ["*", "author_profile.*"]>;
 }) => {
   return (
     <DialogContent className="sm:max-w-[425px]">
@@ -27,7 +27,7 @@ const ReplyDialog = ({
         </StatusDynamicBody>
       </ReplyStatusForm>
     </DialogContent>
-  )
-}
+  );
+};
 
-export { ReplyDialog }
+export { ReplyDialog };

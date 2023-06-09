@@ -1,12 +1,12 @@
-"use client"
+"use client";
 
-import { Analytics } from "@vercel/analytics/react"
-import { SessionProvider } from "next-auth/react"
-import { ThemeProvider } from "next-themes"
-import { Provider as WrapBalancerProvider } from "react-wrap-balancer"
-import { SWRConfig } from "swr"
+import { Analytics } from "@vercel/analytics/react";
+import { SessionProvider } from "next-auth/react";
+import { ThemeProvider } from "next-themes";
+import { Provider as WrapBalancerProvider } from "react-wrap-balancer";
+import { SWRConfig } from "swr";
 
-import { Toaster } from "@/components/ui/toaster"
+import { Toaster } from "@/components/ui/toaster";
 
 const ClientLayout = ({ children }) => {
   return (
@@ -27,7 +27,7 @@ const ClientLayout = ({ children }) => {
         </ThemeProvider>
       </SWRConfig>
     </SessionProvider>
-  )
-}
+  );
+};
 
-export default ClientLayout
+export default ClientLayout;

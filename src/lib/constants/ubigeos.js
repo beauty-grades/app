@@ -6783,4 +6783,4 @@ export const UBIGEOS = {
       },
     },
   },
-}
+};

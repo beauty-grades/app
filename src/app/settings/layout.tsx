@@ -1,22 +1,22 @@
-import { Metadata } from "next"
+import { Metadata } from "next";
 
-import { Separator } from "@/components/ui/separator"
-import { SidebarNav } from "./sidebar-nav"
+import { Separator } from "@/components/ui/separator";
+import { SidebarNav } from "./sidebar-nav";
 
 export const metadata: Metadata = {
   title: "Forms",
   description: "Advanced form example using react-hook-form and Zod.",
-}
+};
 
 const sidebarNavItems = [
   {
     title: "Perfil",
     href: "/settings",
   },
-]
+];
 
 interface SettingsLayoutProps {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
 export default function SettingsLayout({ children }: SettingsLayoutProps) {
@@ -38,5 +38,5 @@ export default function SettingsLayout({ children }: SettingsLayoutProps) {
         </div>
       </div>
     </div>
-  )
+  );
 }

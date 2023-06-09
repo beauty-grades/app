@@ -1,12 +1,12 @@
-import { cache } from "react"
+import { cache } from "react";
 
-import Xata from "@/lib/xata"
+import Xata from "@/lib/xata";
 
 const getStatus = cache(async (id: string | undefined | null) => {
-  if (!id) return null
-  const status = await Xata.db.status.read(id, ["*", "author_profile.*"])
+  if (!id) return null;
+  const status = await Xata.db.status.read(id, ["*", "author_profile.*"]);
 
-  return status
-})
+  return status;
+});
 
-export { getStatus }
+export { getStatus };

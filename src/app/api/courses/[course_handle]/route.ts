@@ -1,40 +1,40 @@
-import { NextResponse } from "next/server"
+import { NextResponse } from "next/server";
 
-import { getMyEmail } from "@/lib/auth/get-my-email"
-import Xata from "@/lib/xata"
+import { getMyEmail } from "@/lib/auth/get-my-email";
+import Xata from "@/lib/xata";
 
 interface Grade {
-  handle: string | null
-  label: string
-  score: number | null
-  weight: number
+  handle: string | null;
+  label: string;
+  score: number | null;
+  weight: number;
 }
 
 interface Enrollment {
-  period: string
-  section: number
-  status: "enrolled" | "dropped_out" | "failed" | "passed"
-  grades: Grade[]
+  period: string;
+  section: number;
+  status: "enrolled" | "dropped_out" | "failed" | "passed";
+  grades: Grade[];
 }
 
 export async function GET(request: Request, { params }) {
   try {
-    const email = await getMyEmail()
+    const email = await getMyEmail();
 
     if (!email) {
-      return NextResponse.json({ error: "Unauthenticated" }, { status: 401 })
+      return NextResponse.json({ error: "Unauthenticated" }, { status: 401 });
     }
 
-    const { course_handle } = params
+    const { course_handle } = params;
 
     if (!course_handle) {
       return NextResponse.json(
         { error: "Missing course handle" },
         { status: 400 }
-      )
+      );
     }
 
-    const handle = course_handle as string
+    const handle = course_handle as string;
 
     const raw_enrollments = await Xata.db.section_enrollment
       .select([
@@ -50,30 +50,30 @@ export async function GET(request: Request, { params }) {
       .filter({
         "section.class.course": handle,
       })
-      .getAll()
+      .getAll();
 
     // we need to know in wich periods the utec_account is enrolled
     const enrollments: (Enrollment | null)[] = await Promise.all(
       raw_enrollments.map(async (raw_enrollment) => {
         try {
           if (!raw_enrollment.section?.class?.period?.id) {
-            return null
+            return null;
           }
 
-          const period = raw_enrollment.section.class.period.id
-          const section = raw_enrollment.section.section || 0
+          const period = raw_enrollment.section.class.period.id;
+          const section = raw_enrollment.section.section || 0;
 
-          let status: Enrollment["status"] = "passed"
+          let status: Enrollment["status"] = "passed";
 
           if (raw_enrollment.dropped_out) {
-            status = "dropped_out"
+            status = "dropped_out";
           } else if (raw_enrollment.score === null) {
-            status = "enrolled"
+            status = "enrolled";
           } else if (raw_enrollment?.score && raw_enrollment.score < 11) {
-            status = "failed"
+            status = "failed";
           }
 
-          let grades: Grade[] = []
+          let grades: Grade[] = [];
 
           if (!raw_enrollment.dropped_out) {
             const raw_grades = await Xata.db.grade
@@ -81,7 +81,7 @@ export async function GET(request: Request, { params }) {
               .filter({
                 "section_enrollment.id": raw_enrollment.id,
               })
-              .getAll()
+              .getAll();
 
             raw_grades.forEach((grade) => {
               if (grade.evaluation?.handle) {
@@ -90,9 +90,9 @@ export async function GET(request: Request, { params }) {
                   label: grade.evaluation?.label || "",
                   score: grade.score || null,
                   weight: grade.evaluation?.weight || 0,
-                })
+                });
               }
-            })
+            });
           }
 
           return {
@@ -101,14 +101,14 @@ export async function GET(request: Request, { params }) {
             status,
             grades,
             final_score: raw_enrollment.score || null,
-          } as Enrollment
+          } as Enrollment;
         } catch {
-          return null
+          return null;
         }
       })
-    )
+    );
 
-    return NextResponse.json(enrollments)
+    return NextResponse.json(enrollments);
   } catch (error) {
     return NextResponse.json(
       {
@@ -117,6 +117,6 @@ export async function GET(request: Request, { params }) {
       {
         status: 500,
       }
-    )
+    );
   }
 }

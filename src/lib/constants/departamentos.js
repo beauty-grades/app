@@ -2150,4 +2150,4 @@ export const DEPARTAMENTOS = {
       "TICACO",
     ],
   },
-}
+};

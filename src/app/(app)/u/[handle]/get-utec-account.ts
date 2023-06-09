@@ -1,6 +1,6 @@
-import { cache } from "react"
+import { cache } from "react";
 
-import Xata from "@/lib/xata"
+import Xata from "@/lib/xata";
 
 export const getUtecAccount = cache(
   async (email: string | undefined | null) => {
@@ -8,11 +8,11 @@ export const getUtecAccount = cache(
       const utec_account = await Xata.db.utec_account
         .filter({ email })
         .select(["*", "curriculum.career.*"])
-        .getFirst()
+        .getFirst();
 
-      return utec_account
+      return utec_account;
     } catch (error) {
-      return null
+      return null;
     }
   }
-)
+);

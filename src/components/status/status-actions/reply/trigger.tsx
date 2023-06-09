@@ -1,7 +1,7 @@
-import { Reply } from "lucide-react"
+import { Reply } from "lucide-react";
 
-import { Button } from "@/components/ui/button"
-import { DialogTrigger } from "@/components/ui/dialog"
+import { Button } from "@/components/ui/button";
+import { DialogTrigger } from "@/components/ui/dialog";
 
 const ReplyTrigger = () => {
   return (
@@ -10,7 +10,7 @@ const ReplyTrigger = () => {
         <Reply className="mr-2 h-4 w-4" /> Reply
       </Button>
     </DialogTrigger>
-  )
-}
+  );
+};
 
-export { ReplyTrigger }
+export { ReplyTrigger };

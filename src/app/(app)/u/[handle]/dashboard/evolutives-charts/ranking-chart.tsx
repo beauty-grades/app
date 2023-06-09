@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { AreaChart } from "@tremor/react"
+import { AreaChart } from "@tremor/react";
 
 import {
   Card,
@@ -8,18 +8,18 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 
 const dataFormatter = (number: number) =>
-  `Top ${Intl.NumberFormat("us").format(number).toString()}%`
+  `Top ${Intl.NumberFormat("us").format(number).toString()}%`;
 
 export const RankingChart = ({
   data,
 }: {
   data: {
-    period: string
-    score: number | null
-  }[]
+    period: string;
+    score: number | null;
+  }[];
 }) => (
   <Card>
     <CardHeader>
@@ -37,4 +37,4 @@ export const RankingChart = ({
       />
     </CardContent>
   </Card>
-)
+);

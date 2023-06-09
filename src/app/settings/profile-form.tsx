@@ -1,13 +1,13 @@
 // @ts-nocheck
-"use client"
+"use client";
 
-import * as React from "react"
-import { useRouter } from "next/navigation"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
+import * as React from "react";
+import { useRouter } from "next/navigation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -16,31 +16,31 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { UploadImageButton } from "@/components/upload-image-button"
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { UploadImageButton } from "@/components/upload-image-button";
 import {
   profileFormSchema,
   type ProfileFormValues,
-} from "./profile-form-schema"
-import { updateProfile } from "./update-profile"
+} from "./profile-form-schema";
+import { updateProfile } from "./update-profile";
 
 export function ProfileForm({
   initial_values,
 }: {
-  initial_values: ProfileFormValues
+  initial_values: ProfileFormValues;
 }) {
-  const router = useRouter()
+  const router = useRouter();
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
     defaultValues: initial_values,
     mode: "onChange",
-  })
+  });
 
   const [profile_pic, setProfilePic] = React.useState<string | undefined>(
     initial_values.profile_picture
-  )
+  );
 
   return (
     <>
@@ -56,11 +56,11 @@ export function ProfileForm({
         <UploadImageButton
           onClientUploadComplete={(files) => {
             // Do something with the response
-            files && files[0]?.fileUrl && setProfilePic(files[0].fileUrl)
+            files && files[0]?.fileUrl && setProfilePic(files[0].fileUrl);
           }}
           onUploadError={(error: Error) => {
             // Do something with the error.
-            alert(`ERROR! ${error.message}`)
+            alert(`ERROR! ${error.message}`);
           }}
         />
       </div>
@@ -69,10 +69,10 @@ export function ProfileForm({
         <form
           action={async (data: FormData) => {
             if (profile_pic) {
-              data.append("profile_picture", profile_pic)
+              data.append("profile_picture", profile_pic);
             }
-            await updateProfile(data)
-            router.push(`/u/${data.get("handle")}`)
+            await updateProfile(data);
+            router.push(`/u/${data.get("handle")}`);
           }}
           className="space-y-8"
         >
@@ -134,5 +134,5 @@ export function ProfileForm({
         </form>
       </Form>
     </>
-  )
+  );
 }

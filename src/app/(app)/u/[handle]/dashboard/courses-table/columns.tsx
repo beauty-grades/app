@@ -1,23 +1,23 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { ColumnDef } from "@tanstack/react-table"
-import { ArrowUpDown } from "lucide-react"
+import Link from "next/link";
+import { ColumnDef } from "@tanstack/react-table";
+import { ArrowUpDown } from "lucide-react";
 
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 export type Course = {
-  id: string
-  name: string
-  period: string
-  score: number | null
-  section: number
-  section_score: number | null
-  dropped_out: boolean
-  is_elective: boolean
-  teacher: string | null
-}
+  id: string;
+  name: string;
+  period: string;
+  score: number | null;
+  section: number;
+  section_score: number | null;
+  dropped_out: boolean;
+  is_elective: boolean;
+  teacher: string | null;
+};
 
 export const columns: ColumnDef<Course>[] = [
   {
@@ -32,7 +32,7 @@ export const columns: ColumnDef<Course>[] = [
           ID
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
   },
   {
@@ -47,27 +47,27 @@ export const columns: ColumnDef<Course>[] = [
           Nombre
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
     cell: ({ row }) => {
-      const name = row.getValue("name") as string
-      let label: string | null = null
+      const name = row.getValue("name") as string;
+      let label: string | null = null;
       let variant:
         | "default"
         | "destructive"
         | "outline"
         | "secondary"
         | null
-        | undefined = null
+        | undefined = null;
       if (row.original.dropped_out) {
-        label = "Retirado"
-        variant = "destructive"
+        label = "Retirado";
+        variant = "destructive";
       } else if (row.original.is_elective) {
-        label = "Electivo"
-        variant = "default"
+        label = "Electivo";
+        variant = "default";
       } else if (row.original.score === null && !row.original.dropped_out) {
-        label = "Cursando"
-        variant = "outline"
+        label = "Cursando";
+        variant = "outline";
       }
 
       return (
@@ -77,7 +77,7 @@ export const columns: ColumnDef<Course>[] = [
             <span className="ml-2">{name}</span>
           </div>
         </Link>
-      )
+      );
     },
   },
   {
@@ -92,7 +92,7 @@ export const columns: ColumnDef<Course>[] = [
           Periodo
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
   },
   {
@@ -107,7 +107,7 @@ export const columns: ColumnDef<Course>[] = [
           Puntaje
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
   },
   {
@@ -122,7 +122,7 @@ export const columns: ColumnDef<Course>[] = [
           Sección
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
   },
   {
@@ -137,7 +137,7 @@ export const columns: ColumnDef<Course>[] = [
           Puntaje de la Sección
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
   },
   {
@@ -152,7 +152,7 @@ export const columns: ColumnDef<Course>[] = [
           Profesor
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
   },
-]
+];

@@ -1,14 +1,14 @@
-import { ProfileForm } from "@/app/settings/profile-form"
+import { ProfileForm } from "@/app/settings/profile-form";
 
-import { getMyEmailOrSignIn } from "@/lib/auth/get-my-email"
-import Xata from "@/lib/xata"
-import { Separator } from "@/components/ui/separator"
-import { ProfileFormValues } from "./profile-form-schema"
+import { getMyEmailOrSignIn } from "@/lib/auth/get-my-email";
+import Xata from "@/lib/xata";
+import { Separator } from "@/components/ui/separator";
+import { ProfileFormValues } from "./profile-form-schema";
 
 export default async function SettingsProfilePage() {
-  const email = await getMyEmailOrSignIn()
+  const email = await getMyEmailOrSignIn();
 
-  const profile = await Xata.db.profile.filter({ email }).getFirst()
+  const profile = await Xata.db.profile.filter({ email }).getFirst();
 
   const initial_values: ProfileFormValues = {
     name: profile?.name || "",
@@ -16,7 +16,7 @@ export default async function SettingsProfilePage() {
     bio: profile?.bio || "",
     profile_picture: profile?.profile_picture || undefined,
     cover_picture: profile?.cover_picture || undefined,
-  }
+  };
 
   return (
     <div className="space-y-6">
@@ -29,5 +29,5 @@ export default async function SettingsProfilePage() {
       <Separator />
       <ProfileForm initial_values={initial_values} />
     </div>
-  )
+  );
 }

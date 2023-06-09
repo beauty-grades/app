@@ -1,10 +1,10 @@
-import { Suspense } from "react"
-import Link from "next/link"
+import { Suspense } from "react";
+import Link from "next/link";
 
-import { siteConfig } from "@/lib/site"
-import { Icons } from "@/components/ui/icons"
-import { AuthButton } from "./auth-button"
-import { ThemeToggle } from "./theme-toggle"
+import { siteConfig } from "@/lib/site";
+import { Icons } from "@/components/ui/icons";
+import { AuthButton } from "./auth-button";
+import { ThemeToggle } from "./theme-toggle";
 
 const Navbar = () => {
   return (
@@ -23,7 +23,7 @@ const Navbar = () => {
         </div>
       </nav>
     </div>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;

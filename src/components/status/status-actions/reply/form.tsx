@@ -1,36 +1,36 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { useRouter } from "next/navigation"
+import * as React from "react";
+import { useRouter } from "next/navigation";
 
-import { Button } from "@/components/ui/button"
-import { Textarea } from "@/components/ui/textarea"
-import { useToast } from "@/components/ui/use-toast"
-import { ReplyStatusAction } from "./actions/reply-status"
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/components/ui/use-toast";
+import { ReplyStatusAction } from "./actions/reply-status";
 
 const ReplyStatusForm = ({
   children,
   status_id,
 }: {
-  children: React.ReactNode
-  status_id: string
+  children: React.ReactNode;
+  status_id: string;
 }) => {
-  const router = useRouter()
-  const { toast } = useToast()
+  const router = useRouter();
+  const { toast } = useToast();
 
   return (
     <form
       action={async (base_data: FormData) => {
-        let data = base_data
+        let data = base_data;
 
-        data.append("original_status", status_id)
-        const id = await ReplyStatusAction(data)
+        data.append("original_status", status_id);
+        const id = await ReplyStatusAction(data);
 
         const pretty_ob = {
           id,
           body: data.get("body"),
           reply_to: status_id.replace("rec_", ""),
-        }
+        };
 
         toast({
           title: "Reply status created!",
@@ -41,9 +41,9 @@ const ReplyStatusForm = ({
               </code>
             </pre>
           ),
-        })
+        });
 
-        router.push(`/status/${id}`)
+        router.push(`/status/${id}`);
       }}
     >
       <div className="flex flex-col gap-2">
@@ -60,7 +60,7 @@ const ReplyStatusForm = ({
         <Button type="submit">Publicar</Button>
       </div>
     </form>
-  )
-}
+  );
+};
 
-export { ReplyStatusForm }
+export { ReplyStatusForm };

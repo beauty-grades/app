@@ -1,4 +1,4 @@
-import * as z from "zod"
+import * as z from "zod";
 
 export const FormSchema = z.object({
   body: z
@@ -9,6 +9,6 @@ export const FormSchema = z.object({
     .max(280, {
       message: "Tus estados deben tener como máximo 280 caracteres",
     }),
-})
+});
 
-export type InferedFormType = z.infer<typeof FormSchema>
+export type InferedFormType = z.infer<typeof FormSchema>;

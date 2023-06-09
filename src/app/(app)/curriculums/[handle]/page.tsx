@@ -1,39 +1,39 @@
-import Link from "next/link"
+import Link from "next/link";
 
-import Xata from "@/lib/xata"
-import { GlowBox } from "@/components/ui/glow-box"
-import { Heading } from "@/components/ui/typography"
-import { TakenCourses } from "./taken-courses"
+import Xata from "@/lib/xata";
+import { GlowBox } from "@/components/ui/glow-box";
+import { Heading } from "@/components/ui/typography";
+import { TakenCourses } from "./taken-courses";
 
 const getCurriculum = async (handle: string) => {
   const raw_courses = await Xata.db.rel_level_course
     .select(["*", "level.*", "course.*"])
     .filter({ "level.curriculum.id": handle })
-    .getAll()
+    .getAll();
 
   const courses_by_levels: {
-    order: number
+    order: number;
     courses: {
-      id: string
-      name: string
-      credits: number | null
-    }[]
-    elective_count?: number | null
-  }[] = []
+      id: string;
+      name: string;
+      credits: number | null;
+    }[];
+    elective_count?: number | null;
+  }[] = [];
 
   raw_courses.forEach((raw_course) => {
-    if (!raw_course.level) return
-    if (!raw_course.course) return
+    if (!raw_course.level) return;
+    if (!raw_course.course) return;
     const level = courses_by_levels.find(
       (level) => level.order === raw_course.level?.order
-    )
+    );
 
     if (level) {
       level.courses.push({
         id: raw_course.course?.id,
         name: raw_course.course?.name || "",
         credits: raw_course.credits || null,
-      })
+      });
     } else {
       courses_by_levels.push({
         order: raw_course.level?.order || 0,
@@ -45,15 +45,15 @@ const getCurriculum = async (handle: string) => {
           },
         ],
         elective_count: raw_course.level?.elective_count,
-      })
+      });
     }
-  })
+  });
 
-  return courses_by_levels.sort((a, b) => a.order - b.order)
-}
+  return courses_by_levels.sort((a, b) => a.order - b.order);
+};
 
 const Page = async ({ params: { handle } }: { params: { handle: string } }) => {
-  const courses_by_levels = await getCurriculum(handle)
+  const courses_by_levels = await getCurriculum(handle);
 
   return (
     <>
@@ -111,7 +111,7 @@ const Page = async ({ params: { handle } }: { params: { handle: string } }) => {
       </section>
       <TakenCourses />
     </>
-  )
-}
+  );
+};
 
-export default Page
+export default Page;

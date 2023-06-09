@@ -1,7 +1,7 @@
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
 interface Props extends React.ButtonHTMLAttributes<HTMLDivElement> {
-  colors?: string
+  colors?: string;
 }
 
 export const GlowBox = ({ children, colors, className, ...props }: Props) => {
@@ -19,5 +19,5 @@ export const GlowBox = ({ children, colors, className, ...props }: Props) => {
         </button>
       </div>
     </div>
-  )
-}
+  );
+};

@@ -1,16 +1,16 @@
-import { NextResponse } from "next/server"
+import { NextResponse } from "next/server";
 
-import { getMyEmail } from "@/lib/auth/get-my-email"
-import Xata from "@/lib/xata"
+import { getMyEmail } from "@/lib/auth/get-my-email";
+import Xata from "@/lib/xata";
 
 export async function GET() {
-  const email = await getMyEmail()
+  const email = await getMyEmail();
 
   if (!email) {
-    return NextResponse.json({ error: "Not authorized" }, { status: 401 })
+    return NextResponse.json({ error: "Not authorized" }, { status: 401 });
   }
 
-  const profile = await Xata.db.profile.filter({ email }).getFirst()
+  const profile = await Xata.db.profile.filter({ email }).getFirst();
 
-  return NextResponse.json({ profile })
+  return NextResponse.json({ profile });
 }

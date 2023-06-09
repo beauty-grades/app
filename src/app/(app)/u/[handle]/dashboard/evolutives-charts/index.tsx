@@ -1,15 +1,15 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Heading } from "@/components/ui/typography"
-import { getScoreAndRankingByPeriod } from "./getScoreAndRankingByPeriod"
-import { RankingChart } from "./ranking-chart"
-import { ScoreChart } from "./score-chart"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Heading } from "@/components/ui/typography";
+import { getScoreAndRankingByPeriod } from "./getScoreAndRankingByPeriod";
+import { RankingChart } from "./ranking-chart";
+import { ScoreChart } from "./score-chart";
 
 export const EvolutivesCharts = async ({
   utec_account,
 }: {
-  utec_account: string
+  utec_account: string;
 }) => {
-  const periods = await getScoreAndRankingByPeriod(utec_account)
+  const periods = await getScoreAndRankingByPeriod(utec_account);
 
   return (
     <>
@@ -27,5 +27,5 @@ export const EvolutivesCharts = async ({
         </TabsContent>
       </Tabs>
     </>
-  )
-}
+  );
+};

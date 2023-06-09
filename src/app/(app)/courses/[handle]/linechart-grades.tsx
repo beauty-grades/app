@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import { LineChart } from "@tremor/react"
+import { LineChart } from "@tremor/react";
 
-import { Heading } from "@/components/ui/typography"
+import { Heading } from "@/components/ui/typography";
 
 export const LineChartGrades = ({ data }) => {
   return (
@@ -16,5 +16,5 @@ export const LineChartGrades = ({ data }) => {
         yAxisWidth={20}
       />
     </div>
-  )
-}
+  );
+};

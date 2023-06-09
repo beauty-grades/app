@@ -1,29 +1,29 @@
-import Xata from "@/lib/xata"
+import Xata from "@/lib/xata";
 
 export const getScoreAndRankingByPeriod = async (utec_account: string) => {
   const periods = new Map<
     string,
     {
-      score: number | null
-      merit_order: number | null
-      total_students: number | null
-      ranking: number | null
-      career: string
+      score: number | null;
+      merit_order: number | null;
+      total_students: number | null;
+      ranking: number | null;
+      career: string;
     }
-  >()
+  >();
 
-  const careers = new Set<string>()
+  const careers = new Set<string>();
 
   const data = await Xata.db.period_enrollment
     .filter({ utec_account })
     .select(["*", "utec_account.email", "curriculum.career"])
-    .getAll()
+    .getAll();
 
   data.forEach((period_enrollment) => {
     if (period_enrollment.curriculum?.career?.id) {
-      careers.add(period_enrollment.curriculum.career.id)
+      careers.add(period_enrollment.curriculum.career.id);
     }
-  })
+  });
 
   const students_by_career_period = await Xata.db.rel_career_period
     .filter({
@@ -34,7 +34,7 @@ export const getScoreAndRankingByPeriod = async (utec_account: string) => {
       },
     })
     .select(["*", "career.*", "period.*"])
-    .getAll()
+    .getAll();
 
   data.forEach((period_enrollment) => {
     if (
@@ -46,7 +46,7 @@ export const getScoreAndRankingByPeriod = async (utec_account: string) => {
           career_period.career?.id ===
             period_enrollment.curriculum?.career?.id &&
           career_period.period?.id === period_enrollment.period?.id
-      )
+      );
 
       if (career_period?.career?.name) {
         periods.set(period_enrollment.period.id, {
@@ -62,13 +62,13 @@ export const getScoreAndRankingByPeriod = async (utec_account: string) => {
                 )
               : null,
           career: career_period.career.name,
-        })
+        });
       }
     }
-  })
+  });
 
   return Array.from(periods).map(([period, rest]) => ({
     period,
     ...rest,
-  }))
-}
+  }));
+};

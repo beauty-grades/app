@@ -1,5 +1,6 @@
 /** @type {import('prettier').Config} */
 module.exports = {
+  tailwindConfig: "tailwind.config.js",
   endOfLine: "lf",
   semi: false,
   singleQuote: false,
@@ -26,6 +27,6 @@ module.exports = {
   importOrderCombineTypeAndValueImports: true,
   plugins: [
     "@ianvs/prettier-plugin-sort-imports",
-    require("prettier-plugin-tailwindcss"),
+    "prettier-plugin-tailwindcss",
   ],
-}
+};

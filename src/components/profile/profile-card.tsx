@@ -1,7 +1,7 @@
-import Link from "next/link"
+import Link from "next/link";
 
-import { ProfileRecord } from "@/lib/xata/codegen"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { ProfileRecord } from "@/lib/xata/codegen";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const ProfileCard = ({ profile }: { profile: ProfileRecord }) => {
   return (
@@ -26,7 +26,7 @@ const ProfileCard = ({ profile }: { profile: ProfileRecord }) => {
         </div>
       </div>
     </Link>
-  )
-}
+  );
+};
 
-export { ProfileCard }
+export { ProfileCard };

@@ -1,14 +1,14 @@
-"use client"
+"use client";
 
-import { AnimatePresence, motion } from "framer-motion"
+import { AnimatePresence, motion } from "framer-motion";
 
 interface GradeBarProps {
-  handle: string
-  grades?: number[]
-  average: number
-  weight: number
-  delete_lowest?: boolean
-  delay?: number
+  handle: string;
+  grades?: number[];
+  average: number;
+  weight: number;
+  delete_lowest?: boolean;
+  delay?: number;
 }
 
 export const GradeBar = ({
@@ -22,7 +22,7 @@ export const GradeBar = ({
   const bg_color =
     weight > 0
       ? "bg-gradient-to-r from-red-600 to-purple-600"
-      : "bg-gradient-to-r from-slate-600 to-slate-600"
+      : "bg-gradient-to-r from-slate-600 to-slate-600";
 
   return (
     <AnimatePresence>
@@ -48,5 +48,5 @@ export const GradeBar = ({
         <span className="font-bold">{Math.round(average * 100) / 100}</span>
       </div>
     </AnimatePresence>
-  )
-}
+  );
+};

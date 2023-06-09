@@ -1,5 +1,5 @@
-import { XataClient } from "./codegen"
+import { XataClient } from "./codegen";
 
-const Xata = new XataClient()
+const Xata = new XataClient();
 
-export default Xata
+export default Xata;

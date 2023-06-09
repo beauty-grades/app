@@ -1,21 +1,21 @@
-import Link from "next/link"
+import Link from "next/link";
 
-import { getStatus } from "@/lib/queries/get-status"
-import { DateHoverCard } from "@/components/date-hover-card"
-import { ProfileAvatarHoverCard } from "@/components/profile/profile-avatar"
-import { ProfileHoverCard } from "@/components/profile/profile-hover-card"
-import { StatusActions } from "@/components/status/status-actions"
-import { StatusDynamicBody } from "@/components/status/status-dynamic-body"
+import { getStatus } from "@/lib/queries/get-status";
+import { DateHoverCard } from "@/components/date-hover-card";
+import { ProfileAvatarHoverCard } from "@/components/profile/profile-avatar";
+import { ProfileHoverCard } from "@/components/profile/profile-hover-card";
+import { StatusActions } from "@/components/status/status-actions";
+import { StatusDynamicBody } from "@/components/status/status-dynamic-body";
 
 interface Props {
-  replied_status_id?: string | null
-  children: React.ReactNode
+  replied_status_id?: string | null;
+  children: React.ReactNode;
 }
 
 const StatusWithParent = async ({ replied_status_id, children }: Props) => {
-  const replied_status = await getStatus(replied_status_id)
+  const replied_status = await getStatus(replied_status_id);
 
-  if (!replied_status?.author_profile) return <>{children}</>
+  if (!replied_status?.author_profile) return <>{children}</>;
 
   return (
     <StatusWithParent replied_status_id={replied_status.reply_to?.id}>
@@ -48,7 +48,7 @@ const StatusWithParent = async ({ replied_status_id, children }: Props) => {
 
       {children}
     </StatusWithParent>
-  )
-}
+  );
+};
 
-export { StatusWithParent }
+export { StatusWithParent };

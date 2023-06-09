@@ -1,14 +1,14 @@
-import * as React from "react"
-import { SelectedPick } from "@xata.io/client"
+import * as React from "react";
+import { SelectedPick } from "@xata.io/client";
 
-import { StatusRecord } from "@/lib/xata/codegen"
-import { Separator } from "@/components/ui/separator"
-import { StatusCard } from "./status-card"
+import { StatusRecord } from "@/lib/xata/codegen";
+import { Separator } from "@/components/ui/separator";
+import { StatusCard } from "./status-card";
 
 const StatusList = ({
   statuses,
 }: {
-  statuses: SelectedPick<StatusRecord, ["*", "author_profile.*"]>[]
+  statuses: SelectedPick<StatusRecord, ["*", "author_profile.*"]>[];
 }) => {
   return (
     <div className="flex flex-col">
@@ -19,7 +19,7 @@ const StatusList = ({
         </>
       ))}
     </div>
-  )
-}
+  );
+};
 
-export { StatusList }
+export { StatusList };

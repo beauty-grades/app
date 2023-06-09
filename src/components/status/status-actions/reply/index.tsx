@@ -1,21 +1,21 @@
-import { SelectedPick } from "@xata.io/client"
+import { SelectedPick } from "@xata.io/client";
 
-import { StatusRecord } from "@/lib/xata/codegen"
-import { Dialog } from "@/components/ui/dialog"
-import { ReplyDialog } from "./dialog"
-import { ReplyTrigger } from "./trigger"
+import { StatusRecord } from "@/lib/xata/codegen";
+import { Dialog } from "@/components/ui/dialog";
+import { ReplyDialog } from "./dialog";
+import { ReplyTrigger } from "./trigger";
 
 const ReplyAction = ({
   status,
 }: {
-  status: SelectedPick<StatusRecord, ["*", "author_profile.*"]>
+  status: SelectedPick<StatusRecord, ["*", "author_profile.*"]>;
 }) => {
   return (
     <Dialog>
       <ReplyTrigger />
       <ReplyDialog status={status} />
     </Dialog>
-  )
-}
+  );
+};
 
-export { ReplyAction }
+export { ReplyAction };

@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
-import { useRouter } from "next/navigation"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
+import { useRouter } from "next/navigation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -13,25 +13,25 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Textarea } from "@/components/ui/textarea"
-import { useToast } from "@/components/ui/use-toast"
-import { createStatus } from "./actions/create-status"
-import { FormSchema, InferedFormType } from "./form-schema"
+} from "@/components/ui/form";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/components/ui/use-toast";
+import { createStatus } from "./actions/create-status";
+import { FormSchema, InferedFormType } from "./form-schema";
 
 export default function TextareaReactHookForm() {
   const form = useForm<InferedFormType>({
     resolver: zodResolver(FormSchema),
-  })
-  const { toast } = useToast()
+  });
+  const { toast } = useToast();
 
-  const router = useRouter()
+  const router = useRouter();
 
   return (
     <Form {...form}>
       <form
         action={async (data: FormData) => {
-          const id = await createStatus(data)
+          const id = await createStatus(data);
 
           toast({
             title: "Recibimos los siguientes datos:",
@@ -42,9 +42,9 @@ export default function TextareaReactHookForm() {
                 </code>
               </pre>
             ),
-          })
+          });
 
-          router.push(`/status/${id}`)
+          router.push(`/status/${id}`);
         }}
         className="space-y-6"
       >
@@ -71,5 +71,5 @@ export default function TextareaReactHookForm() {
         <Button type="submit">Publicar</Button>
       </form>
     </Form>
-  )
+  );
 }

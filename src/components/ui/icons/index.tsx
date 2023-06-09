@@ -22,13 +22,13 @@ import {
   Twitter,
   Undo,
   type Icon as LucideIcon,
-} from "lucide-react"
+} from "lucide-react";
 
-import { Facebook } from "./facebook"
-import { GitHub } from "./github"
-import { Logo } from "./logo"
+import { Facebook } from "./facebook";
+import { GitHub } from "./github";
+import { Logo } from "./logo";
 
-export type Icon = LucideIcon
+export type Icon = LucideIcon;
 
 export const Icons = {
   externalLink: ExternalLink,
@@ -56,4 +56,4 @@ export const Icons = {
   github: GitHub,
   facebook: Facebook,
   instagram: Instagram,
-}
+};

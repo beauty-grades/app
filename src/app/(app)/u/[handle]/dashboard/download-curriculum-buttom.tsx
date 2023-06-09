@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 
 export const DownloadCurriculumButtom = () => {
   const handleClick = () => {
@@ -20,17 +20,17 @@ export const DownloadCurriculumButtom = () => {
     })
       .then((response) => response.blob())
       .then((blob) => {
-        const url = URL.createObjectURL(blob)
-        const link = document.createElement("a")
-        link.href = url
-        link.setAttribute("download", "file.pdf")
-        document.body.appendChild(link)
-        link.click()
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", "file.pdf");
+        document.body.appendChild(link);
+        link.click();
       })
       .catch((error) => {
-        console.error("Error downloading file:", error)
-      })
-  }
+        console.error("Error downloading file:", error);
+      });
+  };
 
-  return <Button onClick={handleClick}>Download File</Button>
-}
+  return <Button onClick={handleClick}>Download File</Button>;
+};

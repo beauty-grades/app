@@ -4,4 +4,4 @@ export const PromoBanner = ({ children }) => (
       <h1 className="text-sm font-bold">{children}</h1>
     </div>
   </div>
-)
+);

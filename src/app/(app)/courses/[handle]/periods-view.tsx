@@ -1,4 +1,4 @@
-import Xata from "@/lib/xata"
+import Xata from "@/lib/xata";
 import {
   Card,
   CardContent,
@@ -6,80 +6,80 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Separator } from "@/components/ui/separator"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+} from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface Classroom {
-  id: string
-  section: number
-  score: number
+  id: string;
+  section: number;
+  score: number;
   teacher: {
-    id: string
-    name: string
-  }
+    id: string;
+    name: string;
+  };
 }
 
 interface Evaluation {
-  handle: string
-  label: string
-  weight: number | null
-  can_be_deleted: boolean
+  handle: string;
+  label: string;
+  weight: number | null;
+  can_be_deleted: boolean;
 }
 
 const getEvaluationsByPeriod = async (course_handle: string) => {
   const raw_classrooms = await Xata.db.section
     .select(["*", "class.course.*", "teacher.*", "class.period"])
     .filter({ "class.course": course_handle })
-    .getAll()
+    .getAll();
 
   const raw_evaluations = await Xata.db.evaluation
     .select(["*", "class.*", "class.course.*", "class.period.*"])
     .filter({ "class.course": course_handle })
-    .getAll()
+    .getAll();
 
   const periods: {
-    period: string
-    evaluations: Evaluation[]
-    classrooms: Classroom[]
-    wrong_formula: boolean
-  }[] = []
+    period: string;
+    evaluations: Evaluation[];
+    classrooms: Classroom[];
+    wrong_formula: boolean;
+  }[] = [];
 
   raw_evaluations.forEach((raw_evaluation) => {
-    if (!raw_evaluation.class) return
-    if (!raw_evaluation.class.course) return
+    if (!raw_evaluation.class) return;
+    if (!raw_evaluation.class.course) return;
 
-    const period = raw_evaluation.class.period?.id || ""
+    const period = raw_evaluation.class.period?.id || "";
 
     const evaluation = {
       handle: raw_evaluation.handle || "",
       label: raw_evaluation.label || "",
       weight: raw_evaluation.weight || null,
       can_be_deleted: raw_evaluation.can_be_deleted,
-    }
+    };
 
     const period_evaluations = periods.find(
       (period_evaluations) => period_evaluations.period === period
-    )
+    );
 
     if (period_evaluations) {
-      period_evaluations.evaluations.push(evaluation)
+      period_evaluations.evaluations.push(evaluation);
     } else {
       periods.push({
         period,
         evaluations: [evaluation],
         classrooms: [],
         wrong_formula: raw_evaluation.class?.wrong_formula || false,
-      })
+      });
     }
-  })
+  });
 
   raw_classrooms.forEach((raw_classroom) => {
-    const classroom_period = raw_classroom.class?.period?.id
+    const classroom_period = raw_classroom.class?.period?.id;
 
     const existing_period = periods.find(
       ({ period }) => classroom_period === period
-    )
+    );
 
     existing_period?.classrooms.push({
       id: raw_classroom.id,
@@ -89,22 +89,22 @@ const getEvaluationsByPeriod = async (course_handle: string) => {
         name: raw_classroom.teacher?.name || "Unknown",
         id: raw_classroom.teacher?.id || "ukn",
       },
-    })
-  })
+    });
+  });
 
   periods.sort(
     (a, b) =>
       parseInt(a.period.replace("-", "")) - parseInt(b.period.replace("-", ""))
-  )
-  return periods
-}
+  );
+  return periods;
+};
 
 interface Props {
-  course_handle: string
+  course_handle: string;
 }
 
 export const PeriodsView = async ({ course_handle }: Props) => {
-  const periods = await getEvaluationsByPeriod(course_handle)
+  const periods = await getEvaluationsByPeriod(course_handle);
 
   return (
     <div>
@@ -151,8 +151,8 @@ export const PeriodsView = async ({ course_handle }: Props) => {
         ))}
       </Tabs>
     </div>
-  )
-}
+  );
+};
 
 const Classrooms = ({ classrooms }: { classrooms: Classroom[] }) => {
   return (
@@ -164,18 +164,18 @@ const Classrooms = ({ classrooms }: { classrooms: Classroom[] }) => {
             <p className="ml-4">{teacher.name}</p>
             <p className="ml-4">{score}</p>
           </li>
-        )
+        );
       })}
     </ul>
-  )
-}
+  );
+};
 
 const WrongFormulaEvaluations = ({
   evaluations,
   period,
 }: {
-  evaluations: Evaluation[]
-  period: string
+  evaluations: Evaluation[];
+  period: string;
 }) => {
   return (
     <div className="flex flex-col gap-4">
@@ -191,30 +191,30 @@ const WrongFormulaEvaluations = ({
         </div>
       ))}
     </div>
-  )
-}
+  );
+};
 
 const Evaluations = ({
   evaluations,
   period,
 }: {
-  evaluations: Evaluation[]
-  period: string
+  evaluations: Evaluation[];
+  period: string;
 }) => {
   let grouped_evaluations: {
-    label: string
-    total_weight: number | null
-    can_be_deleted: boolean
+    label: string;
+    total_weight: number | null;
+    can_be_deleted: boolean;
     children: {
-      handle: string
-      weight: number | null
-    }[]
-  }[] = []
+      handle: string;
+      weight: number | null;
+    }[];
+  }[] = [];
 
   evaluations.forEach(({ handle, label, weight, can_be_deleted }) => {
     const g_e_match = grouped_evaluations.find(
       ({ label: existing_label }) => existing_label === label
-    )
+    );
 
     if (!g_e_match) {
       grouped_evaluations.push({
@@ -227,17 +227,17 @@ const Evaluations = ({
             weight,
           },
         ],
-      })
+      });
     } else {
       if (weight && g_e_match?.total_weight) {
-        g_e_match.total_weight += weight
+        g_e_match.total_weight += weight;
       }
       g_e_match.children.push({
         handle,
         weight,
-      })
+      });
     }
-  })
+  });
 
   return (
     <div className="flex flex-col gap-4">
@@ -264,5 +264,5 @@ const Evaluations = ({
           )
       )}
     </div>
-  )
-}
+  );
+};

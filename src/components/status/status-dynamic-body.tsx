@@ -1,58 +1,58 @@
-import * as React from "react"
-import Link from "next/link"
+import * as React from "react";
+import Link from "next/link";
 
-import { cn } from "@/lib/utils"
-import Xata from "@/lib/xata"
-import { ProfileHoverCard } from "@/components/profile/profile-hover-card"
+import { cn } from "@/lib/utils";
+import Xata from "@/lib/xata";
+import { ProfileHoverCard } from "@/components/profile/profile-hover-card";
 
 const StatusDynamicBody = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLParagraphElement>
 >(async ({ className, children, ...props }, ref) => {
-  if (typeof children !== "string") return
+  if (typeof children !== "string") return;
 
-  const pattern = /@(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])/g
+  const pattern = /@(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])/g;
   const matches = Array.from(children.match(pattern) || []).map((el) =>
     el.replace("@", "")
-  )
+  );
 
   if (!matches || matches.length === 0)
     return (
       <p ref={ref} className={cn(className)} {...props}>
         <span>{children}</span>
       </p>
-    )
+    );
 
   const profiles = await Xata.db.profile
     .filter({
       handle: { $any: matches },
     })
-    .getAll()
+    .getAll();
 
-  const existing_profiles = profiles.map((p) => p.handle as string)
+  const existing_profiles = profiles.map((p) => p.handle as string);
 
   if (existing_profiles.length === 0)
     return (
       <p ref={ref} className={cn(className)} {...props}>
         <span>{children}</span>
       </p>
-    )
+    );
 
-  let react_nodes: Array<React.ReactNode> = []
+  let react_nodes: Array<React.ReactNode> = [];
 
-  let string_to_check: string = children
+  let string_to_check: string = children;
 
   while (true) {
-    let [static_string, ...rest] = string_to_check.split("@")
-    react_nodes.push(<span>{static_string}</span>)
+    let [static_string, ...rest] = string_to_check.split("@");
+    react_nodes.push(<span>{static_string}</span>);
 
-    string_to_check = string_to_check.replace(static_string, "")
+    string_to_check = string_to_check.replace(static_string, "");
 
-    let handle_to_test_index = 0
+    let handle_to_test_index = 0;
 
-    let replaced = false
+    let replaced = false;
     while (true) {
-      if (handle_to_test_index === existing_profiles.length) break
+      if (handle_to_test_index === existing_profiles.length) break;
 
       if (
         string_to_check.startsWith(
@@ -68,22 +68,22 @@ const StatusDynamicBody = React.forwardRef<
               @{existing_profiles[handle_to_test_index]}
             </Link>
           </ProfileHoverCard>
-        )
+        );
         string_to_check = string_to_check.replace(
           "@" + existing_profiles[handle_to_test_index],
           ""
-        )
-        replaced = true
+        );
+        replaced = true;
 
-        break
+        break;
       } else {
-        handle_to_test_index++
+        handle_to_test_index++;
       }
     }
 
     if (replaced === false) {
-      react_nodes.push(<span>{string_to_check}</span>)
-      break
+      react_nodes.push(<span>{string_to_check}</span>);
+      break;
     }
   }
 
@@ -91,9 +91,9 @@ const StatusDynamicBody = React.forwardRef<
     <p ref={ref} className={cn(className)} {...props}>
       {react_nodes}
     </p>
-  )
-})
+  );
+});
 
-StatusDynamicBody.displayName = "StatusDynamicBody"
+StatusDynamicBody.displayName = "StatusDynamicBody";
 
-export { StatusDynamicBody }
+export { StatusDynamicBody };

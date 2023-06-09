@@ -1,52 +1,52 @@
-import Link from "next/link"
+import Link from "next/link";
 
-import Xata from "@/lib/xata"
-import { Button } from "@/components/ui/button"
-import { Heading, Paragraph } from "@/components/ui/typography"
-import { PeriodsView } from "./periods-view"
-import { UserGrades } from "./user-grades"
+import Xata from "@/lib/xata";
+import { Button } from "@/components/ui/button";
+import { Heading, Paragraph } from "@/components/ui/typography";
+import { PeriodsView } from "./periods-view";
+import { UserGrades } from "./user-grades";
 
 const getCourse = async (handle: string) => {
   const raw_classrooms = await Xata.db.section
     .select(["*", "class.*", "teacher.*", "class.course.*"])
     .filter({ "class.course": handle })
-    .getAll()
+    .getAll();
 
-  const title = raw_classrooms[0]?.class?.course?.name || ""
+  const title = raw_classrooms[0]?.class?.course?.name || "";
 
-  return title
-}
+  return title;
+};
 
 const getCurriculums = async (handle: string) => {
   const raw_level_courses = await Xata.db.rel_level_course
     .select(["*", "level.*", "course.*", "level.curriculum.*"])
     .filter({ course: handle })
-    .getAll()
+    .getAll();
 
-  const curriculums: string[] = []
+  const curriculums: string[] = [];
 
   raw_level_courses.forEach((raw_level_course) => {
-    if (!raw_level_course.level) return
-    if (!raw_level_course.course) return
-    if (!raw_level_course.level.curriculum) return
+    if (!raw_level_course.level) return;
+    if (!raw_level_course.course) return;
+    if (!raw_level_course.level.curriculum) return;
 
     // add the handles to the curriculum
     const curriculum = curriculums.find(
       (curriculum) => curriculum === raw_level_course.level?.curriculum?.id
-    )
+    );
 
     if (!curriculum) {
-      const handle = raw_level_course?.level?.curriculum?.id || ""
-      curriculums.push(handle)
+      const handle = raw_level_course?.level?.curriculum?.id || "";
+      curriculums.push(handle);
     }
-  })
+  });
 
-  return curriculums
-}
+  return curriculums;
+};
 
 const Page = async ({ params: { handle } }: { params: { handle: string } }) => {
-  const title = await getCourse(handle)
-  const curriculums = await getCurriculums(handle)
+  const title = await getCourse(handle);
+  const curriculums = await getCurriculums(handle);
 
   return (
     <div>
@@ -66,12 +66,12 @@ const Page = async ({ params: { handle } }: { params: { handle: string } }) => {
             <Link href={`/curriculums/${curriculum}`} key={curriculum}>
               <Button variant="secondary">{curriculum}</Button>
             </Link>
-          )
+          );
         })}
       </div>
       <UserGrades course_handle={handle} />
     </div>
-  )
-}
+  );
+};
 
-export default Page
+export default Page;

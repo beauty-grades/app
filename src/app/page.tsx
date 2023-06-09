@@ -1,14 +1,14 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-import { Button } from "@/components/ui/button"
-import { GlowBox } from "@/components/ui/glow-box"
-import { Icons } from "@/components/ui/icons"
-import { Heading, Paragraph } from "@/components/ui/typography"
+import { Button } from "@/components/ui/button";
+import { GlowBox } from "@/components/ui/glow-box";
+import { Icons } from "@/components/ui/icons";
+import { Heading, Paragraph } from "@/components/ui/typography";
 
 const Page = () => {
-  const [copied, setCopied] = React.useState(false)
+  const [copied, setCopied] = React.useState(false);
   React.useEffect(() => {
     if (copied) {
       navigator.clipboard
@@ -22,13 +22,13 @@ const Page = () => {
   .then((r) => r.json())
   .then(console.log)
   .catch(console.warn)
-            `)
+            `);
 
       setTimeout(() => {
-        setCopied(false)
-      }, 3000)
+        setCopied(false);
+      }, 3000);
     }
-  }, [copied])
+  }, [copied]);
 
   return (
     <>
@@ -125,7 +125,7 @@ const Page = () => {
         </Paragraph>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default Page
+export default Page;

@@ -1,7 +1,7 @@
-import { XataAdapter } from "@next-auth/xata-adapter"
-import GoogleProvider from "next-auth/providers/google"
+import { XataAdapter } from "@next-auth/xata-adapter";
+import GoogleProvider from "next-auth/providers/google";
 
-import Xata from "@/lib/xata"
+import Xata from "@/lib/xata";
 
 export const authOptions = {
   providers: [
@@ -11,4 +11,4 @@ export const authOptions = {
     }),
   ],
   adapter: XataAdapter(Xata),
-}
+};
