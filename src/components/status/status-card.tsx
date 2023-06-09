@@ -1,12 +1,11 @@
 import Link from "next/link"
 import { SelectedPick } from "@xata.io/client"
 
-import Xata from "@/lib/xata"
+import { getStatus } from "@/lib/queries/get-status"
 import { StatusRecord } from "@/lib/xata/codegen"
 import { DateHoverCard } from "@/components/date-hover-card"
 import { ProfileAvatarHoverCard } from "@/components/profile/profile-avatar"
 import { ProfileHoverCard } from "@/components/profile/profile-hover-card"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { StatusActions } from "./status-actions"
 import { StatusDynamicBody } from "./status-dynamic-body"
 
@@ -17,12 +16,7 @@ const StatusCard = async ({
 }) => {
   if (!status.author_profile) return null
 
-  const quoted_status = await Xata.db.status
-    .filter({
-      id: status.quote_from?.id ?? "ref_that_dont_exists",
-    })
-    .select(["*", "author_profile.*"])
-    .getFirst()
+  const quoted_status = await getStatus(status.quote_from?.id)
 
   return (
     <div className="flex gap-4">

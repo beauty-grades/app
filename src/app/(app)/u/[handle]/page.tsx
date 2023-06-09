@@ -5,6 +5,15 @@ import Xata from "@/lib/xata"
 import { StatusRecord } from "@/lib/xata/codegen"
 import { StatusListPaginated } from "@/components/status/status-list-paginated"
 
+export const revalidate = 600
+export async function generateStaticParams() {
+  const statuses = await Xata.db.status.getAll()
+
+  return statuses.map((status) => ({
+    id: status.id,
+  }))
+}
+
 const HomePage = async ({ params }) => {
   const profile = await getProfile(params.handle)
   const raw_page = await Xata.db.status

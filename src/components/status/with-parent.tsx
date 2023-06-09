@@ -1,8 +1,6 @@
 import Link from "next/link"
-import { SelectedPick } from "@xata.io/client"
 
-import Xata from "@/lib/xata"
-import { StatusRecord } from "@/lib/xata/codegen"
+import { getStatus } from "@/lib/queries/get-status"
 import { DateHoverCard } from "@/components/date-hover-card"
 import { ProfileAvatarHoverCard } from "@/components/profile/profile-avatar"
 import { ProfileHoverCard } from "@/components/profile/profile-hover-card"
@@ -15,17 +13,7 @@ interface Props {
 }
 
 const StatusWithParent = async ({ replied_status_id, children }: Props) => {
-  let replied_status: SelectedPick<
-    StatusRecord,
-    ["*", "author_profile.*"]
-  > | null = null
-
-  if (replied_status_id) {
-    replied_status = await Xata.db.status.read(replied_status_id, [
-      "*",
-      "author_profile.*",
-    ])
-  }
+  const replied_status = await getStatus(replied_status_id)
 
   if (!replied_status?.author_profile) return <>{children}</>
 
