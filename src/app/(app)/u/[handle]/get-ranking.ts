@@ -1,6 +1,6 @@
 import { cache } from "react";
 
-import Xata from "@/lib/xata";
+import xata from "@/lib/xata";
 
 export const getRanking = cache(
   async (utec_account: string | undefined, career: string | undefined) => {
@@ -8,11 +8,11 @@ export const getRanking = cache(
       let ranking: string | null = null;
 
       const MO_PERIOD = process.env.MO_PERIOD as string;
-      const rel_career_period = await Xata.db.rel_career_period.read(
+      const rel_career_period = await xata.db.rel_career_period.read(
         `${career}-${MO_PERIOD}`
       );
 
-      const period_enrollment = await Xata.db.period_enrollment.read(
+      const period_enrollment = await xata.db.period_enrollment.read(
         `${MO_PERIOD}-${utec_account}`
       );
 

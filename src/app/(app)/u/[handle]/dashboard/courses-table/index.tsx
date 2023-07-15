@@ -1,10 +1,10 @@
-import Xata from "@/lib/xata";
+import xata from "@/lib/xata";
 import { Heading } from "@/components/ui/typography";
 import { columns, Course } from "./columns";
 import { DataTable } from "./data-table";
 
 async function getData(utec_account: string): Promise<Course[]> {
-  const section_enrollments = await Xata.db.section_enrollment
+  const section_enrollments = await xata.db.section_enrollment
     .filter({
       "period_enrollment.utec_account": utec_account,
     })

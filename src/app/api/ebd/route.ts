@@ -9,7 +9,18 @@ export function GET() {
   const matrix_2 = Matrix.columnVector(emb_2);
 
   // M1 <- 0.8*M1 + 0.2*M2
-  const updated_matrix = matrix_1.mul(0.8).add(matrix_2.mul(0.2));
+  const resultant_matrix = matrix_1.mul(0.8).add(matrix_2.mul(0.2));
+  const response_matrix = resultant_matrix.getColumn(0);
 
-  return NextResponse.json({ updated_embedding: updated_matrix.getColumn(0) });
+  // get the original embedding from the updated matrix and the added matrix
+  const original_matrix = resultant_matrix
+    .sub(Matrix.columnVector(emb_2).mul(0.2))
+    .div(0.8);
+
+  return NextResponse.json({
+    embedding_1: emb_1,
+    embedding_2: emb_2,
+    resultant_embedding: response_matrix,
+    original_embedding: original_matrix.getColumn(0),
+  });
 }

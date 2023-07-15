@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import Image from "next/image";
 
 import { getProfile } from "@/lib/queries/get-profile";
-import Xata from "@/lib/xata";
+import xata from "@/lib/xata";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -15,7 +15,7 @@ import { ProfileInteractions } from "./profile-interactions";
 export const revalidate = 10000;
 
 export async function generateStaticParams() {
-  const profiles = await Xata.db.profile.getAll();
+  const profiles = await xata.db.profile.getAll();
 
   return profiles.map((profile) => ({
     handle: profile.handle,

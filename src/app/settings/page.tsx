@@ -1,14 +1,14 @@
 import { ProfileForm } from "@/app/settings/profile-form";
 
 import { getMyEmailOrSignIn } from "@/lib/auth/get-my-email";
-import Xata from "@/lib/xata";
+import xata from "@/lib/xata";
 import { Separator } from "@/components/ui/separator";
 import { ProfileFormValues } from "./profile-form-schema";
 
 export default async function SettingsProfilePage() {
   const email = await getMyEmailOrSignIn();
 
-  const profile = await Xata.db.profile.filter({ email }).getFirst();
+  const profile = await xata.db.profile.filter({ email }).getFirst();
 
   const initial_values: ProfileFormValues = {
     name: profile?.name || "",

@@ -2,7 +2,7 @@ import * as React from "react";
 import Link from "next/link";
 
 import { cn } from "@/lib/utils";
-import Xata from "@/lib/xata";
+import xata from "@/lib/xata";
 import { ProfileHoverCard } from "@/components/profile/profile-hover-card";
 
 const StatusDynamicBody = React.forwardRef<
@@ -23,7 +23,7 @@ const StatusDynamicBody = React.forwardRef<
       </p>
     );
 
-  const profiles = await Xata.db.profile
+  const profiles = await xata.db.profile
     .filter({
       handle: { $any: matches },
     })

@@ -1,14 +1,14 @@
 "use server";
 
 import { getMyProfileOrThrow } from "@/lib/auth/get-my-profile";
-import Xata from "@/lib/xata";
+import xata from "@/lib/xata";
 
 export async function unfollow(profile_id: string) {
   const profile_a = await getMyProfileOrThrow();
-  const profile_b = await Xata.db.profile.read(profile_id);
+  const profile_b = await xata.db.profile.read(profile_id);
   if (!profile_b) throw new Error("Profile not found");
 
-  const rel_users = await Xata.db.rel_profiles
+  const rel_users = await xata.db.rel_profiles
     .filter({
       "profile_a.id": profile_a.id,
       "profile_b.id": profile_b.id,
@@ -24,14 +24,14 @@ export async function unfollow(profile_id: string) {
       a_follows_b: false,
     });
   } else {
-    await Xata.db.rel_profiles.create({
+    await xata.db.rel_profiles.create({
       profile_a: profile_a.id,
       profile_b: profile_b.id,
       a_follows_b: false,
     });
   }
 
-  const profile_b_stats = await Xata.db.profile_stats
+  const profile_b_stats = await xata.db.profile_stats
     .filter({ profile: profile_b.id })
     .getFirstOrThrow();
 
@@ -39,7 +39,7 @@ export async function unfollow(profile_id: string) {
     follower_count: { $decrement: 1 },
   });
 
-  const profile_a_stats = await Xata.db.profile_stats
+  const profile_a_stats = await xata.db.profile_stats
     .filter({ profile: profile_a.id })
     .getFirstOrThrow();
 

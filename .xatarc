@@ -1,6 +1,7 @@
 {
   "databaseURL": "https://coollege-jbc8sn.us-east-1.xata.sh/db/utec",
   "codegen": {
-    "output": "src/lib/xata/codegen.ts"
+    "output": "src/lib/xata/codegen.ts",
+    "workersBuildId": "ci7n934lmr4cnrg6ttgg"
   }
 }

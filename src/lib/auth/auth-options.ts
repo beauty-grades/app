@@ -1,7 +1,7 @@
 import { XataAdapter } from "@next-auth/xata-adapter";
 import GoogleProvider from "next-auth/providers/google";
 
-import Xata from "@/lib/xata";
+import xata from "@/lib/xata";
 
 export const authOptions = {
   providers: [
@@ -10,5 +10,5 @@ export const authOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     }),
   ],
-  adapter: XataAdapter(Xata),
+  adapter: XataAdapter(xata),
 };

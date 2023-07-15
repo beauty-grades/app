@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { getMyEmail } from "@/lib/auth/get-my-email";
-import Xata from "@/lib/xata";
+import xata from "@/lib/xata";
 
 interface Grade {
   handle: string | null;
@@ -36,7 +36,7 @@ export async function GET(request: Request, { params }) {
 
     const handle = course_handle as string;
 
-    const raw_enrollments = await Xata.db.section_enrollment
+    const raw_enrollments = await xata.db.section_enrollment
       .select([
         "*",
         "section.*",
@@ -76,7 +76,7 @@ export async function GET(request: Request, { params }) {
           let grades: Grade[] = [];
 
           if (!raw_enrollment.dropped_out) {
-            const raw_grades = await Xata.db.grade
+            const raw_grades = await xata.db.grade
               .select(["*", "evaluation.*"])
               .filter({
                 "section_enrollment.id": raw_enrollment.id,

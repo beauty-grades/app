@@ -1,15 +1,15 @@
 import { getProfile } from "@/lib/queries/get-profile";
-import Xata from "@/lib/xata";
+import xata from "@/lib/xata";
 import { ProfileListPaginated } from "@/components/profile";
 import { Heading } from "@/components/ui/typography";
 
-export const revalidate = 1000;
+export const revalidate = 10000;
 
 const FollowersPage = async ({ params }) => {
   const handle = params.handle;
   const profile = await getProfile(handle);
 
-  const followers = await Xata.db.rel_profiles
+  const followers = await xata.db.rel_profiles
     .filter({ profile_b: profile.id })
     .filter({ a_follows_b: true })
     .select(["*", "profile_a.*"])
@@ -22,6 +22,7 @@ const FollowersPage = async ({ params }) => {
   return (
     <div>
       <Heading as="h3">Seguidores</Heading>
+      {/* @ts-ignore */}
       <ProfileListPaginated profiles_page={followers} />
     </div>
   );

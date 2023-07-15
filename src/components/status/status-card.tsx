@@ -62,14 +62,16 @@ const StatusCard = async ({
             </div>
             <div className="text-muted"></div>
             <Link href={`/status/${status.id.replace("rec_", "")}`}>
-              <StatusDynamicBody className="pb-4">{status.body}</StatusDynamicBody>
+              <StatusDynamicBody className="pb-4">
+                {status.body}
+              </StatusDynamicBody>
             </Link>
           </div>
         </div>
       </div>
       {quoted_status && quoted_status.author_profile?.id && (
         <div className="mt-4 mb-2 flex space-x-4">
-          <div className="flex-grow-0">
+          <div className="grow-0">
             <div className="flex items-center">
               <div className="h-0.5 w-16 bg-muted"></div>
               <ProfileAvatarHoverCard

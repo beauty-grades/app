@@ -1,12 +1,12 @@
 import Link from "next/link";
 
-import Xata from "@/lib/xata";
+import xata from "@/lib/xata";
 import { GlowBox } from "@/components/ui/glow-box";
 import { Heading } from "@/components/ui/typography";
 import { TakenCourses } from "./taken-courses";
 
 const getCurriculum = async (handle: string) => {
-  const raw_courses = await Xata.db.rel_level_course
+  const raw_courses = await xata.db.rel_level_course
     .select(["*", "level.*", "course.*"])
     .filter({ "level.curriculum.id": handle })
     .getAll();
@@ -69,6 +69,9 @@ const Page = async ({ params: { handle } }: { params: { handle: string } }) => {
                   <GlowBox
                     key={course.id}
                     id={"course-" + course.id}
+                    data-course-name={course.name
+                      .normalize("NFD")
+                      .replace(/\p{Diacritic}/gu, "")}
                     colors="group-[.approved-course]:from-green-800 group-[.approved-course]:to-yellow-800 group-[.taken-course]:from-purple-600 group-[.taken-course]:to-rose-600 from-gray-800 to-slate-800"
                   >
                     <Link

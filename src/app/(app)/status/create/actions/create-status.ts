@@ -5,7 +5,7 @@ import { zfd } from "zod-form-data";
 
 import { getMyProfileOrThrow } from "@/lib/auth/get-my-profile";
 import OpenAI from "@/lib/openai";
-import Xata from "@/lib/xata";
+import xata from "@/lib/xata";
 import { FormSchema } from "../form-schema";
 
 export const createStatus = async (data: FormData) => {
@@ -23,7 +23,7 @@ export const createStatus = async (data: FormData) => {
 
     const embedding = response.data.data[0].embedding;
 
-    const status = await Xata.db.status.create({
+    const status = await xata.db.status.create({
       body,
       author_profile: profile.id,
       embedding: embedding,

@@ -1,13 +1,13 @@
 import Link from "next/link";
 
-import Xata from "@/lib/xata";
+import xata from "@/lib/xata";
 import { Button } from "@/components/ui/button";
 import { Heading, Paragraph } from "@/components/ui/typography";
 import { PeriodsView } from "./periods-view";
 import { UserGrades } from "./user-grades";
 
 const getCourse = async (handle: string) => {
-  const raw_classrooms = await Xata.db.section
+  const raw_classrooms = await xata.db.section
     .select(["*", "class.*", "teacher.*", "class.course.*"])
     .filter({ "class.course": handle })
     .getAll();
@@ -18,7 +18,7 @@ const getCourse = async (handle: string) => {
 };
 
 const getCurriculums = async (handle: string) => {
-  const raw_level_courses = await Xata.db.rel_level_course
+  const raw_level_courses = await xata.db.rel_level_course
     .select(["*", "level.*", "course.*", "level.curriculum.*"])
     .filter({ course: handle })
     .getAll();

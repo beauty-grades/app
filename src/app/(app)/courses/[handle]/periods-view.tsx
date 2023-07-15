@@ -1,4 +1,4 @@
-import Xata from "@/lib/xata";
+import xata from "@/lib/xata";
 import {
   Card,
   CardContent,
@@ -28,12 +28,12 @@ interface Evaluation {
 }
 
 const getEvaluationsByPeriod = async (course_handle: string) => {
-  const raw_classrooms = await Xata.db.section
+  const raw_classrooms = await xata.db.section
     .select(["*", "class.course.*", "teacher.*", "class.period"])
     .filter({ "class.course": course_handle })
     .getAll();
 
-  const raw_evaluations = await Xata.db.evaluation
+  const raw_evaluations = await xata.db.evaluation
     .select(["*", "class.*", "class.course.*", "class.period.*"])
     .filter({ "class.course": course_handle })
     .getAll();

@@ -1,13 +1,13 @@
 import { Page, SelectedPick } from "@xata.io/client";
 
 import { getProfile } from "@/lib/queries/get-profile";
-import Xata from "@/lib/xata";
+import xata from "@/lib/xata";
 import { StatusRecord } from "@/lib/xata/codegen";
 import { StatusListPaginated } from "@/components/status/status-list-paginated";
 
-export const revalidate = 600;
+export const revalidate = 10000;
 export async function generateStaticParams() {
-  const statuses = await Xata.db.status.getAll();
+  const statuses = await xata.db.status.getAll();
 
   return statuses.map((status) => ({
     id: status.id,
@@ -16,7 +16,7 @@ export async function generateStaticParams() {
 
 const HomePage = async ({ params }) => {
   const profile = await getProfile(params.handle);
-  const raw_page = await Xata.db.status
+  const raw_page = await xata.db.status
     .filter({ author_profile: profile.id })
     .select(["*", "author_profile.id"])
     .getPaginated({

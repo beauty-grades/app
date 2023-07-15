@@ -15,22 +15,44 @@ export const TakenCourses = () => {
     if (error) return;
     if (!data?.ok) return;
 
-    data.approved.forEach((handle: string) => {
-      const course = document.querySelector("#course-" + handle);
+    data.approved.forEach(({ id, name }: { id: string; name: string }) => {
+      const course = document.querySelector("#course-" + id);
+
       if (course) {
         course.classList.add("approved-course");
+      } else {
+        const d_id = `[data-course-name='${name
+          .normalize("NFD")
+          .replace(/\p{Diacritic}/gu, "")}']`;
+        const course = document.querySelector(d_id);
+        if (course) {
+          course.classList.add("approved-course");
+        }
       }
     });
 
     let counter = 0;
-    data.taking.forEach((handle: string) => {
-      const course = document.querySelector("#course-" + handle);
+    data.taking.forEach(({ id, name }: { id: string; name: string }) => {
+      const course = document.querySelector("#course-" + id);
       if (course) {
         course.classList.add("taken-course");
         //focus on the first taken course
         if (counter === 0) {
           course.scrollIntoView({ behavior: "smooth", block: "center" });
           counter++;
+        }
+      } else {
+        const d_id = `[data-course-name='${name
+          .normalize("NFD")
+          .replace(/\p{Diacritic}/gu, "")}']`;
+        const course = document.querySelector(d_id);
+        if (course) {
+          course.classList.add("taken-course");
+          //focus on the first taken course
+          if (counter === 0) {
+            course.scrollIntoView({ behavior: "smooth", block: "center" });
+            counter++;
+          }
         }
       }
     });

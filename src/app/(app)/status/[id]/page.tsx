@@ -3,7 +3,7 @@ import { SelectedPick } from "@xata.io/client";
 
 import { getStatus } from "@/lib/queries/get-status";
 import { cn } from "@/lib/utils";
-import Xata from "@/lib/xata";
+import xata from "@/lib/xata";
 import { StatusRecord } from "@/lib/xata/codegen";
 import { DateHoverCard } from "@/components/date-hover-card";
 import { ProfileAvatarHoverCard } from "@/components/profile/profile-avatar";
@@ -14,9 +14,9 @@ import { StatusDynamicBody } from "@/components/status/status-dynamic-body";
 import { StatusWithParent } from "@/components/status/with-parent";
 import { Separator } from "@/components/ui/separator";
 
-export const revalidate = 600;
+export const revalidate = 10000;
 export async function generateStaticParams() {
-  const statuses = await Xata.db.status.getAll();
+  const statuses = await xata.db.status.getAll();
 
   return statuses.map((status) => ({
     id: status.id,
@@ -32,7 +32,7 @@ const StatusPage = async ({ params }: { params: { id: string } }) => {
 
   const quoted_status = await getStatus(status.quote_from?.id);
 
-  const raw_similar_statuses = await Xata.db.status.vectorSearch(
+  const raw_similar_statuses = await xata.db.status.vectorSearch(
     "embedding",
     status.embedding,
     {
@@ -90,7 +90,7 @@ const StatusPage = async ({ params }: { params: { id: string } }) => {
 
       {quoted_status && quoted_status.author_profile?.id && (
         <div className="mb-4 flex space-x-4">
-          <div className="flex-grow-0">
+          <div className="grow-0">
             <div className="flex items-center">
               <div className="h-0.5 w-16 bg-muted"></div>
               <ProfileAvatarHoverCard

@@ -2,7 +2,7 @@ import { cache } from "react";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-import Xata from "@/lib/xata";
+import xata from "@/lib/xata";
 
 export const getMyEmailOrThrow = cache(async () => {
   const session_token = cookies().get(
@@ -15,7 +15,7 @@ export const getMyEmailOrThrow = cache(async () => {
     throw new Error("No session token");
   }
 
-  const raw_session = await Xata.db.nextauth_sessions
+  const raw_session = await xata.db.nextauth_sessions
     .select(["*", "user.email"])
     .filter({ sessionToken: session_token })
     .getFirstOrThrow();

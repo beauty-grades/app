@@ -15,14 +15,15 @@ interface Props {
 const StatusWithParent = async ({ replied_status_id, children }: Props) => {
   const replied_status = await getStatus(replied_status_id);
 
-  if (!replied_status?.author_profile) return <>{children}</>;
+  if (!replied_status?.id || !replied_status?.author_profile)
+    return <>{children}</>;
 
   return (
     <StatusWithParent replied_status_id={replied_status.reply_to?.id}>
       <div className="flex gap-4">
         <div className="flex flex-col items-center">
           <ProfileAvatarHoverCard profile={replied_status.author_profile} />
-          <div className="w-0.5 flex-grow bg-muted-foreground"></div>
+          <div className="w-0.5 grow bg-muted-foreground"></div>
         </div>
         <div className="flex flex-col">
           <div className="flex flex-wrap items-center gap-x-2">

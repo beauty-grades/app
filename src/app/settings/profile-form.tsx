@@ -19,7 +19,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { UploadImageButton } from "@/components/upload-image-button";
+// import { UploadImageButton } from "@/components/upload-image-button";
+import { MultiUploader } from "@/components/upload-profile-picture";
 import {
   profileFormSchema,
   type ProfileFormValues,
@@ -53,7 +54,7 @@ export function ProfileForm({
           <AvatarFallback>{initial_values.name[0]}</AvatarFallback>
         </Avatar>
 
-        <UploadImageButton
+        {/* <UploadImageButton
           onClientUploadComplete={(files) => {
             // Do something with the response
             files && files[0]?.fileUrl && setProfilePic(files[0].fileUrl);
@@ -62,7 +63,8 @@ export function ProfileForm({
             // Do something with the error.
             alert(`ERROR! ${error.message}`);
           }}
-        />
+        /> */}
+        <MultiUploader />
       </div>
 
       <Form {...form}>

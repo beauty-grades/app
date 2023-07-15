@@ -1,4 +1,4 @@
-import Xata from "@/lib/xata";
+import xata from "@/lib/xata";
 
 export const getScoreAndRankingByPeriod = async (utec_account: string) => {
   const periods = new Map<
@@ -14,7 +14,7 @@ export const getScoreAndRankingByPeriod = async (utec_account: string) => {
 
   const careers = new Set<string>();
 
-  const data = await Xata.db.period_enrollment
+  const data = await xata.db.period_enrollment
     .filter({ utec_account })
     .select(["*", "utec_account.email", "curriculum.career"])
     .getAll();
@@ -25,7 +25,7 @@ export const getScoreAndRankingByPeriod = async (utec_account: string) => {
     }
   });
 
-  const students_by_career_period = await Xata.db.rel_career_period
+  const students_by_career_period = await xata.db.rel_career_period
     .filter({
       career: {
         id: {

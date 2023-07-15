@@ -7,8 +7,11 @@ import { Provider as WrapBalancerProvider } from "react-wrap-balancer";
 import { SWRConfig } from "swr";
 
 import { Toaster } from "@/components/ui/toaster";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const ClientLayout = ({ children }) => {
+  const queryClient = new QueryClient();
+
   return (
     <SessionProvider>
       <SWRConfig
@@ -18,13 +21,15 @@ const ClientLayout = ({ children }) => {
             fetch(resource, init).then((res) => res.json()),
         }}
       >
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-          <WrapBalancerProvider>
-            {children}
-            <Toaster />
-          </WrapBalancerProvider>
-          <Analytics />
-        </ThemeProvider>
+        <QueryClientProvider client={queryClient}>
+          <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+            <WrapBalancerProvider>
+              {children}
+              <Toaster />
+            </WrapBalancerProvider>
+            <Analytics />
+          </ThemeProvider>
+        </QueryClientProvider>
       </SWRConfig>
     </SessionProvider>
   );

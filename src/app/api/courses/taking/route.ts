@@ -1,23 +1,10 @@
 import { NextResponse } from "next/server";
 
 import { getMyEmail } from "@/lib/auth/get-my-email";
-import Xata from "@/lib/xata";
+import xata from "@/lib/xata";
 
-interface Grade {
-  handle: string | null;
-  label: string;
-  score: number | null;
-  weight: number;
-}
 
-interface Enrollment {
-  period: string;
-  section: number;
-  status: "enrolled" | "dropped_out" | "failed" | "passed";
-  grades: Grade[];
-}
-
-export async function GET(request: Request, { params }) {
+export async function GET() {
   try {
     const email = await getMyEmail();
 
@@ -25,7 +12,7 @@ export async function GET(request: Request, { params }) {
       return NextResponse.json({ error: "Unauthenticated" }, { status: 401 });
     }
 
-    const data = await Xata.db.section_enrollment
+    const data = await xata.db.section_enrollment
       .select([
         "*",
         /* @ts-ignore */
@@ -37,8 +24,8 @@ export async function GET(request: Request, { params }) {
       })
       .getAll();
 
-    const approved = new Set<string>();
-    const taking = new Set<string>();
+    const approved = new Set<{ id: string; name: string }>();
+    const taking = new Set<{ id: string; name: string }>();
     const elective = new Map<string, { taking: boolean; name: string }>();
 
     data.forEach((enrollment) => {
@@ -57,9 +44,9 @@ export async function GET(request: Request, { params }) {
             });
           } else {
             if (!score) {
-              taking.add(course);
+              taking.add({ id: course, name: course_name });
             } else {
-              approved.add(course);
+              approved.add({ id: course, name: course_name });
             }
           }
         }
@@ -76,6 +63,7 @@ export async function GET(request: Request, { params }) {
       ok: true,
     });
   } catch (error) {
+    console.log({ error });
     return NextResponse.json(
       {
         error: error.message,

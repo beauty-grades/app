@@ -7,7 +7,7 @@ import { getUtecAccount } from "../get-utec-account";
 import { CoursesTable } from "./courses-table";
 import { EvolutivesCharts } from "./evolutives-charts";
 
-export const revalidate = 1000000;
+export const revalidate = 10000;
 
 const Page = async ({ params }) => {
   const handle = params["handle"];

@@ -4,7 +4,7 @@ import { Matrix } from "ml-matrix";
 
 import { getMyProfileOrThrow } from "@/lib/auth/get-my-profile";
 import OpenAI from "@/lib/openai";
-import Xata from "@/lib/xata";
+import xata from "@/lib/xata";
 
 async function QuoteStatusAction(data: FormData) {
   try {
@@ -14,7 +14,7 @@ async function QuoteStatusAction(data: FormData) {
       body = String(parsed_body);
     }
 
-    const original_status = await Xata.db.status.readOrThrow(
+    const original_status = await xata.db.status.readOrThrow(
       data.get("original_status") as string
     );
 
@@ -33,7 +33,7 @@ async function QuoteStatusAction(data: FormData) {
 
     const embedding = response.data.data[0].embedding;
 
-    const status = await Xata.db.status.create({
+    const status = await xata.db.status.create({
       body,
       author_profile: profile.id,
       embedding: embedding,

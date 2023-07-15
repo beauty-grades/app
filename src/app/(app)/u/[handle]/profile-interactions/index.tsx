@@ -1,5 +1,5 @@
 import { getMyProfileOrThrow } from "@/lib/auth/get-my-profile";
-import Xata from "@/lib/xata";
+import xata from "@/lib/xata";
 import { ProfileInteractionsClient } from "./client-component";
 
 export const ProfileInteractions = async ({
@@ -11,7 +11,7 @@ export const ProfileInteractions = async ({
 }) => {
   const profile_a = await getMyProfileOrThrow();
 
-  const rel_profiles = await Xata.db.rel_profiles
+  const rel_profiles = await xata.db.rel_profiles
     .filter({
       "profile_a.id": profile_a.id,
     })
@@ -20,7 +20,7 @@ export const ProfileInteractions = async ({
     })
     .getFirst();
 
-  const profile_b_stats = await Xata.db.profile_stats
+  const profile_b_stats = await xata.db.profile_stats
     .filter({ "profile.id": profile_id })
     .getFirstOrThrow();
 
