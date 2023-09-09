@@ -7,12 +7,7 @@ import { GlowBox } from "@/components/ui/glow-box";
 import { Icons } from "@/components/ui/icons";
 import { Heading, Paragraph } from "@/components/ui/typography";
 
-const Page = () => {
-  const [copied, setCopied] = React.useState(false);
-  React.useEffect(() => {
-    if (copied) {
-      navigator.clipboard
-        .writeText(`fetch("https://coollege.up.railway.app/api/feed", {
+let code = `fetch("https://coollege.vercel.app/api/sync", {
   method: "POST",
   headers: {
     "Content-Type": "application/json",
@@ -22,7 +17,14 @@ const Page = () => {
   .then((r) => r.json())
   .then(console.log)
   .catch(console.warn)
-            `);
+            `
+
+const Page = () => {
+  const [copied, setCopied] = React.useState(false);
+  React.useEffect(() => {
+    if (copied) {
+      navigator.clipboard
+        .writeText(code);
 
       setTimeout(() => {
         setCopied(false);
@@ -48,17 +50,7 @@ const Page = () => {
         >
           <pre className="javascript relative text-left font-mono text-xs font-bold tracking-wide text-muted-foreground md:text-base">
             <code className="block p-4">
-              {`fetch("https://coollege.up.railway.app/api/feed", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-  },
-  body: localStorage.session,
-})
-  .then((r) => r.json())
-  .then(console.log)
-  .catch(console.warn)
-    `}
+              {code}
             </code>
             <div
               className="absolute bottom-2 right-2 rounded border border-transparent p-2 text-slate-700 hover:border-slate-500 hover:text-slate-500 "
