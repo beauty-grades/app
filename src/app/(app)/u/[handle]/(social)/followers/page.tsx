@@ -3,8 +3,6 @@ import xata from "@/lib/xata";
 import { ProfileListPaginated } from "@/components/profile";
 import { Heading } from "@/components/ui/typography";
 
-export const revalidate = 10000;
-
 const FollowersPage = async ({ params }) => {
   const handle = params.handle;
   const profile = await getProfile(handle);

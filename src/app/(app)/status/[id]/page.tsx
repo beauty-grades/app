@@ -14,14 +14,6 @@ import { StatusDynamicBody } from "@/components/status/status-dynamic-body";
 import { StatusWithParent } from "@/components/status/with-parent";
 import { Separator } from "@/components/ui/separator";
 
-export const revalidate = 10000;
-export async function generateStaticParams() {
-  const statuses = await xata.db.status.getAll();
-
-  return statuses.map((status) => ({
-    id: status.id,
-  }));
-}
 
 const StatusPage = async ({ params }: { params: { id: string } }) => {
   const status_id = "rec_" + params.id;

@@ -21,14 +21,13 @@ import {
   Truck,
   Twitter,
   Undo,
-  type Icon as LucideIcon,
 } from "lucide-react";
 
 import { Facebook } from "./facebook";
 import { GitHub } from "./github";
 import { Logo } from "./logo";
 
-export type Icon = LucideIcon;
+export type Icon = typeof Truck;
 
 export const Icons = {
   externalLink: ExternalLink,

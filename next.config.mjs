@@ -2,7 +2,6 @@
 const nextConfig = {
   reactStrictMode: true,
   experimental: {
-    serverComponentsExternalPackages: ["@tremor/react"],
     serverActions: true,
   },
   images: {
@@ -16,6 +15,28 @@ const nextConfig = {
       "cdn.discordapp.com",
       "i.imgur.com",
     ],
+  },
+  async headers() {
+    return [
+      {
+        // matching all API routes
+        source: "/api/sync",
+        headers: [
+          {
+            key: "Access-Control-Allow-Origin",
+            value: "https://sistema-academico.utec.edu.pe",
+          },
+          {
+            key: "Access-Control-Allow-Methods",
+            value: "OPTIONS,POST",
+          },
+          {
+            key: "Access-Control-Allow-Headers",
+            value: "Authorization, Content-Type",
+          },
+        ],
+      },
+    ]
   },
 }
 

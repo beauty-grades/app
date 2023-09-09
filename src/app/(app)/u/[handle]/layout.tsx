@@ -12,15 +12,6 @@ import { getRanking } from "./get-ranking";
 import { getUtecAccount } from "./get-utec-account";
 import { ProfileInteractions } from "./profile-interactions";
 
-export const revalidate = 10000;
-
-export async function generateStaticParams() {
-  const profiles = await xata.db.profile.getAll();
-
-  return profiles.map((profile) => ({
-    handle: profile.handle,
-  }));
-}
 
 const Layout = async ({ children, params }) => {
   const handle = params["handle"];

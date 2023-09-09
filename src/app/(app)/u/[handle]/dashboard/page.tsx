@@ -6,8 +6,9 @@ import { getRanking } from "../get-ranking";
 import { getUtecAccount } from "../get-utec-account";
 import { CoursesTable } from "./courses-table";
 import { EvolutivesCharts } from "./evolutives-charts";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
-export const revalidate = 10000;
 
 const Page = async ({ params }) => {
   const handle = params["handle"];
@@ -18,8 +19,8 @@ const Page = async ({ params }) => {
     notFound();
   }
 
-  const utec_account = await getUtecAccount(profile.email);
 
+  const utec_account = await getUtecAccount(profile.email);
   if (!utec_account) return;
 
   const ranking = await getRanking(
@@ -33,6 +34,17 @@ const Page = async ({ params }) => {
         <div className="text-xl font-bold">
           Promedio Histórico {utec_account.score}
         </div>
+        {
+          <>
+            <Separator orientation="vertical" />
+            <Button className="text-xl font-bold" asChild variant="link">
+              <Link href={`/curriculums/${utec_account?.curriculum?.id}`}>
+              {utec_account?.curriculum?.id}
+              </Link>
+            </Button>
+          </>
+
+        }
         {ranking && (
           <>
             <Separator orientation="vertical" />

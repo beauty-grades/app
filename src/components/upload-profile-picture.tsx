@@ -26,8 +26,7 @@ export function MultiUploader() {
     setFiles(acceptedFiles);
   }, []);
 
-  const { startUpload, permittedFileInfo } = useUploadThing({
-    endpoint: "imageUploader",
+  const { startUpload, permittedFileInfo } = useUploadThing("imageUploader",{
     onClientUploadComplete: () => {
       alert("uploaded successfully!");
     },

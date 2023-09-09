@@ -3,7 +3,6 @@ import xata from "@/lib/xata";
 import { ProfileListPaginated } from "@/components/profile";
 import { Heading } from "@/components/ui/typography";
 
-export const revalidate = 10000;
 
 const FollowingPage = async ({ params }) => {
   const handle = params.handle;

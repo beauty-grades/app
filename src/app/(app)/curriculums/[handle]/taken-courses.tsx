@@ -27,6 +27,21 @@ export const TakenCourses = () => {
         const course = document.querySelector(d_id);
         if (course) {
           course.classList.add("approved-course");
+        } else {
+          if (name.includes("Proyecto Final de ")) {
+            let ddd_name = "";
+            if (name.includes("II")) {
+               ddd_name = "Tesis II";
+            } else {
+               ddd_name = "Tesis I";
+            }
+
+            const d_id = `[data-course-name='${ddd_name}']`;
+            const course = document.querySelector(d_id);
+            if (course) {
+              course.classList.add("approved-course");
+            }
+          }
         }
       }
     });
@@ -52,6 +67,21 @@ export const TakenCourses = () => {
           if (counter === 0) {
             course.scrollIntoView({ behavior: "smooth", block: "center" });
             counter++;
+          }
+        } else {
+          if (name.includes("Proyecto Final de ")) {
+            let ddd_name = "";
+            if (name.includes("II")) {
+               ddd_name = "Tesis II";
+            } else {
+               ddd_name = "Tesis I";
+            }
+
+            const d_id = `[data-course-name='${ddd_name}']`;
+            const course = document.querySelector(d_id);
+            if (course) {
+              course.classList.add("taken-course");
+            }
           }
         }
       }
